@@ -180,11 +180,18 @@ a:not(href){ color: red }
   "name": "The Example App",
   "short_name": "Example",
   "launch_path": "/",
-  "icons": {
-    "16": "/img/icon_16.png",
-    "48": "/img/icon_48.png",
-    "128": "/img/icon_128.png"
-  },
+  "icons": [{
+    "src": "icon/lowres",
+    "density": "1",
+    "width": "64",
+    "height": "64",
+    "type": "image/webp"
+  }, {
+    "src": "icon/hd",
+    "density": "2",
+    "width": "64",
+    "height": "64"
+  }],
   "developer": {
     "name": "Foo Corp.",
     "url": "http://example.org/dev"
