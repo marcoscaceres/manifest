@@ -76,7 +76,7 @@ a:not(href){ color: red }
         specification: a <dfn>user agent</dfn>.
       </p>
     </section>
-    <section id="linking">
+  <section id="linking">
       <h2>
         Linking to a manifest
       </h2>
@@ -158,8 +158,8 @@ a:not(href){ color: red }
           <code>document</code>).
         </p>
       </section>
-    </section>
-    <section>
+  </section>
+  <section>
       <h2>
         Application Manifest
       </h2>
@@ -177,9 +177,12 @@ a:not(href){ color: red }
         </p>
         <pre class="example highlight">
 {
-  "name": "The Example App",
-  "short_name": "Example",
-  "launch_path": "/",
+  "name": "Example App",
+  "altname": "The Example App 2.0",
+  &quot;orientation&quot;: &quot;landscape&quot;,
+  "url": "/index.html",
+  &quot;mode&quot;: &quot;standalone&quot;,
+  &quot;display&quot;: &quot;fullscreen&quot;,
   "icons": [{
     "src": "icon/lowres",
     "density": "1",
@@ -189,11 +192,7 @@ a:not(href){ color: red }
     "src": "icon/hd",
     "density": "2",
     "width": "64"
-  }],
-  "developer": {
-    "name": "Foo Corp.",
-    "url": "http://example.org/dev"
-  }
+  }]
 }
 </pre>
       </section>
@@ -237,10 +236,9 @@ a:not(href){ color: red }
         by the following algorithm:
       </p>
       <ol>
-        <li>Let <var>text</var> be the result of <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
-          title="concept-link-obtain">obtaining</a> the application manifest.
-          If the process aborts, terminate this algorithm.
+	<li>Let <var>text</var> be the result of <a href="http://fetch.spec.whatwg.org/#concept-fetch">fetching</a> the application manifest.
+	  If the fetching algorithm aborts, treat this application manifest as an <a>invalid application
+	manifest</a>.
         </li>
         <li>Let <var>manifest</var> be the result of invoking the <a href=
         "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">parse</a>
@@ -248,20 +246,28 @@ a:not(href){ color: red }
         <var>text</var> as its only argument. If parsing throws an exception,
         then treat this application manifest as an <a>invalid application
         manifest</a>. </li>
-        <li>Let <var>short name</var> be the result of running the <a>steps for
-        processing the <code>short_name</code> member</a>.
+	<li>Let <var> name</var> be the result of running the <a>steps for
+	processing the <code>name</code> member</a>. </li>
+	<li>Let <var>alternative  name</var> be the result of running the <a>steps for
+	processing the <code>altname</code> member</a>. </li>
+	<li>Let <var>mode</var> be the result of running the <a>steps for
+	processing the <code>mode</code> member</a>. </li>
+	<li>Let <var>display</var> be the result of running the <a>steps for
+	processing the <code>display</code> member</a>. </li>
+	<li>Let <var>orientation</var> be the result of running the <a>steps for
+	processing the <code>orientation</code> member</a>.
         </li>
-        <li>Let <var>name</var> be the result of running the <a>steps for
-        processing the <code>name</code> member</a>.
+	<li>Let <var>url</var> be the result of running the <a>steps
+	for processing the <code>url</code> member</a>.
         </li>
-        <li>Let <var>launch path</var> be the result of running the <a>steps
-        for processing the <code>launch_path</code> member</a>.
-        </li>
-        <li>...
-        </li>
+	<li>Let <var>icons</var> be the result of running the <a>steps
+	for processing the <code>icons</code> member</a>. </li>
         <li>Optionally, <a>ignore</a> all other members.
         </li>
       </ol>
+      <section>
+
+      </section>
       <section>
         <h3>
         Type checks</h3>
@@ -300,18 +306,7 @@ a:not(href){ color: red }
           <code title="">name</code> member
         </h3>
         <p>
-          The <dfn id="propdef-name"><code>name</code></dfn> is a string that represents the name of the hosted web
-          application or packaged application, that is used, for example, in an
-        application menu or in other contexts. </p>
-        <p>
-          Authoring requirement: it is strongly recommended that authors
-          include a name for the application in at the root of the manifest.
-        </p>
-        <p class="note">
-          Note: The <code>name</code> member needs to be present in the
-          application manifest for the user agent to treat an application
-          manifest as valid.
-        </p>
+	The <dfn id="propdef-name"><code>name</code></dfn> is a string that represents the name of the application as is usually displayed to the user (e.g., amongst a list of other applicatons, or as a label underneath an icon). </p>
         <p>
           The <dfn>steps for processing the name member</dfn> is given by the
           following algorithm. The algorithm takes an application manifest as
@@ -320,108 +315,91 @@ a:not(href){ color: red }
         <ol>
           <li>Let <var>key</var> be the string "<code>name</code>".
           </li>
-          <li>Let <var>value</var> be the result of running the <a>steps for
-          retrieving a localizable member from the application manifest</a>,
-          with <var>key</var> as the member being sought.
-          </li>
-          <li>Optionally, if <var>value</var> is null or undefined, then let
-          <var>value</var> be an implementation specific string that can serve
+	  <li>Let <var>value</var> be the result of calling the
+	  [[\GetOwnProperty]] internal method of <var>manifest</var> passing <var>key</var> as the argument. </li>
+	  <li>If <var>value</var> is <code>null</code> or <code>undefined</code>, then let <var>value</var> be an implementation specific string that can serve
           as a suitable name for the application. For example, if the manifest
-          was obtained from link element, then the document's title could be
-          used or the user could be prompted to provide a custom name.
-          </li>
+	  was obtained from a <code>link</code> element and the document has a title, then the document's <code>title</code> could be
+	  used. Alternatively, the user could be prompted to provide a custom name. </li>
           <li>Let <var>result</var> be the result of calling
-          <a>ToString</a>(<var>value</var>).
-          </li>
+	  <a>ToString</a>(<var>value</var>)</li>
+	  <li><a href="http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">Strip leading and trailing whitespace</a> from <var>result</var>.</li>
           <li>Return the <var>result</var>.
           </li>
         </ol>
       </section>
       <section>
         <h3>
-          <code title="">short_name</code> member
+	  <code title="">altname</code> member
         </h3>
         <p>
-          The <dfn id="propdef-short-name"><code>short_name</code></dfn>
-          <a>localizable member</a> is a string that represents a condensed
-          name of the application that can be used in context where space is
-          constrained (e.g., underneath an icon on the home screen of a
-          device).
-        </p>
-        <p>
-          Authoring guidelines: Authors should only use a short name if it has
-          less characters than the value of the <code>name</code> member. Using
-          the <code>name</code> member is preferred over a short name.
-        </p>
+	  The <dfn id="propdef-short-name"><code>altname</code></dfn> is a string that represents an alternative
+	name of the application, such as the name under which the application is sold or marketed.</p>
         <p>
           The <dfn>steps for processing the short name member</dfn> is given by
           the following algorithm. The algorithm takes an application manifest
           as an argument and returns a string:
         </p>
         <ol>
-          <li>Let <var>key</var> be the string "<code>short_name</code>".
+	  <li>Let <var>key</var> be the string "<code>altname</code>".
           </li>
           
           <li>Let <var>value</var> be the result of calling the
-                [[\GetOwnProperty]] internal method of <var>manifest</var> passing <var>key</var> as the argument. </li>
+		[[\GetOwnProperty]] internal method of <var>manifest</var> passing <var>key</var> as the argument.</li>
+	  <li>If <var>value</var> is <code>null</code> or <code>undefined</code>, then let <var>value</var> be an implementation specific string that can serve
+	  as a suitable alt for the application. </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToString</a>(<var>value</var>).
           </li>
+	  <li><a href="http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">Strip leading and trailing whitespace</a> from <var>result</var>.</li>
           <li>Return the <var>result</var>.
           </li>
         </ol>
       </section>
       <section>
         <h3>
-          <code>launch_path</code> member
+	  <code>url</code> member
         </h3>
         <p>
-          The <dfn id="propdef-launch_path">launch_path</dfn> <a>localizable
-          member</a> is a <a>relative URL</a> that represents a resource
-          within the <a>origin of the application</a> that is <a href=
+	  The <dfn id="propdef-launch_path">url</dfn> <a>member</a> is the URL that is  is <a href=
           "http://www.w3.org/html/wg/drafts/html/master/single-page.html#browsers">
           loaded</a> when the application is <a>launched</a>.
-        </p>
+	When it's missing from the manifest, the UA loads the URL from the manifest was loaded. </p>
         <p>
-          The <dfn>steps for processing the <code>launch_path</code>
+	  The <dfn>steps for processing the <code>url</code>
           member</dfn> are given by the following algorithm. The algorithm
-          returns either a string, and error, or <code>undefined</code>.
+	  returns either a string or <code>undefined</code>.
         </p>
         <ol>
-          <li>Let <var>result</var> be <code>undefined</code>.
+	  <li>Let <var>key</var> be the string "<code>url</code>".          </li>
+	  <li>Let <var>url</var> be the result of calling the
+	  [[\GetOwnProperty]] internal method of <var>manifest</var> passing <var>key</var> as the argument. </li>
+	  <li>If <var>url</var> is null or <var>undefined</var>:
+	    <ol>
+	      <li>Let <var>value</var> be the URL from which the manifest was linked from. </li>
+	    </ol>
           </li>
-          <li>Let <var>key</var> be the string "<code>launch_path</code>".
-          </li>
-          <li>Let <var>present</var> be the result of calling
-          [[\HasOwnProperty]] internal method of <var>manifest</var> with
-          argument <var>key</var>.
-          </li>
-          <li>If present is <code>true</code>:
+	  <li>Otherwise:
             <ol>
-              <li>Let <var>path</var> be <a>ToString</a>(<var>value</var>).
-              </li>
               <li>Let <var>url</var> be the result of <a href=
-              "http://url.spec.whatwg.org/#parsing">parsing</a>
-              <var>path</var>.
-              </li>
-              <li>If <var>url</var> is not a <a href=
-              "http://url.spec.whatwg.org/#concept-absolute-url">relative
-              URL</a>, then return an error and terminate this algorithm.
-              </li>
-              <li>Set <var>result</var> to be the value of <var>url</var>.
+	      "http://url.spec.whatwg.org/#parsing">parsing</a><var> url</var>.
               </li>
             </ol>
           </li>
+	  <ol>
+	    <li>Set <var>result</var> to be the value of <var>url</var>.
+	    </li>
+	  </ol>
           <li>Return <var>result</var>.
           </li>
         </ol>
-      </section>
+</section>
       <section>
         <h3>
           <code title="">icons</code> member
         </h3>
         <p>
-          The <dfn id="propdef-icons">icons</dfn> <a>localizable member</a> is
+	  The <dfn id="propdef-icons">icons</dfn> is
           a list of <a>icon objects</a> that represents a set of icons that the
           application can make use.
         </p>
@@ -481,50 +459,6 @@ a:not(href){ color: red }
           </h3>
           <p>
             The MIME media type of resource the src member refers to. 
-          </p>
-        </section>
-      </section>
-
-      <section>
-        <h2>
-          Developer object and its members
-        </h2>
-        <section>
-          <h3>
-            <code title="">name</code> member
-          </h3>
-          <p>
-            The <dfn id="propdef-developer-name">name</dfn> member of the
-            <a>developer object</a> represents the name of the developer.
-          </p>
-          <p>
-            The <dfn>steps for processing the name member of the developer
-            object</dfn> is given by the following algorithm. The algorithm
-            returns <code>undefined</code> or a string:
-          </p>
-          <ol>
-            <li>Let <var>O</var> be the result of running the <a>steps for
-            retrieving a localizable member from the application manifest</a>,
-            with "<var>developer"</var> as the member being sought.
-            </li>
-            <li>Let <var>result</var> be <code>undefined</code>.
-            </li>
-            <li>If Type(O) is "Object".
-            </li>
-            <li>Set <var>result</var> be the result of calling
-            <a>ToString</a>(<var>value</var>).
-            </li>
-            <li>Return the <var>result</var>.
-            </li>
-          </ol>
-        </section>
-        <section>
-          <h3>
-            url member
-          </h3>
-          <p>
-            The <dfn id="propdef-url">url</dfn> an URL pointing to the
-            developer's website.
           </p>
         </section>
       </section>
@@ -709,6 +643,6 @@ a:not(href){ color: red }
           specification is edited by Ian Hickson.
         </p>
       </section>
-    </section>
+  </section>
   </body>
 </html>
