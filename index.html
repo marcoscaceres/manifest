@@ -311,30 +311,7 @@ a:not(href){ color: red }
         function of the JSON object defined in [[!ECMASCRIPT]] with
         <var>text</var> as its only argument. If parsing throws an exception,
         then treat this application manifest as an <a>invalid application
-        manifest</a>.
-        </li>
-        <li>Let <var>default locale</var> be the result of running the <a>steps
-        for processing the <code>default_locale</code> member</a>.
-          <ol>
-            <li>If <var>default locale</var> is not <var>undefined</var>:
-              <ol>
-                <li>from <var>default locale</var>.
-                </li>
-                <li>If there is no occurance of <var>default locale</var> in
-                the application locales list, then insert <var>default
-                locale</var> immediately before the last item of the
-                <var>application locale list</var>.
-                  <p>
-                    For example, given <var>default locale</var> "jp", and an
-                    <var>application locale list</var> containing "en-US,*",
-                    then the application locale list would become ["en-US",
-                    "jp", "*"].
-                  </p>
-                </li>
-              </ol>
-            </li>
-          </ol>
-        </li>
+        manifest</a>. </li>
         <li>Let <var>short name</var> be the result of running the <a>steps for
         processing the <code>short_name</code> member</a>.
         </li>
