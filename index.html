@@ -23,7 +23,7 @@ var respecConfig = {
     wgURI: "http://www.w3.org/2008/webapps/",
     wgPublicList: "public-webapps",
     wgPatentURI: "http://www.w3.org/2004/01/pp-impl/42538/status",
-		otherLinks: [{
+                otherLinks: [{
             key: "Repository",
             data: [{
                     value: "We are on Github.",
@@ -50,13 +50,18 @@ a:not(href){ color: red }
   <body>
     <section id='abstract'>
       <p>
-        This specification defines an <dfn>application manifest</dfn>, which is
-        a JSON document that describes various aspects of a web application. A
-        user agent can make use of an application manifest to, for example,
-        provide enhanced bookmarking capabilities like adding the name and icon
-        of a Web application to the home screen of a device. This specification
-        also defines the <code>appconfig</code> HTML attribute, which allows a
-        document to be associated with an application manifest.
+        This specification defines a <dfn>web manifest</dfn>, which is a JSON
+        document that a user agent can use to provide enhanced bookmarking
+        capabilities. Unlike regular bookmarks, this specification allows
+        developers to specify a range of icons, the name of the web
+        application, as well as the url to launch when a website is bookmarked
+        to, for example, the homescreen of a device. It also defines a special
+        "standalone" mode in which applications can be launched, which is
+        intended to allow web applications to run independently of a web
+        browser and more tightly integrate with native application
+        environments. This specification also defines the <code>manifest</code>
+        link type, which allows a document to be associated with a web
+        manifest.
       </p>
     </section>
     <section id="sotd">
@@ -66,7 +71,7 @@ a:not(href){ color: red }
         likely to find the specification changing out from under them in
         incompatible ways.</strong> Vendors interested in implementing this
         specification before it eventually reaches the Candidate Recommendation
-        stage should join the aforementioned mailing lists and take part in the
+        phase should join the aforementioned mailing lists and take part in the
         discussions.
       </p>
     </section>
@@ -76,15 +81,59 @@ a:not(href){ color: red }
         specification: a <dfn>user agent</dfn>.
       </p>
     </section>
-  <section id="linking">
+    <section id="linking">
       <h2>
-        Linking to a manifest
+        Linking to a web manifest
       </h2>
       <p>
-        A [[!HTML]] <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element"><code>
-        link</code></a> element that has a <a>link type</a>
-        <code>manifest</code> associates a manifest with a document.
+        The <code>manifest</code> keyword can be used with a [[!HTML]] <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">link</a>
+        element. This keyword creates an <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+        title="external resource link">external resource link</a>.
+      </p>
+      <table border="1">
+        <tr>
+          <th rowspan="2">
+            Link type
+          </th>
+          <th colspan="2">
+            Effect on...
+          </th>
+          <th rowspan="2">
+            Brief description
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <code><a href="#the-link-element">link</a></code>
+          </th>
+          <th>
+            <code><a href="#the-a-element">a</a></code> and <code><a href=
+            "#the-area-element">area</a></code>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <code title="rel-manifest">manifest</code>
+          </td><!-- second most used <link rel> value -->
+          <td>
+            <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+            title="external resource link">External Resource</a>
+          </td>
+          <td>
+            not allowed
+          </td>
+          <td>
+            Imports or links to a web manifest.
+          </td>
+        </tr>
+      </table>
+      <p>
+        The default type for resources given by the <code>manifest</code>
+        keyword is the <a>media type for a web manifests</a>, represented by
+        the string <code>application/webapp-manifest+json</code>.
       </p>
       <p>
         In cases where more than one <a href=
@@ -97,92 +146,45 @@ a:not(href){ color: red }
         if the first element was in error).
       </p>
       <p>
-        Authoring requirement: In a [[HTML]] document, there must not be more
-        than one link element whose <a title="manifest link type">link type
-        contains <code>manifest</code></a>.
+        The appropriate time to <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
+        title="concept-link-obtain">obtain</a> the resource is when the
+        <a href="http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+        title="external resource link">external resource link</a> is created or
+        when its element is <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
+        title="insert an element into a document">inserted into a document</a>,
+        whichever happens last. However, a user agent MAY opt to delay <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
+        title="concept-link-obtain">obtaining</a> a web manifest until after
+        the document and its other resources have loaded (i.e., to not delay
+        the availability of content and scripts required by the
+        <code>document</code>).
       </p>
-      <section>
-        <h3>
-          Link type "<code>manifest</code>"
-        </h3>
-        <p>
-          The <code>manifest</code> keyword can be used with a <a href=
-          "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-          link</a> element. This keyword creates an <a href=
-          "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-          title="external resource link">external resource link</a>.
-        </p>
-        <table border="1">
-          <tr>
-            <th rowspan="2"> Link type </th>
-            <th colspan="2"> Effect on... </th>
-            <th rowspan="2"> Brief description </th>
-          </tr>
-          <tr>
-            <th> <code><a href="#the-link-element">link</a></code> </th>
-            <th> <code><a href="#the-a-element">a</a></code> and <code><a href=
-              "#the-area-element">area</a></code> </th>
-          </tr>
-          <tr>
-            <td><code title="rel-manifest">manifest</code></td>
-            <!-- second most used <link rel> value -->
-            <td><a href=
-              "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-              title="external resource link">External Resource</a></td>
-            <td> not allowed </td>
-            <td> Imports or links to an application manifest. </td>
-          </tr>
-        </table>
-        <p>
-          The default type for resources given by the <code>manifest</code>
-          keyword is the <a>media type for an application manifests</a>,
-          represented by the string
-          <code>application/webapp-manifest+json</code>.
-        </p>
-        <p>
-          The appropriate time to <a href=
-          "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
-          title="concept-link-obtain">obtain</a> the resource is when the
-          <a href=
-          "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-          title="external resource link">external resource link</a> is created
-          or when its element is <a href=
-          "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
-          title="insert an element into a document">inserted into a
-          document</a>, whichever happens last. However, a user agents may opt
-          to delay <a href=
-          "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
-          title="concept-link-obtain">obtaining</a> a manifest until after the
-          document and its other resources have loaded (i.e., to not delay the
-          availability of content and scripts required by the
-          <code>document</code>).
-        </p>
-      </section>
-  </section>
-  <section>
+    </section>
+    <section>
       <h2>
-        Application Manifest
+        Web manifest
       </h2>
       <p>
-        An <a>application manifest</a> consists of a top-level object (the
-        application manifest <dfn>root</dfn>) and one or more members, some of
-        which contain other objects.
+        A web <a>manifest</a> consists of a top-level object (the web manifest
+        <dfn>root</dfn>) and one or more members, some of which contain other
+        objects.
       </p>
       <section class="informative">
         <h3>
-          Example application manifest
+          Example web manifest
         </h3>
         <p>
-          The following shows a typical <a>application manifest</a>.
+          The following shows a typical <a>web manifest</a>.
         </p>
         <pre class="example highlight">
 {
-  "name": "Example App",
+  "name": "Example",
   "altname": "The Example App 2.0",
-  &quot;orientation&quot;: &quot;landscape&quot;,
-  "url": "/index.html",
-  &quot;mode&quot;: &quot;standalone&quot;,
-  &quot;display&quot;: &quot;fullscreen&quot;,
+  "orientation": "landscape",
+  "url": "/start.html",
+  "mode": "standalone",
   "icons": [{
     "src": "icon/lowres",
     "density": "1",
@@ -199,450 +201,607 @@ a:not(href){ color: red }
     </section>
     <section>
       <h2>
-        Processing the application manifest
+        Processing the web manifest
       </h2>
       <p id="ecmascript-abstractop">
-        Algorithms in this section use the conventions described in <a class=
-        "external" href=
+        Algorithms in this specification use the conventions described in
+        <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-5.2">ECMA-262
-        section 5.2</a>, such as the use of steps and sub-steps, and so on. The <a class="external" href=
+        section 5.2</a>, such as the use of steps and sub-steps, and so on. The
+        <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.3"><dfn>ToNumber</dfn></a>,
         <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a> abstract operations and the <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
+        abstract operations and the <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-8">Type(<var>x</var>)</a>
-      notation referenced in this section are defined in [[!ECMA-262-51]]. </p>
-      <p>In
-        the algorithms, to <dfn>ignore</dfn> means that the user agent MUST act
-        as if the author had not declared the particular member in the
-        application manifest document.
+        notation referenced in this section are defined in [[!ECMA-262]].
+        Processing also relies on various algorithms defined in [[!HTML]],
+        [[!FETCH]], and [[!URL]].
       </p>
       <p>
-        Certain error conditions can result in an <a>application manifest</a>
-        being treated as an <a>invalid application manifest</a>. An
-        <dfn>invalid application manifest</dfn> is an application manifest that
-        is deemed to be non-conforming in such a way that it would not be
-        possible for the user agent to continue processing (e.g., it can't be
-        parsed by the JSON parser because of a syntax error). In such a case,
-        the user agent MAY report the error to the user in a
-        user-agent-specific manner, MAY <a href=
+        In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
+        act as if the author had not declared the particular member in the web
+        manifest document.
+      </p>
+      <p>
+        Certain error conditions can result in a web <a>manifest</a> being
+        treated as an <a>invalid web manifest</a>. An <dfn>invalid web
+        manifest</dfn> is a web manifest that is deemed to be non-conforming in
+        such a way that it would not be possible for the user agent to continue
+        processing (e.g., it can't be parsed by the JSON parser because of a
+        syntax error). In such a case, the user agent MAY report the error to
+        the user in a user-agent-specific manner, MAY <a href=
         "http://www.whatwg.org/specs/web-apps/current-work/#navigate">navigate</a>
         to an error page to report the error, or MAY ignore the error and do
-        nothing. In either case, when a step results in an <a>invalid
-        application manifest</a> the user agent MUST abort whatever step or
-        sub-step caused the condition.
+        nothing. In either case, when a step results in an <a>invalid web
+        manifest</a> the user agent MUST abort whatever step or sub-step caused
+        the condition.
       </p>
       <p>
-        The <dfn>steps for processing an application manifest</dfn> are given
-        by the following algorithm:
+        The <dfn>steps for processing a member whose type is a positive
+        number</dfn> are given by the following algorithm. The algorithm takes
+        an <var>object</var> and a <var>key</var> as an argument. The algorithm
+        returns a positive number or <code>undefined</code>.
       </p>
       <ol>
-	<li>Let <var>text</var> be the result of <a href="http://fetch.spec.whatwg.org/#concept-fetch">fetching</a> the application manifest.
-	  If the fetching algorithm aborts, treat this application manifest as an <a>invalid application
-	manifest</a>.
+        <li>Let <var>value</var> be the result of calling the
+        [[\GetOwnProperty]] internal method of icon passing <var>key</var> as
+        the argument.
+        </li>
+        <li>Let <var>number</var> be the result of
+        parseFloat(<var>value</var>);
+        </li>
+        <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
+        less than 0, return <code>undefined</code>.
+        </li>
+        <li>Return <var>number</var>.
+        </li>
+      </ol>
+      <p>
+        The <dfn>steps for processing a web manifest</dfn> are given by the
+        following algorithm:
+      </p>
+      <ol>
+        <li>Let <var>text</var> be the result of <a href=
+        "http://fetch.spec.whatwg.org/#concept-fetch">fetching</a> the web
+        manifest. If the fetching algorithm aborts, treat this web manifest as
+        an <a>invalid web manifest</a>.
         </li>
         <li>Let <var>manifest</var> be the result of invoking the <a href=
         "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">parse</a>
         function of the JSON object defined in [[!ECMASCRIPT]] with
         <var>text</var> as its only argument. If parsing throws an exception,
-        then treat this application manifest as an <a>invalid application
-        manifest</a>. </li>
-	<li>Let <var> name</var> be the result of running the <a>steps for
-	processing the <code>name</code> member</a>. </li>
-	<li>Let <var>alternative  name</var> be the result of running the <a>steps for
-	processing the <code>altname</code> member</a>. </li>
-	<li>Let <var>mode</var> be the result of running the <a>steps for
-	processing the <code>mode</code> member</a>. </li>
-	<li>Let <var>display</var> be the result of running the <a>steps for
-	processing the <code>display</code> member</a>. </li>
-	<li>Let <var>orientation</var> be the result of running the <a>steps for
-	processing the <code>orientation</code> member</a>.
+        then treat this web manifest as an <a>invalid application manifest</a>.
         </li>
-	<li>Let <var>url</var> be the result of running the <a>steps
-	for processing the <code>url</code> member</a>.
+        <li>Let <var>name</var> be the result of running the <a>steps for
+        processing the <code>name</code> member</a>.
         </li>
-	<li>Let <var>icons</var> be the result of running the <a>steps
-	for processing the <code>icons</code> member</a>. </li>
+        <li>Let <var>alternative name</var> be the result of running the
+        <a>steps for processing the <code>altname</code> member</a>.
+        </li>
+        <li>Let <var>mode</var> be the result of running the <a>steps for
+        processing the <code>mode</code> member</a>.
+        </li>
+        <li>Let <var>orientation</var> be the result of running the <a>steps
+        for processing the <code>orientation</code> member</a>.
+        </li>
+        <li>Let <var>url</var> be the result of running the <a>steps for
+        processing the <code>url</code> member</a>.
+        </li>
+        <li>Let <var>icons</var> be the result of running the <a>steps for
+        processing the <code>icons</code> member</a>.
+        </li>
         <li>Optionally, <a>ignore</a> all other members.
         </li>
       </ol>
       <section>
-
-      </section>
-      <section>
         <h3>
-        Type checks</h3>
+          Type checks
+        </h3>
         <p>
-          As the application manifest format is a [[!JSON]] document, this
+          As the web manifest format is a [[!JSON]] document, this
           specification relies on the types defined in [[!JSON]] specification:
           namely <dfn id="json-object">object</dfn>, <dfn id=
           "json-array">array</dfn>, <dfn id="json-number">number</dfn>, and
           <dfn id="json-string">string</dfn>. Strict type checking is not
           enforced by this specification. Instead, each member's definition
-          specifies the steps to required to process a particular member.
+          specifies the steps required to process a particular member.
         </p>
-        <p>
-          In addition, for the purpose of validity checking, this specification
-          relies on the the following types:
-        </p>
-        <dl>
-          <dt>
-            <dfn>Relative URL</dfn>
-          </dt>
-          <dd>
-            The concept of a relative URL is defined in the [[!URL]]
-            specification.
-          </dd>
-          <dt>
-            <dfn>Absolute URL</dfn>
-          </dt>
-          <dd>
-            The concept of an absolute URL is defined in the [[!URL]]
-            specification.
-          </dd>
-        </dl>
       </section>
       <section>
         <h3>
           <code title="">name</code> member
         </h3>
         <p>
-	The <dfn id="propdef-name"><code>name</code></dfn> is a string that represents the name of the application as is usually displayed to the user (e.g., amongst a list of other applicatons, or as a label underneath an icon). </p>
+          The <dfn id="propdef-name"><code>name</code></dfn> is a string that
+          represents the name of the application as is usually displayed to the
+          user (e.g., amongst a list of other applications, or as a label
+          underneath an icon).
+        </p>
         <p>
           The <dfn>steps for processing the name member</dfn> is given by the
-          following algorithm. The algorithm takes an application manifest as
-          an argument and returns either an error or a string:
+          following algorithm. The algorithm takes a web manifest as an
+          argument and returns either an error or a string:
         </p>
         <ol>
-          <li>Let <var>key</var> be the string "<code>name</code>".
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>name</code>" as the argument.
           </li>
-	  <li>Let <var>value</var> be the result of calling the
-	  [[\GetOwnProperty]] internal method of <var>manifest</var> passing <var>key</var> as the argument. </li>
-	  <li>If <var>value</var> is <code>null</code> or <code>undefined</code>, then let <var>value</var> be an implementation specific string that can serve
-          as a suitable name for the application. For example, if the manifest
-	  was obtained from a <code>link</code> element and the document has a title, then the document's <code>title</code> could be
-	  used. Alternatively, the user could be prompted to provide a custom name. </li>
+          <li>If <var>value</var> is <code>null</code> or
+          <code>undefined</code>, then let <var>value</var> be an
+          implementation specific string that can serve as a suitable name for
+          the application. For example, if the manifest was obtained from a
+          <code>link</code> element and the document has a title, then the
+          document's <code>title</code> could be used. Alternatively, the user
+          could be prompted to provide a custom name.
+          </li>
           <li>Let <var>result</var> be the result of calling
-	  <a>ToString</a>(<var>value</var>)</li>
-	  <li><a href="http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">Strip leading and trailing whitespace</a> from <var>result</var>.</li>
+          <a>ToString</a>(<var>value</var>)
+          </li>
+          <li>
+            <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
+            Strip leading and trailing whitespace</a> from <var>result</var>.
+          </li>
           <li>Return the <var>result</var>.
           </li>
         </ol>
       </section>
       <section>
         <h3>
-	  <code title="">altname</code> member
+          <code title="">altname</code> member
         </h3>
         <p>
-	  The <dfn id="propdef-short-name"><code>altname</code></dfn> is a string that represents an alternative
-	name of the application, such as the name under which the application is sold or marketed.</p>
+          The <dfn id="propdef-short-name"><code>altname</code></dfn> is a
+          string that represents an alternative name of the application, such
+          as the name under which the application is sold or marketed.
+        </p>
         <p>
           The <dfn>steps for processing the short name member</dfn> is given by
-          the following algorithm. The algorithm takes an application manifest
-          as an argument and returns a string:
+          the following algorithm. The algorithm takes a web manifest as an
+          argument and returns a string:
         </p>
         <ol>
-	  <li>Let <var>key</var> be the string "<code>altname</code>".
-          </li>
-
           <li>Let <var>value</var> be the result of calling the
-		[[\GetOwnProperty]] internal method of <var>manifest</var> passing <var>key</var> as the argument.</li>
-	  <li>If <var>value</var> is <code>null</code> or <code>undefined</code>, then let <var>value</var> be an implementation specific string that can serve
-	  as a suitable alt for the application. </li>
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>altname</code>" as the argument.
+          </li>
+          <li>If <var>value</var> is <code>null</code> or
+          <code>undefined</code>, then let <var>value</var> be an
+          implementation specific string that can serve as a suitable alt for
+          the application.
+          </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToString</a>(<var>value</var>).
           </li>
-	  <li><a href="http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">Strip leading and trailing whitespace</a> from <var>result</var>.</li>
+          <li>
+            <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
+            Strip leading and trailing whitespace</a> from <var>result</var>.
+          </li>
           <li>Return the <var>result</var>.
           </li>
         </ol>
       </section>
       <section>
         <h3>
-	  <code>url</code> member
+          <code>url</code> member
         </h3>
         <p>
-	  The <dfn id="propdef-launch_path">url</dfn> <a>member</a> is the URL that is  is <a href=
+          The <dfn id="propdef-launch_path">url</dfn> <a>member</a> is the URL
+          that is is <a href=
           "http://www.w3.org/html/wg/drafts/html/master/single-page.html#browsers">
-          loaded</a> when the application is <a>launched</a>.
-	When it's missing from the manifest, the UA loads the URL from the manifest was loaded. </p>
+          loaded</a> when the application is <a>launched</a>. When it's missing
+          from the manifest, the UA loads the URL from the manifest was loaded.
+        </p>
         <p>
-	  The <dfn>steps for processing the <code>url</code>
-          member</dfn> are given by the following algorithm. The algorithm
-	  returns either a string or <code>undefined</code>.
+          The <dfn>steps for processing the <code>url</code> member</dfn> are
+          given by the following algorithm. The algorithm returns a <a href=
+          "http://url.spec.whatwg.org/#concept-url">URL</a>.
         </p>
         <ol>
-	  <li>Let <var>key</var> be the string "<code>url</code>".          </li>
-	  <li>Let <var>url</var> be the result of calling the
-	  [[\GetOwnProperty]] internal method of <var>manifest</var> passing <var>key</var> as the argument. </li>
-	  <li>If <var>url</var> is null or <var>undefined</var>:
-	    <ol>
-	      <li>Let <var>value</var> be the URL from which the manifest was linked from. </li>
-	    </ol>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>url</code>" as the argument.
           </li>
-	  <li>Otherwise:
+          <li>If <var>value</var> is <code>null</code> or
+          <code>undefined</code> or <a>Type</a>(<var>value</var>) is not
+          "string":
             <ol>
-              <li>Let <var>url</var> be the result of <a href=
-	      "http://url.spec.whatwg.org/#parsing">parsing</a><var> url</var>.
+              <li>Let <var>result</var> be the absolute URL from which the
+              manifest was fetched from.
               </li>
             </ol>
           </li>
-	  <ol>
-	    <li>Set <var>result</var> to be the value of <var>url</var>.
-	    </li>
-	  </ol>
+          <li>Otherwise:
+            <ol>
+              <li>Let <var>manifest URL</var> be the URL from which the
+              <var>manifest</var> was fetched from.
+              </li>
+              <li>
+                <a href="http://url.spec.whatwg.org/#parsing">Parse</a>
+                <var>value</var>, using <var>manifest URL</var> as the base
+                URL, and let <var>result</var> be the result.
+              </li>
+            </ol>
+          </li>
           <li>Return <var>result</var>.
           </li>
         </ol>
-</section>
+      </section>
       <section>
         <h3>
           <code title="">icons</code> member
         </h3>
         <p>
-	  The <dfn id="propdef-icons">icons</dfn> is
-          a list of <a>icon objects</a> that represents a set of icons that the
-          application can make use.
+          The <dfn id="propdef-icons">icons</dfn> is a list of <a>icon
+          objects</a> that represents a set of icons that the application can
+          make use.
+        </p>
+        <p>
+          The <dfn>steps for processing the <code>icons</code> member</dfn> are
+          given by the following algorithm. The algorithm returns either an
+          list of icons, which can be empty.
+        </p>
+        <ol>
+          <li>Let <var>icons</var> be an empty list.
+          </li>
+          <li>Let <var>manifest URL</var> be the URL from which the
+          <var>manifest</var> was fetched from.
+          </li>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>icons</code>" as the argument.
+          </li>
+          <li>If <var>value</var> is an array, then for each <var>potential
+          icon</var> in the array:
+            <ol>
+              <li>Let <var>src</var> be the result of running the <a>steps for
+              processing the <code>src</code> member of an icon</a>. If the
+              result is an error, stop processing this <var>potential
+              icon</var> and move to the next <var>portential icon</var> in
+              value (if available).
+              </li>
+              <li>Run the <a>steps for processing the <code>type</code> member
+              of an icon</a>. If the result is an error,
+              </li>
+              <li>Let <var>width</var> be the result of running the <a>steps
+              for processing the <code>width</code> member of an icon</a>. If
+              the result is an error,
+              </li>
+              <li>Otherwise, let <var>icon</var> be an object.
+              </li>
+            </ol>
+          </li>
+          <li>return <var>icons</var>.
+          </li>
+        </ol>
+      </section>
+      <section>
+        <h3>
+          <code>orientation</code> member
+        </h3>
+        <p>
+          The <dfn id="propdef-orientation">orientation</dfn> <a>member</a>
+          represents the screen orientation required to use the web application
+          effectively. Orientation is only applicable for applications whose
+          <a>mode</a> of operation is <a>standalone</a>.
+        </p>
+        <p>
+          A <dfn>screen orientation</dfn> is a string that conforms to the
+          following ABNF.
+        </p>
+        <pre>
+  orientation = type ["-" option]
+  type = "portrait" / "landscape"
+  option = "locked" / "primary" / "secondary" 
+</pre>
+        <p>
+          The <dfn>steps for processing the <code>orientation</code>
+          member</dfn> are given by the following algorithm. The algorithm
+          returns a string.
         </p>
       </section>
       <section>
         <h3>
-          <code>developer</code> member
+          <code title="">mode</code> member
         </h3>
         <p>
-          The <dfn id="propdef-developer">developer</dfn> <a>localizable
-          member</a> is a <a>developer object</a> that represents the person,
-          persons, or entity that created the application.
-        </p>
-      </section>
-      <section>
-        <h2>
-          Icon object and its members
-        </h2>
-        <p>
-          Each <dfn>icons object</dfn> represents an icon for an application
-          suitable to use at some dimensions and screen density.
-        </p>
-        <section>
-          <h3>
-            width member
-          </h3>
-          <p>
-            A numeric value that represents the width of the icon in CSS pixels.
-          </p>
-        </section>
-        <section>
-          <h3>
-            height member
-          </h3>
-          <p>
-            A numeric value that represents the height of the icon in CSS pixels.
-          </p>
-        </section>
-        <section>
-          <h3>
-            density member
-          </h3>
-          <p>
-            The preferred pixel density, given as real number, for which this
-            icon was designed to be shown.
-          </p>
-        </section>
-        <section>
-          <h3>
-            src member
-          </h3>
-          <p>A URL that is the address of the resource.</p>
-        </section>
-        <section>
-          <h3>
-            type member
-          </h3>
-          <p>
-            The MIME media type of resource the src member refers to.
-          </p>
-        </section>
-      </section>
-      <section>
-        <h2>
-          Media Type
-        </h2>
-        <p>
-          This section contains the required text for MIME media type
-          registration with IANA.
+          The mode member represents that <dfn>mode of operation</dfn> in which
+          the web application will be launched. When the value is missing, the
+          user agent defaults to <a>bookmark</a>.
         </p>
         <p>
-          The <dfn>media type for an application manifests</dfn> is
-          <code>application/webapp-manifest+json</code>.
-        </p>
-        <p>
-          If the protocol over which the application manifest is transferred
-          supports the [[!MIME-TYPES]] specification (e.g. [[!HTTP11]]), it is
-          RECOMMENDED that the application manifest be labeled with the
-          <a>media type for an application manifests</a>.
+          The modes that a web application can be launched in include:
         </p>
         <dl>
           <dt>
-            Type name:
+            <dfn>standalone</dfn>
           </dt>
           <dd>
-            application
+            ...
           </dd>
           <dt>
-            Subtype name:
+            <dfn>bookmark</dfn>
           </dt>
           <dd>
-            webapp-manifest+json
-          </dd>
-          <dt>
-            Required parameters:
-          </dt>
-          <dd>
-            N/A
-          </dd>
-          <dt>
-            Optional parameters:
-          </dt>
-          <dd>
-            N/A
-          </dd>
-          <dt>
-            Encoding considerations:
-          </dt>
-          <dd>
-            Same as for application/json
-          </dd>
-          <dt>
-            Security considerations:
-          </dt>
-          <dd>
-            <p>
-              As the application manifest format is JSON and will commonly be
-              encoded using [[!UNICODE]], the security considerations described
-              in [[!JSON]] and [[!UNICODE-SECURITY]] apply. In addition,
-              implementors need to impose their own implementation-specific
-              limits on the values of otherwise unconstrained member types,
-              e.g. to prevent denial of service attacks, to guard against
-              running out of memory, or to work around platform-specific
-              limitations.
-            </p>
-            <p>
-              The application manifest document allows authors, through the
-              permissions and <code>permissions</code> members, to request
-              permission to enable security sensitive APIs. As these APIs are
-              outside the scope of this specification, significant caution
-              needs to be taken when granting an application the capability to
-              use a feature. The relevant APIs define their own security
-              considerations (see the <a href=
-              "http://www.w3.org/2012/sysapps/#roadmap">System Applications
-              Working Group's APIs</a>).
-            </p>
-            <p>
-              Web applications will generally contain ECMAScript, HTML, CSS
-              files, and other media, which are executed in a sand-boxed
-              environment. As such, implementors need to be aware of the
-              security implications for the types they support. Specifically,
-              implementors need to consider the security implications outlined
-              in the [[!CSS-MIME]] specification, the [[!ECMAScript-MIME]]
-              specification, and the [[!HTML]] specification.
-            </p>
-            <p>
-              As web applications can contain content that is able to
-              simultaneously interact with the local device and a remote host,
-              implementors need to consider the privacy implications resulting
-              from exposing private information to a remote host. Mitigation
-              and in-depth defensive measures are an implementation
-              responsibility and not prescribed by this specification. However,
-              in designing these measures, implementors are advised to enable
-              user awareness of information sharing, and to provide easy access
-              to interfaces that enable revocation of permissions.
-            </p>
-            <p>
-              As this specification allows for the declaration of IRIs within
-              certain members of the application manifest, implementors need
-              to consider the security considerations discussed in the [IRI]
-              specification. Implementations intending to display <abbr title=
-              "Internationalized Resource Identifiers">IRIs</abbr> and
-              <abbr title="Internationalized domain name">IDNA</abbr> addresses
-              found in the application manifest are strongly encouraged to
-              follow the security advice given in [[!UNICODE-SECURITY]].
-            </p>
-          </dd>
-          <dt>
-            Applications that use this media type:
-          </dt>
-          <dd>
-            Web browsers
-          </dd>
-          <dt>
-            Additional information:
-          </dt>
-          <dd>
-            <dl>
-              <dt>
-                Magic number(s):
-              </dt>
-              <dd>
-                N/A
-              </dd>
-              <dt>
-                File extension(s):
-              </dt>
-              <dd>
-                .webapp
-              </dd>
-              <dt>
-                Macintosh file type code(s):
-              </dt>
-              <dd>
-                TEXT
-              </dd>
-            </dl>
-          </dd>
-          <dt>
-            Person &amp; email address to contact for further information:
-          </dt>
-          <dd>
-            The <a href="http://www.w3.org/2008/webapps/" rel="nofollow">Web
-            Applications (WebApps) Working Group</a> can be contacted at
-            <a href="http://lists.w3.org/Archives/Public/public-webapps/" rel=
-            "nofollow">public-webapps@w3.org</a>.
-          </dd>
-          <dt>
-            Intended usage:
-          </dt>
-          <dd>
-            COMMON
-          </dd>
-          <dt>
-            Restrictions on usage:
-          </dt>
-          <dd>
-            none
-          </dd>
-          <dt>
-            Author:
-          </dt>
-          <dd>
-            W3C's Web Applications (WebApps) Working Group.
-          </dd>
-          <dt>
-            Change controller:
-          </dt>
-          <dd>
-            W3C.
+            ...
           </dd>
         </dl>
-      </section>
-      <section class="appendix">
-        <h2>
-          Acknowledgments
-        </h2>
         <p>
-          This document reuses text from the WHATWG [[!HTML]] specification as
-          permitted by the license of that specification. The [[!HTML]]
-          specification is edited by Ian Hickson.
+          Standalone mode can also be displayed in the following view modes:
+        </p>
+        <p>
+          A valid application mode is one that conforms to the following
+          [[!ABNF]]:
+        </p>
+        <pre>
+  mode = "bookmark" / "standalone" ["-fullscreen"]
+        
+</pre>
+      </section>
+    </section>
+    <section>
+      <h2>
+        Icon object and its members
+      </h2>
+      <p>
+        Each <dfn>icons object</dfn> represents an icon for an application
+        suitable to use at some dimensions and screen density.
+      </p>
+      <section>
+        <h3>
+          <code>width</code> and <code title="">height</code> members
+        </h3>
+        <p>
+          The <dfn title="icon-width">width</dfn> and <dfn title=
+          "icon-height">height</dfn> members represent the natural width of the
+          icon in pixels. Their corresponding value is a positive number
+          greater than 0.
         </p>
       </section>
-  </section>
+      <section>
+        <h3>
+          <code>density</code> member
+        </h3>
+        <p>
+          The <dfn title="icon-densitiy">density</dfn> member of an icon is the
+          device pixel density for which this icon was designed. The device
+          pixel density is expressed as the number of dots per 'px' unit
+          (equivalent to a <a href=
+          "http://dev.w3.org/csswg//#resolution">dppx</a> as defined in
+          [[!CSS-VALUES]]). The value is a positive number greater than 0. When
+          the value is missing, the user agent assumes the value
+          <a><code>1</code></a>.
+        </p>
+      </section>
+      <section>
+        <h3>
+          <code>src</code> member
+        </h3>
+        <p>
+          The <dfn title="icon-density">src</dfn> member of an icon is a URL
+          from which the icon can be fetched.
+        </p>
+        <p>
+          The <dfn>steps for processing the <code>src</code> member of an
+          icon</dfn> are given by the following algorithm. The algorithm takes
+          a <var>potential icon</var> object as an arugment. The algorithm
+          returns a URL or an error.
+        </p>
+        <ol>
+          <li>Let <var>raw src</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>potential icon</var>
+          passing "<code>src</code>" as the argument.
+          </li>
+          <li>If <var>raw src</var> is <code>null</code> or
+          <code>underfined</code> or Type(<var>potential src</var>) is not
+          "string", return an error.
+          </li>
+          <li>
+            <a href="http://url.spec.whatwg.org/#parsing">Parse</a> <var>raw
+            src</var>, using <var>manifest URL</var> as the base URL, and let
+            <var>src</var> be the result.
+          </li>
+          <li>return <var>result</var>.
+          </li>
+        </ol>
+      </section>
+      <section>
+        <h3>
+          <code>type</code> member
+        </h3>
+        <p>
+          The <dfn title="icon-type">type</dfn> member of an icon is a hint as
+          to the media type of the icon. A user agent can ignore icons of media
+          types it does not support.
+        </p>
+        <p>
+          The <dfn>steps for processing the <code>type</code> member</dfn> are
+          given by the following algorithm. The algorithm returns a string or
+          <code>undefined</code>.
+        </p>
+      </section>
+    </section>
+    <section>
+      <h2>
+        Media Type
+      </h2>
+      <p>
+        This section contains the required text for MIME media type
+        registration with IANA.
+      </p>
+      <p>
+        The <dfn>media type for a web manifests</dfn> is
+        <code>application/webapp-manifest+json</code>.
+      </p>
+      <p>
+        If the protocol over which the web manifest is transferred supports the
+        [[!MIME-TYPES]] specification (e.g. [[!HTTP11]]), it is RECOMMENDED
+        that the web manifest be labeled with the <a>media type for a web
+        manifests</a>.
+      </p>
+      <dl>
+        <dt>
+          Type name:
+        </dt>
+        <dd>
+          application
+        </dd>
+        <dt>
+          Subtype name:
+        </dt>
+        <dd>
+          webapp-manifest+json
+        </dd>
+        <dt>
+          Required parameters:
+        </dt>
+        <dd>
+          N/A
+        </dd>
+        <dt>
+          Optional parameters:
+        </dt>
+        <dd>
+          N/A
+        </dd>
+        <dt>
+          Encoding considerations:
+        </dt>
+        <dd>
+          Same as for application/json
+        </dd>
+        <dt>
+          Security considerations:
+        </dt>
+        <dd>
+          <p>
+            As the web manifest format is JSON and will commonly be encoded
+            using [[!UNICODE]], the security considerations described in
+            [[!JSON]] and [[!UNICODE-SECURITY]] apply. In addition,
+            implementors need to impose their own implementation-specific
+            limits on the values of otherwise unconstrained member types, e.g.
+            to prevent denial of service attacks, to guard against running out
+            of memory, or to work around platform-specific limitations.
+          </p>
+          <p>
+            The web manifest document allows authors, through the permissions
+            and <code>permissions</code> members, to request permission to
+            enable security sensitive APIs. As these APIs are outside the scope
+            of this specification, significant caution needs to be taken when
+            granting an application the capability to use a feature. The
+            relevant APIs define their own security considerations (see the
+            <a href="http://www.w3.org/2012/sysapps/#roadmap">System
+            Applications Working Group's APIs</a>).
+          </p>
+          <p>
+            Web applications will generally contain ECMAScript, HTML, CSS
+            files, and other media, which are executed in a sand-boxed
+            environment. As such, implementors need to be aware of the security
+            implications for the types they support. Specifically, implementors
+            need to consider the security implications outlined in the
+            [[!CSS-MIME]] specification, the [[!ECMAScript-MIME]]
+            specification, and the [[!HTML]] specification.
+          </p>
+          <p>
+            As web applications can contain content that is able to
+            simultaneously interact with the local device and a remote host,
+            implementors need to consider the privacy implications resulting
+            from exposing private information to a remote host. Mitigation and
+            in-depth defensive measures are an implementation responsibility
+            and not prescribed by this specification. However, in designing
+            these measures, implementors are advised to enable user awareness
+            of information sharing, and to provide easy access to interfaces
+            that enable revocation of permissions.
+          </p>
+          <p>
+            As this specification allows for the declaration of IRIs within
+            certain members of the web manifest, implementors need to consider
+            the security considerations discussed in the [IRI] specification.
+            Implementations intending to display <abbr title=
+            "Internationalized Resource Identifiers">IRIs</abbr> and
+            <abbr title="Internationalized domain name">IDNA</abbr> addresses
+            found in the web manifest are strongly encouraged to follow the
+            security advice given in [[!UNICODE-SECURITY]].
+          </p>
+        </dd>
+        <dt>
+          Applications that use this media type:
+        </dt>
+        <dd>
+          Web browsers
+        </dd>
+        <dt>
+          Additional information:
+        </dt>
+        <dd>
+          <dl>
+            <dt>
+              Magic number(s):
+            </dt>
+            <dd>
+              N/A
+            </dd>
+            <dt>
+              File extension(s):
+            </dt>
+            <dd>
+              .webapp
+            </dd>
+            <dt>
+              Macintosh file type code(s):
+            </dt>
+            <dd>
+              TEXT
+            </dd>
+          </dl>
+        </dd>
+        <dt>
+          Person &amp; email address to contact for further information:
+        </dt>
+        <dd>
+          The <a href="http://www.w3.org/2008/webapps/" rel="nofollow">Web
+          Applications (WebApps) Working Group</a> can be contacted at <a href=
+          "http://lists.w3.org/Archives/Public/public-webapps/" rel=
+          "nofollow">public-webapps@w3.org</a>.
+        </dd>
+        <dt>
+          Intended usage:
+        </dt>
+        <dd>
+          COMMON
+        </dd>
+        <dt>
+          Restrictions on usage:
+        </dt>
+        <dd>
+          none
+        </dd>
+        <dt>
+          Author:
+        </dt>
+        <dd>
+          W3C's Web Applications (WebApps) Working Group.
+        </dd>
+        <dt>
+          Change controller:
+        </dt>
+        <dd>
+          W3C.
+        </dd>
+      </dl>
+    </section>
+    <section class="appendix">
+      <h2>
+        Acknowledgments
+      </h2>
+      <p>
+        This document reuses text from the WHATWG [[!HTML]] specification as
+        permitted by the license of that specification. The [[!HTML]]
+        specification is edited by Ian Hickson.
+      </p>
+    </section>
   </body>
 </html>
