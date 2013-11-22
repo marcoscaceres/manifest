@@ -59,7 +59,19 @@ a:not(href){ color: red }
         Introduction
       </h2>
       <p>
-        TBW...
+        Ideally, web applications should be immediately available to users
+        without them needing to launch a separate application (a web browser)
+        and having to type a URL. A user may have found a web application
+        through browsing the web (e.g., through a search engine, via a link
+        given to them by a friend on a social network, or through a website
+        that works as an "app store"), but once added to the homescreen, the
+        developer needs to be able to control if in web application opens in a
+        Web browser environment or if the application is launchedstandalone:
+        that is, once the application is launched, it appears indistinguishable
+        from a native application by allowing the OS to treat it as equivalent
+        to a native application. This includes, but is not limited to,
+        integration with OS facilities such as the task switcher and doing away
+        with browser UI chrome (the address bar, forward/back buttons, etc.).
       </p>
       <p>
         This document attempts to address the <cite><a href=
@@ -149,7 +161,49 @@ installButton.addEventListener("click", function(e){
       <p>
         A web <a>manifest</a> is a [[!JSON]] document that consists of a
         top-level object (the web manifest <dfn>root</dfn>) and one or more
-        members, some of which contain other objects.
+        members, some of which contain other objects. Each of the members, as
+        well as how their values are processes, are defined below.
+      </p>
+      <p id="ecmascript-abstractop">
+        Algorithms in this specification use the conventions described in
+        [[!ECMA-262]], such as the use of steps and sub-steps, and so on. The
+        <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-parsefloat-string">
+        <dfn>parseFloat</dfn></a> method, <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
+        abstract operation, and the <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-8">Type(<var>x</var>)</a>
+        notation referenced in this section are defined in [[!ECMA-262]].
+        Processing also relies on various algorithms defined in [[!HTML]],
+        [[!FETCH]], and [[!URL]].
+      </p>
+      <p>
+        As the web manifest format is a [[!JSON]] document, this specification
+        relies on the types defined in [[!JSON]] specification: namely <dfn id=
+        "json-object">object</dfn>, <dfn id="json-array">array</dfn>, <dfn id=
+        "json-number">number</dfn>, and <dfn id="json-string">string</dfn>.
+        Strict type checking is not enforced by this specification. Instead,
+        each member's definition specifies the steps required to process a
+        particular member.
+      </p>
+      <p>
+        In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
+        act as if the developer had not declared the particular member in the
+        web manifest document.
+      </p>
+      <p>
+        Certain error conditions can result in a web <a>manifest</a> being
+        treated as an <a>invalid web manifest</a>. An <dfn>invalid web
+        manifest</dfn> is a web manifest that is deemed to be non-conforming in
+        such a way that it would not be possible for the user agent to continue
+        processing (e.g., it can't be parsed by the JSON parser because of a
+        syntax error). In such a case, the user agent MAY report the error to
+        the user in a user-agent-specific manner, MAY <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#navigate">navigate</a>
+        to an error page to report the error, or MAY ignore the error and do
+        nothing. In either case, when a step results in an <a>invalid web
+        manifest</a> the user agent MUST abort whatever step or sub-step caused
+        the condition.
       </p>
       <section>
         <h3>
@@ -327,24 +381,99 @@ installButton.addEventListener("click", function(e){
         </h3>
         <p>
           The <dfn id="propdef-orientation">orientation</dfn> <a>member</a>
-          represents the screen orientation required to use the web application
-          effectively. Orientation is only applicable for applications whose
-          <a>mode</a> of operation is <a>standalone</a>.
+          represents the screen orientation that is required to use the web
+          application effectively. The value of this member is only applicable
+          to applications whose mode of operation is <a>standalone</a>.
         </p>
         <p>
-          A <dfn>screen orientation</dfn> is a string that conforms to the
-          following ABNF.
+          Two orientations exists for most devices: 'portrait' and 'landscape',
+          but some devices support only one. Devices might also support up to
+          two portrait and two landscape orientations (described below), and by
+          default be able to flip between all of these.
+        </p>
+        <p>
+          Orientation-locking requests can be post-fixed with one of the
+          following keywords:
+        </p>
+        <dl>
+          <dt>
+            primary
+          </dt>
+          <dd>
+            The natural orientation for the device (if applicable, else an
+            arbitrary one).
+          </dd>
+          <dt>
+            secondary
+          </dt>
+          <dd>
+            The opposite direction of the primary one.
+          </dd>
+          <dt>
+            auto
+          </dt>
+          <dd>
+            The choice of using either primary or secondary is left to the use
+            agent.
+          </dd>
+        </dl>
+        <p>
+          When the request is not post-fixed, the user agent can flip between
+          primary and secondary orientation.
+        </p>
+        <p>
+          A <dfn>valid screen orientation</dfn> is a string that conforms to
+          the following [[!ABNF]].
         </p>
         <pre>
   orientation = type ["-" option]
   type = "portrait" / "landscape"
-  option = "locked" / "primary" / "secondary" 
+  option = "any" / "primary" / "secondary" 
 </pre>
         <p>
           The <dfn>steps for processing the <code>orientation</code>
           member</dfn> are given by the following algorithm. The algorithm
           returns a string.
         </p>
+        <ol>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>orientation</code>" as the argument.
+          </li>
+          <li>If <var>value</var> is <code>null</code> or
+          <code>undefined</code>, return <code>undefined</code>.
+          </li>
+          <li>If <a>type</a>(<var>value</var>) is not "string", then return an
+          error and terminate this algorithm.
+          </li>
+          <li>
+            <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
+            Strip leading and trailing whitespace</a> from <var>value</var>.
+          </li>
+          <li>If <var>value</var> is not a <a>valid screen orientation</a>,
+          then return an error and terminate this algorithm.
+          </li>
+          <li>Return <var>value</var>.
+          </li>
+        </ol>
+        <p>
+          The <dfn>steps for selectng the orientaton when the application is
+          launched</dfn> is given by the following algorithm:<br>
+        </p>
+        <ol>
+          <li>If the device is currently in either primary or secondary mode,
+          choose the one that the device is currently in (unless there is some
+          reason not to do so).
+          </li>
+          <li>if the device is in an orientation that is contrary to the one
+          being requested, attempt to put the device into the primary or the
+          orientation being requested.
+          </li>
+          <li>When the device is rotated, allow the document? to flip freely
+          from primary to secondary.
+          </li>
+        </ol>
       </section>
       <section>
         <h3>
@@ -356,32 +485,64 @@ installButton.addEventListener("click", function(e){
           user agent defaults to <a>bookmark</a>.
         </p>
         <p>
-          The modes that a web application can be launched in include:
+          The mode of operation in which a web application can be launched
+          include:
         </p>
         <dl>
           <dt>
             <dfn>standalone</dfn>
           </dt>
           <dd>
-            ...
+            Once launched, the Web application appears indistinguishable from a
+            native application by allowing the OS to treat it as equivalent to
+            a native application.
           </dd>
           <dt>
             <dfn>bookmark</dfn>
           </dt>
           <dd>
-            ...
+            When launched, the user agent open the URL is normal (e.g., opens a
+            new tab, or a new window, or whatever it commonly does when
+            instructed to open a bookmark).
           </dd>
         </dl>
         <p>
           Standalone mode can also be displayed in the following view modes:
         </p>
         <p>
-          A valid application mode is one that conforms to the following
-          [[!ABNF]]:
+          A <dfn>valid application mode</dfn> is one that conforms to the
+          following [[!ABNF]]:
         </p>
         <pre>
   mode = "bookmark" / "standalone" ["-fullscreen"]
 </pre>
+        <p>
+          The <dfn>steps for processing the <code>mode</code> member of an
+          icon</dfn> are given by the following algorithm. The algorithm
+          returns a string, an error, or <code>undefined</code>.
+        </p>
+        <ol>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>mode</code>" as the argument.
+          </li>
+          <li>If <var>value</var> is <code>null</code> or
+          <code>undefined</code>, return <code>undefined</code>.
+          </li>
+          <li>If <a>type</a>(<var>value</var>) is not "string", then return an
+          error and terminate this algorithm.
+          </li>
+          <li>
+            <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
+            Strip leading and trailing whitespace</a> from <var>value</var>.
+          </li>
+          <li>If <var>value</var> is not a <a>valid application mode</a>, then
+          return an error and terminate this algorithm.
+          </li>
+          <li>Return <var>value</var>.
+          </li>
+        </ol>
       </section>
     </section>
     <section>
@@ -394,7 +555,8 @@ installButton.addEventListener("click", function(e){
       </p>
       <section>
         <h3>
-          <code>width</code> and <code title="">height</code> members
+          <code>width</code>, <code title="">height</code>, and
+          <code>density</code> members
         </h3>
         <p>
           The <dfn title="icon-width">width</dfn> and <dfn title=
@@ -402,11 +564,6 @@ installButton.addEventListener("click", function(e){
           icon in pixels. Their corresponding value is a positive number
           greater than 0.
         </p>
-      </section>
-      <section>
-        <h3>
-          <code>density</code> member
-        </h3>
         <p>
           The <dfn title="icon-densitiy">density</dfn> member of an icon is the
           device pixel density for which this icon was designed. The device
@@ -417,6 +574,35 @@ installButton.addEventListener("click", function(e){
           When the value is missing, the user agent assumes the value
           <a><code>1</code></a>.
         </p>
+        <p>
+          The <code>width</code>, <code>height</code>, and <code>density</code>
+          members are processed using the <a>steps for processing a member
+          whose type is a positive number</a>.
+        </p>
+        <p>
+          The <dfn>steps for processing a member whose type is a positive
+          number</dfn> are given by the following algorithm. The algorithm
+          takes an <var>object</var> and a <var>key</var> as an argument. The
+          algorithm returns a positive number, <code>undefined</code>, or an
+          error.
+        </p>
+        <ol>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>object</var> passing
+          <var>key</var> as the argument.
+          </li>
+          <li>If value is <code>undefined</code>, return
+          <code>undefined</code>.
+          </li>
+          <li>Let <var>number</var> be the result of
+          parseFloat(<var>value</var>);
+          </li>
+          <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
+          less than 0, return an error.
+          </li>
+          <li>Return <var>number</var>.
+          </li>
+        </ol>
       </section>
       <section>
         <h3>
@@ -438,7 +624,7 @@ installButton.addEventListener("click", function(e){
           passing "<code>src</code>" as the argument.
           </li>
           <li>If <var>raw src</var> is <code>null</code> or
-          <code>underfined</code> or Type(<var>potential src</var>) is not
+          <code>underfined</code> or type(<var>potential src</var>) is not
           "string", return an error.
           </li>
           <li>
@@ -470,47 +656,6 @@ installButton.addEventListener("click", function(e){
       <h2>
         Processing the web manifest
       </h2>
-      <p id="ecmascript-abstractop">
-        Algorithms in this specification use the conventions described in
-        [[!ECMA-262]], such as the use of steps and sub-steps, and so on. The
-        <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-parsefloat-string">
-        <dfn>parseFloat</dfn></a> method, <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
-        abstract operation, and the <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-8">Type(<var>x</var>)</a>
-        notation referenced in this section are defined in [[!ECMA-262]].
-        Processing also relies on various algorithms defined in [[!HTML]],
-        [[!FETCH]], and [[!URL]].
-      </p>
-      <p>
-        As the web manifest format is a [[!JSON]] document, this specification
-        relies on the types defined in [[!JSON]] specification: namely <dfn id=
-        "json-object">object</dfn>, <dfn id="json-array">array</dfn>, <dfn id=
-        "json-number">number</dfn>, and <dfn id="json-string">string</dfn>.
-        Strict type checking is not enforced by this specification. Instead,
-        each member's definition specifies the steps required to process a
-        particular member.
-      </p>
-      <p>
-        In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
-        act as if the developer had not declared the particular member in the
-        web manifest document.
-      </p>
-      <p>
-        Certain error conditions can result in a web <a>manifest</a> being
-        treated as an <a>invalid web manifest</a>. An <dfn>invalid web
-        manifest</dfn> is a web manifest that is deemed to be non-conforming in
-        such a way that it would not be possible for the user agent to continue
-        processing (e.g., it can't be parsed by the JSON parser because of a
-        syntax error). In such a case, the user agent MAY report the error to
-        the user in a user-agent-specific manner, MAY <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#navigate">navigate</a>
-        to an error page to report the error, or MAY ignore the error and do
-        nothing. In either case, when a step results in an <a>invalid web
-        manifest</a> the user agent MUST abort whatever step or sub-step caused
-        the condition.
-      </p>
       <p>
         The <dfn>steps for processing a web manifest</dfn> are given by the
         following algorithm:
@@ -548,35 +693,6 @@ installButton.addEventListener("click", function(e){
         <li>Optionally, <a>ignore</a> all other members.
         </li>
       </ol>
-      <section>
-        <h3>
-          Common processing infrastructure
-        </h3>
-        <p>
-          The <dfn>steps for processing a member whose type is a positive
-          number</dfn> are given by the following algorithm. The algorithm
-          takes an <var>object</var> and a <var>key</var> as an argument. The
-          algorithm returns a positive number, <code>undefined</code>, or an
-          error.
-        </p>
-        <ol>
-          <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>object</var> passing
-          <var>key</var> as the argument.
-          </li>
-          <li>If value is <code>undefined</code>, return
-          <code>undefined</code>.
-          </li>
-          <li>Let <var>number</var> be the result of
-          parseFloat(<var>value</var>);
-          </li>
-          <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
-          less than 0, return an error.
-          </li>
-          <li>Return <var>number</var>.
-          </li>
-        </ol>
-      </section>
     </section>
     <section id="linking">
       <h2>
@@ -881,9 +997,6 @@ installButton.addEventListener("click", function(e){
       <h2>
         Acknowledgments
       </h2>
-      <p>
-        &nbsp;
-      </p>
       <p>
         This document reuses text from the WHATWG [[!HTML]] specification as
         permitted by the license of that specification. The [[!HTML]]
