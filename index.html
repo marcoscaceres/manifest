@@ -66,13 +66,12 @@ a:not(href){ color: red }
         given to them by a friend on a social network, or through a website
         that works as an "app store"), but once added to the homescreen, the
         developer needs to be able to control if in web application opens in a
-        Web browser environment or if the application is launchedstandalone:
+        Web browser environment or if the application is launched <a>standalone</a>:
         that is, once the application is launched, it appears indistinguishable
         from a native application by allowing the OS to treat it as equivalent
         to a native application. This includes, but is not limited to,
         integration with OS facilities such as the task switcher and doing away
-        with browser UI chrome (the address bar, forward/back buttons, etc.).
-      </p>
+      with browser UI chrome (the address bar, forward/back buttons, etc.). </p>
       <p>
         This document attempts to address the <cite><a href=
         "http://w3c-webmob.github.io/installable-webapps/">Use Cases and
@@ -358,7 +357,7 @@ installButton.addEventListener("click", function(e){
               <li>Let <var>src</var> be the result of running the <a>steps for
               processing the <code>src</code> member of an icon</a>. If the
               result is an error, stop processing this <var>potential
-              icon</var> and move to the next <var>portential icon</var> in
+              icon</var> and move to the next <var>potential icon</var> in
               value (if available).
               </li>
               <li>Run the <a>steps for processing the <code>type</code> member
@@ -459,7 +458,7 @@ installButton.addEventListener("click", function(e){
           </li>
         </ol>
         <p>
-          The <dfn>steps for selectng the orientaton when the application is
+          The <dfn>steps for selecting the orientation when the application is
           launched</dfn> is given by the following algorithm:<br>
         </p>
         <ol>
@@ -616,7 +615,7 @@ installButton.addEventListener("click", function(e){
         <p>
           The <dfn>steps for processing the <code>src</code> member of an
           icon</dfn> are given by the following algorithm. The algorithm takes
-          a <var>potential icon</var> object as an arugment. The algorithm
+          a <var>potential icon</var> object as an argument. The algorithm
           returns a URL or an error.
         </p>
         <ol>
@@ -625,7 +624,7 @@ installButton.addEventListener("click", function(e){
           passing "<code>src</code>" as the argument.
           </li>
           <li>If <var>raw src</var> is <code>null</code> or
-          <code>underfined</code> or type(<var>potential src</var>) is not
+          <code>undefined</code> or type(<var>potential src</var>) is not
           "string", return an error.
           </li>
           <li>
@@ -779,7 +778,7 @@ installButton.addEventListener("click", function(e){
     </section>
     <section class="informative">
       <h2>
-        Extending the manifest
+        Proprietary extensions to the web manifest
       </h2>
       <p>
         Although proprietary extensions are undesirable, they can't
@@ -827,7 +826,7 @@ installButton.addEventListener("click", function(e){
     </section>
     <section>
       <h2>
-        Media type regiestration
+        Media type reregistration
       </h2>
       <p>
         This section contains the required text for MIME media type
@@ -888,7 +887,7 @@ installButton.addEventListener("click", function(e){
             of memory, or to work around platform-specific limitations.
           </p>
           <p>
-            The web manifest document allows developeres, through the
+            The web manifest document allows developers, through the
             permissions and <code>permissions</code> members, to request
             permission to enable security sensitive APIs. As these APIs are
             outside the scope of this specification, significant caution needs
