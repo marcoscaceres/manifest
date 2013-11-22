@@ -8,50 +8,8 @@
     <script src="http://www.w3.org/Tools/respec/respec-w3c-common" class=
     "remove">
 </script>
-    <script class='remove'>
-var respecConfig = {
-    specStatus: "WD",
-    shortName: "manifest",
-    edDraftURI: "http://www.w3.org/2008/webapps/manifest/",
-    editors: [{
-            name: "Marcos Caceres",
-            company: "Mozilla Corporation",
-            companyURL: "http://mozilla.com"
-        }, 
-                                {
-            name: "Anssi Kostiainen",
-            company: "Intel Corporation",
-            companyURL: "http://intel.com"
-        },
-                                {
-            name: "Kenneth Rohde Christiansen",
-            company: "Intel Corporation",
-            companyURL: "http://intel.com"
-        },
-                                
-                                
-    ],
-    wg: "Web Applications (WebApps) Working Group",
-    wgURI: "http://www.w3.org/2008/webapps/",
-    wgPublicList: "public-webapps",
-    wgPatentURI: "http://www.w3.org/2004/01/pp-impl/42538/status",
-                otherLinks: [{
-            key: "Repository",
-            data: [{
-                    value: "We are on Github.",
-                    href: "https://github.com/sysapps/manifest"
-                }, {
-                    value: "File a bug.",
-                    href: "https://github.com/sysapps/manifest/issues"
-                }, {
-                    value: "Commit history.",
-                    href: "https://github.com/sysapps/manifest/commits/gh-pages"
-                }
-            ]
-        }
-    ],
-    };
-    </script>
+    <script src="respecConfig.js" class='remove'>
+</script>
     <style class='remove'>
 a:not(href){ color: red }
     li{
@@ -103,7 +61,11 @@ a:not(href){ color: red }
       <p>
         TBW...
       </p>
-      <p>This document attempts to address the <cite><a href="http://w3c-webmob.github.io/installable-webapps/">Use Cases and Requirements for Installable Web Apps</a></cite>. </p>
+      <p>
+        This document attempts to address the <cite><a href=
+        "http://w3c-webmob.github.io/installable-webapps/">Use Cases and
+        Requirements for Installable Web Apps</a></cite>.
+      </p>
       <section class="informative">
         <h3>
           Example web manifest
@@ -451,8 +413,8 @@ installButton.addEventListener("click", function(e){
           pixel density is expressed as the number of dots per 'px' unit
           (equivalent to a <a href=
           "http://dev.w3.org/csswg//#resolution">dppx</a> as defined in
-          [[!CSS-VALUES]]). The value is a positive number greater than 0. When
-          the value is missing, the user agent assumes the value
+          [[!css3-values]]). The value is a positive number greater than 0.
+          When the value is missing, the user agent assumes the value
           <a><code>1</code></a>.
         </p>
       </section>
@@ -512,8 +474,8 @@ installButton.addEventListener("click", function(e){
         Algorithms in this specification use the conventions described in
         [[!ECMA-262]], such as the use of steps and sub-steps, and so on. The
         <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-parsefloat-string"><dfn>parseFloat</dfn></a> method, 
-        <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-parsefloat-string">
+        <dfn>parseFloat</dfn></a> method, <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
         abstract operation, and the <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-8">Type(<var>x</var>)</a>
@@ -725,6 +687,29 @@ installButton.addEventListener("click", function(e){
     </section>
     <section>
       <h2>
+        Extensions to the <code>Navigator</code> object
+      </h2>
+      <section>
+        <h3>
+          <code>standalone</code> attribute
+        </h3>
+        <dl class="idl" title="partial interface Navigator">
+          <dt>
+            readonly attribute Boolean standalone
+          </dt>
+          <dd>
+            When getting, the user agent MUST returns <code>true</code> if the
+            application is running as <a>standalone</a>. Return
+            <code>false</code> otherwise.
+          </dd>
+          <dt>
+            void bookmark(DOMString manifestURL)
+          </dt>
+        </dl>
+      </section>
+    </section>
+    <section>
+      <h2>
         Media type regiestration
       </h2>
       <p>
@@ -896,8 +881,8 @@ installButton.addEventListener("click", function(e){
       <h2>
         Acknowledgments
       </h2>
-      <p>&nbsp;
-        
+      <p>
+        &nbsp;
       </p>
       <p>
         This document reuses text from the WHATWG [[!HTML]] specification as
