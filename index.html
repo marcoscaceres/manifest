@@ -17,7 +17,19 @@ var respecConfig = {
             name: "Marcos Caceres",
             company: "Mozilla Corporation",
             companyURL: "http://mozilla.com"
-        }
+        }, 
+                                {
+            name: "Anssi ",
+            company: "Intel Corporation",
+            companyURL: "http://intel.com"
+        },
+                                {
+            name: "Kenneth Rohde Christiansen",
+            company: "Intel Corporation",
+            companyURL: "http://intel.com"
+        },
+                                
+                                
     ],
     wg: "Web Applications (WebApps) Working Group",
     wgURI: "http://www.w3.org/2008/webapps/",
@@ -59,9 +71,12 @@ a:not(href){ color: red }
         "standalone" mode in which applications can be launched, which is
         intended to allow web applications to run independently of a web
         browser and more tightly integrate with native application
-        environments. This specification also defines the <code>manifest</code>
-        link type, which allows a document to be associated with a web
-        manifest.
+        environments.
+      </p>
+      <p>
+        This specification also defines two ways to allows a web page to be
+        associated with a web manifest: through the <code>manifest</code> link
+        type or through bookmark API.
       </p>
     </section>
     <section id="sotd">
@@ -81,95 +96,12 @@ a:not(href){ color: red }
         specification: a <dfn>user agent</dfn>.
       </p>
     </section>
-    <section id="linking">
-      <h2>
-        Linking to a web manifest
-      </h2>
-      <p>
-        The <code>manifest</code> keyword can be used with a [[!HTML]] <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">link</a>
-        element. This keyword creates an <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-        title="external resource link">external resource link</a>.
-      </p>
-      <table border="1">
-        <tr>
-          <th rowspan="2">
-            Link type
-          </th>
-          <th colspan="2">
-            Effect on...
-          </th>
-          <th rowspan="2">
-            Brief description
-          </th>
-        </tr>
-        <tr>
-          <th>
-            <code><a href="#the-link-element">link</a></code>
-          </th>
-          <th>
-            <code><a href="#the-a-element">a</a></code> and <code><a href=
-            "#the-area-element">area</a></code>
-          </th>
-        </tr>
-        <tr>
-          <td>
-            <code title="rel-manifest">manifest</code>
-          </td><!-- second most used <link rel> value -->
-          <td>
-            <a href=
-            "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-            title="external resource link">External Resource</a>
-          </td>
-          <td>
-            not allowed
-          </td>
-          <td>
-            Imports or links to a web manifest.
-          </td>
-        </tr>
-      </table>
-      <p>
-        The default type for resources given by the <code>manifest</code>
-        keyword is the <a>media type for a web manifests</a>, represented by
-        the string <code>application/webapp-manifest+json</code>.
-      </p>
-      <p>
-        In cases where more than one <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element"><code>
-        link</code></a> element with a <code>manifest</code> link type appears
-        in a <code>document</code>, the user agent MUST use the first inserted
-        link element and ignore all subsequent <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element"><code>
-        link</code></a> elements with a <code>manifest</code> link type (even
-        if the first element was in error).
-      </p>
-      <p>
-        The appropriate time to <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
-        title="concept-link-obtain">obtain</a> the resource is when the
-        <a href="http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-        title="external resource link">external resource link</a> is created or
-        when its element is <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
-        title="insert an element into a document">inserted into a document</a>,
-        whichever happens last. However, a user agent MAY opt to delay <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
-        title="concept-link-obtain">obtaining</a> a web manifest until after
-        the document and its other resources have loaded (i.e., to not delay
-        the availability of content and scripts required by the
-        <code>document</code>).
-      </p>
-    </section>
     <section>
       <h2>
-        Web manifest
+        Introduction
       </h2>
       <p>
-        A web <a>manifest</a> consists of a top-level object (the web manifest
-        <dfn>root</dfn>) and one or more members, some of which contain other
-        objects.
+        TBW...
       </p>
       <section class="informative">
         <h3>
@@ -198,116 +130,64 @@ a:not(href){ color: red }
 }
 </pre>
       </section>
+      <section>
+        <h3>
+          Example of linking to manifest
+        </h3>
+        <pre class="example highlight html">
+&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;title&gt;The Best News - international&lt;/title&gt;
+&lt;link rel="manifest" href="add_to_home.json"&gt;
+&lt;meta name="application-name" content="Best News!"&gt;
+...
+</pre>
+      </section>
+      <section>
+        <h3>
+          Example of using the API
+        </h3>
+        <p>
+          Check if the application is running in standalone.
+        </p>
+        <pre class="example highlight html">
+if("standalone" in window.navigator &amp;&amp; window.navigator.standalone){
+   //Do standalone specific stuff...
+}
+</pre>
+      </section>
+      <section>
+        <h3>
+          Request adding to homescreen
+        </h3>
+        <p>
+          Let the user bookmark the application through clicking a button.
+        </p>
+        <pre class="example highlight html">
+&lt;script&gt;
+var installButton = document.querySelector("#install");
+
+//Bookmarking only works if initiated by user interaction
+installButton.addEventListener("click", function(e){
+   window.navigator.bookmark("path/to/manifest.json");
+});
+&lt;/script&gt;
+
+&lt;button id="install"&gt;
+  Bookmark "Awesome App"!
+&lt;/button&gt;
+</pre>
+      </section>
     </section>
     <section>
       <h2>
-        Processing the web manifest
+        Web manifest
       </h2>
-      <p id="ecmascript-abstractop">
-        Algorithms in this specification use the conventions described in
-        <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-5.2">ECMA-262
-        section 5.2</a>, such as the use of steps and sub-steps, and so on. The
-        <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.3"><dfn>ToNumber</dfn></a>,
-        <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
-        abstract operations and the <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-8">Type(<var>x</var>)</a>
-        notation referenced in this section are defined in [[!ECMA-262]].
-        Processing also relies on various algorithms defined in [[!HTML]],
-        [[!FETCH]], and [[!URL]].
-      </p>
       <p>
-        In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
-        act as if the author had not declared the particular member in the web
-        manifest document.
+        A web <a>manifest</a> is a [[!JSON]] document that consists of a
+        top-level object (the web manifest <dfn>root</dfn>) and one or more
+        members, some of which contain other objects.
       </p>
-      <p>
-        Certain error conditions can result in a web <a>manifest</a> being
-        treated as an <a>invalid web manifest</a>. An <dfn>invalid web
-        manifest</dfn> is a web manifest that is deemed to be non-conforming in
-        such a way that it would not be possible for the user agent to continue
-        processing (e.g., it can't be parsed by the JSON parser because of a
-        syntax error). In such a case, the user agent MAY report the error to
-        the user in a user-agent-specific manner, MAY <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#navigate">navigate</a>
-        to an error page to report the error, or MAY ignore the error and do
-        nothing. In either case, when a step results in an <a>invalid web
-        manifest</a> the user agent MUST abort whatever step or sub-step caused
-        the condition.
-      </p>
-      <p>
-        The <dfn>steps for processing a member whose type is a positive
-        number</dfn> are given by the following algorithm. The algorithm takes
-        an <var>object</var> and a <var>key</var> as an argument. The algorithm
-        returns a positive number or <code>undefined</code>.
-      </p>
-      <ol>
-        <li>Let <var>value</var> be the result of calling the
-        [[\GetOwnProperty]] internal method of icon passing <var>key</var> as
-        the argument.
-        </li>
-        <li>Let <var>number</var> be the result of
-        parseFloat(<var>value</var>);
-        </li>
-        <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
-        less than 0, return <code>undefined</code>.
-        </li>
-        <li>Return <var>number</var>.
-        </li>
-      </ol>
-      <p>
-        The <dfn>steps for processing a web manifest</dfn> are given by the
-        following algorithm:
-      </p>
-      <ol>
-        <li>Let <var>text</var> be the result of <a href=
-        "http://fetch.spec.whatwg.org/#concept-fetch">fetching</a> the web
-        manifest. If the fetching algorithm aborts, treat this web manifest as
-        an <a>invalid web manifest</a>.
-        </li>
-        <li>Let <var>manifest</var> be the result of invoking the <a href=
-        "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">parse</a>
-        function of the JSON object defined in [[!ECMASCRIPT]] with
-        <var>text</var> as its only argument. If parsing throws an exception,
-        then treat this web manifest as an <a>invalid application manifest</a>.
-        </li>
-        <li>Let <var>name</var> be the result of running the <a>steps for
-        processing the <code>name</code> member</a>.
-        </li>
-        <li>Let <var>alternative name</var> be the result of running the
-        <a>steps for processing the <code>altname</code> member</a>.
-        </li>
-        <li>Let <var>mode</var> be the result of running the <a>steps for
-        processing the <code>mode</code> member</a>.
-        </li>
-        <li>Let <var>orientation</var> be the result of running the <a>steps
-        for processing the <code>orientation</code> member</a>.
-        </li>
-        <li>Let <var>url</var> be the result of running the <a>steps for
-        processing the <code>url</code> member</a>.
-        </li>
-        <li>Let <var>icons</var> be the result of running the <a>steps for
-        processing the <code>icons</code> member</a>.
-        </li>
-        <li>Optionally, <a>ignore</a> all other members.
-        </li>
-      </ol>
-      <section>
-        <h3>
-          Type checks
-        </h3>
-        <p>
-          As the web manifest format is a [[!JSON]] document, this
-          specification relies on the types defined in [[!JSON]] specification:
-          namely <dfn id="json-object">object</dfn>, <dfn id=
-          "json-array">array</dfn>, <dfn id="json-number">number</dfn>, and
-          <dfn id="json-string">string</dfn>. Strict type checking is not
-          enforced by this specification. Instead, each member's definition
-          specifies the steps required to process a particular member.
-        </p>
-      </section>
       <section>
         <h3>
           <code title="">name</code> member
@@ -538,7 +418,6 @@ a:not(href){ color: red }
         </p>
         <pre>
   mode = "bookmark" / "standalone" ["-fullscreen"]
-        
 </pre>
       </section>
     </section>
@@ -626,7 +505,226 @@ a:not(href){ color: red }
     </section>
     <section>
       <h2>
-        Media Type
+        Processing the web manifest
+      </h2>
+      <p id="ecmascript-abstractop">
+        Algorithms in this specification use the conventions described in
+        [[!ECMA-262]], such as the use of steps and sub-steps, and so on. The
+        <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.3"><dfn>ToNumber</dfn></a>,
+        <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
+        abstract operations and the <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-8">Type(<var>x</var>)</a>
+        notation referenced in this section are defined in [[!ECMA-262]].
+        Processing also relies on various algorithms defined in [[!HTML]],
+        [[!FETCH]], and [[!URL]].
+      </p>
+      <p>
+        As the web manifest format is a [[!JSON]] document, this specification
+        relies on the types defined in [[!JSON]] specification: namely <dfn id=
+        "json-object">object</dfn>, <dfn id="json-array">array</dfn>, <dfn id=
+        "json-number">number</dfn>, and <dfn id="json-string">string</dfn>.
+        Strict type checking is not enforced by this specification. Instead,
+        each member's definition specifies the steps required to process a
+        particular member.
+      </p>
+      <p>
+        In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
+        act as if the developer had not declared the particular member in the
+        web manifest document.
+      </p>
+      <p>
+        Certain error conditions can result in a web <a>manifest</a> being
+        treated as an <a>invalid web manifest</a>. An <dfn>invalid web
+        manifest</dfn> is a web manifest that is deemed to be non-conforming in
+        such a way that it would not be possible for the user agent to continue
+        processing (e.g., it can't be parsed by the JSON parser because of a
+        syntax error). In such a case, the user agent MAY report the error to
+        the user in a user-agent-specific manner, MAY <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#navigate">navigate</a>
+        to an error page to report the error, or MAY ignore the error and do
+        nothing. In either case, when a step results in an <a>invalid web
+        manifest</a> the user agent MUST abort whatever step or sub-step caused
+        the condition.
+      </p>
+      <p>
+        The <dfn>steps for processing a web manifest</dfn> are given by the
+        following algorithm:
+      </p>
+      <ol>
+        <li>Let <var>text</var> be the result of <a href=
+        "http://fetch.spec.whatwg.org/#concept-fetch">fetching</a> the web
+        manifest. If the fetching algorithm aborts, treat this web manifest as
+        an <a>invalid web manifest</a>.
+        </li>
+        <li>Let <var>manifest</var> be the result of invoking the <a href=
+        "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">parse</a>
+        function of the JSON object defined in [[!ECMASCRIPT]] with
+        <var>text</var> as its only argument. If parsing throws an exception,
+        then treat this web manifest as an <a>invalid application manifest</a>.
+        </li>
+        <li>Let <var>name</var> be the result of running the <a>steps for
+        processing the <code>name</code> member</a>.
+        </li>
+        <li>Let <var>alternative name</var> be the result of running the
+        <a>steps for processing the <code>altname</code> member</a>.
+        </li>
+        <li>Let <var>mode</var> be the result of running the <a>steps for
+        processing the <code>mode</code> member</a>.
+        </li>
+        <li>Let <var>orientation</var> be the result of running the <a>steps
+        for processing the <code>orientation</code> member</a>.
+        </li>
+        <li>Let <var>url</var> be the result of running the <a>steps for
+        processing the <code>url</code> member</a>.
+        </li>
+        <li>Let <var>icons</var> be the result of running the <a>steps for
+        processing the <code>icons</code> member</a>.
+        </li>
+        <li>Optionally, <a>ignore</a> all other members.
+        </li>
+      </ol>
+      <section>
+        <h3>
+          Common processing infrastructure
+        </h3>
+        <p>
+          The <dfn>steps for processing a member whose type is a positive
+          number</dfn> are given by the following algorithm. The algorithm
+          takes an <var>object</var> and a <var>key</var> as an argument. The
+          algorithm returns a positive number, <code>undefined</code>, or an
+          error.
+        </p>
+        <ol>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>object</var> passing
+          <var>key</var> as the argument.
+          </li>
+          <li>If value is <code>undefined</code>, return
+          <code>undefined</code>.
+          </li>
+          <li>Let <var>number</var> be the result of
+          parseFloat(<var>value</var>);
+          </li>
+          <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
+          less than 0, return an error.
+          </li>
+          <li>Return <var>number</var>.
+          </li>
+        </ol>
+      </section>
+    </section>
+    <section id="linking">
+      <h2>
+        Linking to a web manifest
+      </h2>
+      <p>
+        The <code>manifest</code> keyword can be used with a [[!HTML]] <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">link</a>
+        element. This keyword creates an <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+        title="external resource link">external resource link</a>.
+      </p>
+      <table border="1">
+        <tr>
+          <th rowspan="2">
+            Link type
+          </th>
+          <th colspan="2">
+            Effect on...
+          </th>
+          <th rowspan="2">
+            Brief description
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <code><a href="#the-link-element">link</a></code>
+          </th>
+          <th>
+            <code><a href="#the-a-element">a</a></code> and <code><a href=
+            "#the-area-element">area</a></code>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <code title="rel-manifest">manifest</code>
+          </td><!-- second most used <link rel> value -->
+          <td>
+            <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+            title="external resource link">External Resource</a>
+          </td>
+          <td>
+            not allowed
+          </td>
+          <td>
+            Imports or links to a web manifest.
+          </td>
+        </tr>
+      </table>
+      <p>
+        The default media type for resources associated with the
+        <code>manifest</code> link type is
+        <code>application/webapp-manifest+json</code>.
+      </p>
+      <p>
+        In cases where more than one <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element"><code>
+        link</code></a> element with a <code>manifest</code> link type appears
+        in a <code>document</code>, the user agent MUST use the first inserted
+        link element and ignore all subsequent <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element"><code>
+        link</code></a> elements with a <code>manifest</code> link type (even
+        if the first element was in error).
+      </p>
+      <p>
+        The appropriate time to <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
+        title="concept-link-obtain">obtain</a> the web manifest is when the
+        <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+        title="external resource link">external resource link</a> is created or
+        when its element is <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
+        title="insert an element into a document">inserted into a document</a>,
+        whichever happens last. However, a user agent MAY opt to delay <a href=
+        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
+        title="concept-link-obtain">obtaining</a> a web manifest until after
+        the document and its other resources have loaded (i.e., to not delay
+        the availability of content and scripts required by the
+        <code>document</code>).
+      </p>
+    </section>
+    <section class="informative">
+      <h2>
+        Extending the manifest
+      </h2>
+      <p>
+        Although proprietary extensions are undesirable, they can't
+        realistically be avoided. As such, the RECOMMENDED way to add
+        proprietary extension is to use a vendor prefix.
+      </p>
+      <h3>
+        Example of extending manifest format
+      </h3>
+      <p>
+        This example shows two hypothetical vendor extensions.
+      </p>
+      <pre class="example highlight JSON">
+      {
+        ...
+        "webkit-fancyfeature": "some/url/img",
+        "moz-awesome-thing": { ... }
+        ...
+      }
+      
+</pre>
+    </section>
+    <section>
+      <h2>
+        Media type regiestration
       </h2>
       <p>
         This section contains the required text for MIME media type
@@ -687,13 +785,13 @@ a:not(href){ color: red }
             of memory, or to work around platform-specific limitations.
           </p>
           <p>
-            The web manifest document allows authors, through the permissions
-            and <code>permissions</code> members, to request permission to
-            enable security sensitive APIs. As these APIs are outside the scope
-            of this specification, significant caution needs to be taken when
-            granting an application the capability to use a feature. The
-            relevant APIs define their own security considerations (see the
-            <a href="http://www.w3.org/2012/sysapps/#roadmap">System
+            The web manifest document allows developeres, through the
+            permissions and <code>permissions</code> members, to request
+            permission to enable security sensitive APIs. As these APIs are
+            outside the scope of this specification, significant caution needs
+            to be taken when granting an application the capability to use a
+            feature. The relevant APIs define their own security considerations
+            (see the <a href="http://www.w3.org/2012/sysapps/#roadmap">System
             Applications Working Group's APIs</a>).
           </p>
           <p>
@@ -797,6 +895,9 @@ a:not(href){ color: red }
       <h2>
         Acknowledgments
       </h2>
+      <p>
+        &nbsp;
+      </p>
       <p>
         This document reuses text from the WHATWG [[!HTML]] specification as
         permitted by the license of that specification. The [[!HTML]]
