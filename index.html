@@ -86,7 +86,7 @@ a:not(href){ color: red }
         <p>
           The following shows a typical <a>bookmark description document</a>.
         </p>
-        <pre class="example highlight">
+        <pre class="example highlight json">
 {
   "name": "Example",
   "altname": "The Example App 2.0",
@@ -141,10 +141,12 @@ a:not(href){ color: red }
           Check if the application is running in standalone.
         </p>
         <pre class="example highlight html">
+&lt;script&gt;
 if("standalone" in window.navigator &amp;&amp; window.navigator.standalone){
    //Do standalone specific stuff...
    document.documentElement.classList.add("standalone");
 }
+&lt;/script&gt;
 </pre>
       </section>
       <section>
@@ -165,7 +167,7 @@ installButton.addEventListener("click", function(e){
 &lt;/script&gt;
 
 &lt;button id="install"&gt;
-  Bookmark "Awesome App"!
+  Bookmark &lt;b&gt;Awesome App!&lt;/b&gt;
 &lt;/button&gt;
 </pre>
       </section>
@@ -791,13 +793,13 @@ installButton.addEventListener("click", function(e){
           <p>
             This example shows two hypothetical vendor extensions.
           </p>
-          <pre class="example highlight JSON">
-      {
-        ...
-        "webkit-fancyfeature": "some/url/img",
-        "moz-awesome-thing": { ... }
-        ...
-      }
+          <pre class="example highlight json">
+{
+  ...
+  "webkit-fancyfeature": "some/url/img",
+  "moz-awesome-thing": { ... }
+  ...
+}
 </pre>
         </section>
       </section>
