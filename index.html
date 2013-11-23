@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>
-      Web Manifest
+      Bookmarks descriptions and API
     </title>
     <script src="http://www.w3.org/Tools/respec/respec-w3c-common" class=
     "remove">
@@ -20,21 +20,21 @@ a:not(href){ color: red }
   <body>
     <section id='abstract'>
       <p>
-        This specification defines a <dfn>web manifest</dfn>, which is a JSON
-        document that a user agent can use to provide enhanced bookmarking
-        capabilities. Unlike regular bookmarks, this specification allows
-        developers to specify a range of icons, the name of the web
-        application, as well as the url to launch when a website is bookmarked
-        to, for example, the homescreen of a device. It also defines a special
-        "standalone" mode in which applications can be launched, which is
-        intended to allow web applications to run independently of a web
-        browser and more tightly integrate with native application
+        This specification defines a <dfn>bookmark description document</dfn>
+        (BDD), which is a JSON document that a user agent can use to provide
+        enhanced bookmarking capabilities. Unlike regular bookmarks, this
+        specification allows developers to specify a range of icons, the name
+        of the web application, as well as the url to launch when a website is
+        bookmarked to, for example, the homescreen of a device. It also defines
+        a special "standalone" mode in which applications can be launched,
+        which is intended to allow web applications to run independently of a
+        web browser and more tightly integrate with native application
         environments.
       </p>
       <p>
         This specification also defines two ways to allows a web page to be
-        associated with a web manifest: through the <code>manifest</code> link
-        type or through bookmark API.
+        associated with a bookmark description document: through the
+        <code>manifest</code> link type or through an API.
       </p>
     </section>
     <section id="sotd">
@@ -66,12 +66,14 @@ a:not(href){ color: red }
         given to them by a friend on a social network, or through a website
         that works as an "app store"), but once added to the homescreen, the
         developer needs to be able to control if in web application opens in a
-        Web browser environment or if the application is launched <a>standalone</a>:
-        that is, once the application is launched, it appears indistinguishable
-        from a native application by allowing the OS to treat it as equivalent
-        to a native application. This includes, but is not limited to,
-        integration with OS facilities such as the task switcher and doing away
-      with browser UI chrome (the address bar, forward/back buttons, etc.). </p>
+        Web browser environment or if the application is launched
+        <a>standalone</a>: that is, once the application is launched, it
+        appears indistinguishable from a native application by allowing the OS
+        to treat it as equivalent to a native application. This includes, but
+        is not limited to, integration with OS facilities such as the task
+        switcher and doing away with browser UI chrome (the address bar,
+        forward/back buttons, etc.).
+      </p>
       <p>
         This document attempts to address the <cite><a href=
         "http://w3c-webmob.github.io/installable-webapps/">Use Cases and
@@ -79,10 +81,10 @@ a:not(href){ color: red }
       </p>
       <section class="informative">
         <h3>
-          Example web manifest
+          Example bookmark description document
         </h3>
         <p>
-          The following shows a typical <a>web manifest</a>.
+          The following shows a typical <a>bookmark description document</a>.
         </p>
         <pre class="example highlight">
 {
@@ -106,17 +108,23 @@ a:not(href){ color: red }
       </section>
       <section>
         <h3>
-          Example of linking to manifest
+          Example of linking to bookmark description document
         </h3>
+        <p>Example of using a <code>link</code> element to associate a website with a bookmark description document. The example also shows how  HTML fallbacks, such as &quot;<span class="example highlight html">application-name</span>&quot;, can be used to support legacy user agents that don't implement this specification. </p>
         <pre class="example highlight html">
 &lt;!doctype html&gt;
 &lt;html&gt;
+&lt;head&gt;
 &lt;title&gt;The Best News - international&lt;/title&gt;
+
+&lt;!-- link to bookmark metadata --&gt; 
+&lt;link rel="bookmark-description" href="add_to_homescreen.json"&gt;
+
+&lt;!-- fallback metadata for legacy browsers --&gt;
 &lt;meta name="application-name" content="Best News!"&gt;
-...
-&lt;link rel="manifest" href="add_to_home.json"&gt;
-...
-</pre>
+&lt;link rel=&quot;shortcut icon&quot; src=&quot;favicon.ico&quot;&gt;
+&lt;/head&gt;
+...</pre>
       </section>
       <section>
         <h3>
@@ -128,6 +136,7 @@ a:not(href){ color: red }
         <pre class="example highlight html">
 if("standalone" in window.navigator &amp;&amp; window.navigator.standalone){
    //Do standalone specific stuff...
+   document.documentElement.classList.add("standalone");
 }
 </pre>
       </section>
@@ -144,7 +153,7 @@ var installButton = document.querySelector("#install");
 
 //Bookmarking only works if initiated by user interaction
 installButton.addEventListener("click", function(e){
-   window.navigator.bookmark("path/to/manifest.json");
+   window.navigator.bookmark("path/to/bookmark.json");
 });
 &lt;/script&gt;
 
@@ -153,16 +162,41 @@ installButton.addEventListener("click", function(e){
 &lt;/button&gt;
 </pre>
       </section>
+      <section>
+      <h3>Modes of operation</h3>
+              <p>
+          The <dfn>mode of operation</dfn> in which a web application can be launched
+        include: </p>
+        <dl>
+          <dt>
+            <dfn>standalone</dfn>
+          </dt>
+          <dd>
+            Once launched, the Web application appears indistinguishable from a
+            native application by allowing the OS to treat it as equivalent to
+            a native application.
+          </dd>
+          <dt>
+            <dfn>bookmark</dfn>
+          </dt>
+          <dd>
+            When launched, the user agent open the URL is normal (e.g., opens a
+            new tab, or a new window, or whatever it commonly does when
+            instructed to open a bookmark).
+          </dd>
+        </dl>
+      </section>
     </section>
-    <section>
+  <section>
       <h2>
-        Web manifest
+        Bookmark description document
       </h2>
       <p>
-        A web <a>manifest</a> is a [[!JSON]] document that consists of a
-        top-level object (the web manifest <dfn>root</dfn>) and one or more
-        members, some of which contain other objects. Each of the members, as
-        well as how their values are processes, are defined below.
+        A <em>bookmark description document</em> is a [[!JSON]] document that
+        consists of a top-level object (the bookmark description document
+        <dfn>root</dfn>) and one or more members, some of which contain other
+        objects. Each of the members, as well as how their values are
+        processes, are defined below.
       </p>
       <p id="ecmascript-abstractop">
         Algorithms in this specification use the conventions described in
@@ -172,66 +206,47 @@ installButton.addEventListener("click", function(e){
         <dfn>parseFloat</dfn></a> method, <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
         abstract operation, and the <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-ecmascript-data-types-and-values">Type(<var>x</var>)</a>
-        notation referenced in this section are defined in [[!ECMASCRIPT]].
-        Processing also relies on various algorithms defined in [[!HTML]],
-        [[!FETCH]], and [[!URL]].
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-ecmascript-data-types-and-values">
+        Type(<var>x</var>)</a> notation referenced in this section are defined
+        in [[!ECMASCRIPT]]. Processing also relies on various algorithms
+        defined in [[!HTML]], [[!FETCH]], and [[!URL]].
       </p>
       <p>
-        As the web manifest format is a [[!JSON]] document, this specification
-        relies on the types defined in [[!JSON]] specification: namely <dfn id=
-        "json-object">object</dfn>, <dfn id="json-array">array</dfn>, <dfn id=
-        "json-number">number</dfn>, and <dfn id="json-string">string</dfn>.
-        Strict type checking is not enforced by this specification. Instead,
-        each member's definition specifies the steps required to process a
-        particular member.
+        As the bookmark description document format is a [[!JSON]] document,
+        this specification relies on the types defined in [[!JSON]]
+        specification: namely <dfn id="json-object">object</dfn>, <dfn id=
+        "json-array">array</dfn>, <dfn id="json-number">number</dfn>, and
+        <dfn id="json-string">string</dfn>. Strict type checking is not
+        enforced by this specification. Instead, each member's definition
+        specifies the steps required to process a particular member.
       </p>
       <p>
         In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
         act as if the developer had not declared the particular member in the
-        web manifest document.
-      </p>
-      <p>
-        Certain error conditions can result in a web <a>manifest</a> being
-        treated as an <a>invalid web manifest</a>. An <dfn>invalid web
-        manifest</dfn> is a web manifest that is deemed to be non-conforming in
-        such a way that it would not be possible for the user agent to continue
-        processing (e.g., it can't be parsed by the JSON parser because of a
-        syntax error). In such a case, the user agent MAY report the error to
-        the user in a user-agent-specific manner, MAY <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#navigate">navigate</a>
-        to an error page to report the error, or MAY ignore the error and do
-        nothing. In either case, when a step results in an <a>invalid web
-        manifest</a> the user agent MUST abort whatever step or sub-step caused
-        the condition.
+        bookmark description document document.
       </p>
       <section>
         <h3>
           <code title="">name</code> member
         </h3>
         <p>
-          The <dfn id="propdef-name"><code>name</code></dfn> is a string that
+          The <dfn id="member-name"><code>name</code></dfn> is a string that
           represents the name of the application as is usually displayed to the
           user (e.g., amongst a list of other applications, or as a label
           underneath an icon).
         </p>
         <p>
           The <dfn>steps for processing the name member</dfn> is given by the
-          following algorithm. The algorithm takes a web manifest as an
-          argument and returns either an error or a string:
+          following algorithm. The algorithm takes a bookmark description
+          document as an argument and returns either an error or a string:
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          "<code>name</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>bookmark
+          description</var> passing "<code>name</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
-          <code>undefined</code>, then let <var>value</var> be an
-          implementation specific string that can serve as a suitable name for
-          the application. For example, if the manifest was obtained from a
-          <code>link</code> element and the document has a title, then the
-          document's <code>title</code> could be used. Alternatively, the user
-          could be prompted to provide a custom name.
+          <code>undefined</code>, then return <code>undefined</code>.
           </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToString</a>(<var>value</var>)
@@ -250,24 +265,22 @@ installButton.addEventListener("click", function(e){
           <code title="">altname</code> member
         </h3>
         <p>
-          The <dfn id="propdef-short-name"><code>altname</code></dfn> is a
+          The <dfn id="member-short-name"><code>altname</code></dfn> is a
           string that represents an alternative name of the application, such
           as the name under which the application is sold or marketed.
         </p>
         <p>
           The <dfn>steps for processing the short name member</dfn> is given by
-          the following algorithm. The algorithm takes a web manifest as an
-          argument and returns a string:
+          the following algorithm. The algorithm takes a bookmark description
+          document as an argument and returns a string:
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          "<code>altname</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>bookmark
+          description</var> passing "<code>altname</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
-          <code>undefined</code>, then let <var>value</var> be an
-          implementation specific string that can serve as a suitable alt for
-          the application.
+          <code>undefined</code>, then return <code>undefined</code>.
           </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToString</a>(<var>value</var>).
@@ -283,14 +296,49 @@ installButton.addEventListener("click", function(e){
       </section>
       <section>
         <h3>
+          <code>dont-share-cookies-and-stuff</code> member
+        </h3>
+        <p>
+          Yes, this needs to be renamed.
+        </p>
+        <p>
+          The <code>dont-share-cookies-and-stuff</code> member is a boolean
+          that allows a developer to request that the user agent treat this web
+          application as independent from the one in the web browser.
+          Effectively, this means that cookies, storage, and permissions are
+          not shared with the origin from which the application was bookmarked.
+          The value of this member is only applicable to applications whose
+          <a>mode of operation</a> is <a>standalone</a>.
+        </p>
+        <p>
+          The <dfn>steps for processing the
+          <code>dont-share-cookies-and-stuff</code> member</dfn> is given by
+          the following algorithm:
+        </p>
+        <ol>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>bookmark
+          description</var> passing "<code>dont-share-cookies-and-stuff</code>"
+          as the argument.
+          </li>
+          <li>Let <var>result</var> be the result of calling
+          <a><a>ToBoolean</a></a>(<var>value</var>).
+          </li>
+          <li>Return the <var>result</var>.
+          </li>
+        </ol>
+      </section>
+      <section>
+        <h3>
           <code>url</code> member
         </h3>
         <p>
-          The <dfn id="propdef-launch_path">url</dfn> <a>member</a> is the URL
+          The <dfn id="member-launch_path">url</dfn> <a>member</a> is the URL
           that is is <a href=
           "http://www.w3.org/html/wg/drafts/html/master/single-page.html#browsers">
           loaded</a> when the application is <a>launched</a>. When it's missing
-          from the manifest, the UA loads the URL from the manifest was loaded.
+          from the bookmark description document, the UA loads the URL from the
+          bookmark description doccument was fetched.
         </p>
         <p>
           The <dfn>steps for processing the <code>url</code> member</dfn> are
@@ -299,27 +347,26 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          "<code>url</code>" as the argument.
+          [[\GetOwnProperty]] internal method of the <var>bookmark description
+          document</var> passing "<code>url</code>" as the argument.
+          </li>
+          <li>Let <var>bookmark description URL</var> be the URL from which the
+          <var>bookmark description document</var> was fetched from.
           </li>
           <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code> or <a>Type</a>(<var>value</var>) is not
           "string":
             <ol>
-              <li>Let <var>result</var> be the absolute URL from which the
-              manifest was fetched from.
+              <li>Let <var>result</var> be <var>bookmark description URL</var>.
               </li>
             </ol>
           </li>
           <li>Otherwise:
             <ol>
-              <li>Let <var>manifest URL</var> be the URL from which the
-              <var>manifest</var> was fetched from.
-              </li>
               <li>
                 <a href="http://url.spec.whatwg.org/#parsing">Parse</a>
-                <var>value</var>, using <var>manifest URL</var> as the base
-                URL, and let <var>result</var> be the result.
+                <var>value</var>, using <var>bookmark description URL</var> as
+                the base URL, and let <var>result</var> be the result.
               </li>
             </ol>
           </li>
@@ -332,14 +379,14 @@ installButton.addEventListener("click", function(e){
           <code title="">icons</code> member
         </h3>
         <p>
-          The <dfn id="propdef-icons">icons</dfn> is a list of <a>icon
+          The <dfn id="member-icons">icons</dfn> is a list of <a>icon
           objects</a> that represents a set of icons that the application can
           make use.
         </p>
         <p>
           The <dfn>steps for processing the <code>icons</code> member</dfn> are
-          given by the following algorithm. The algorithm returns either an
-          list of icons, which can be empty.
+          given by the following algorithm. The algorithm returns a list of
+          icons, which can be empty.
         </p>
         <ol>
           <li>Let <var>icons</var> be an empty list.
@@ -380,7 +427,7 @@ installButton.addEventListener("click", function(e){
           <code>orientation</code> member
         </h3>
         <p>
-          The <dfn id="propdef-orientation">orientation</dfn> <a>member</a>
+          The <dfn id="member-orientation">orientation</dfn> <a>member</a>
           represents the screen orientation that is required to use the web
           application effectively. The value of this member is only applicable
           to applications whose mode of operation is <a>standalone</a>.
@@ -458,8 +505,8 @@ installButton.addEventListener("click", function(e){
           </li>
         </ol>
         <p>
-          The <dfn>steps for selecting the orientation when the application is
-          launched</dfn> is given by the following algorithm:<br>
+          The <dfn>steps for selecting the orientation</dfn> is given by the
+          following algorithm:<br>
         </p>
         <ol>
           <li>If the device is currently in either primary or secondary mode,
@@ -480,32 +527,9 @@ installButton.addEventListener("click", function(e){
           <code title="">mode</code> member
         </h3>
         <p>
-          The mode member represents that <dfn>mode of operation</dfn> in which
-          the web application will be launched. When the value is missing, the
-          user agent defaults to <a>bookmark</a>.
+          The <dfn title="member-mode">mode</dfn> member represents that mode of operation in which
+          the web application will be launched. When the developer ommits the value, the user agent assumes the value &quot;&quot;<a></a>.
         </p>
-        <p>
-          The mode of operation in which a web application can be launched
-          include:
-        </p>
-        <dl>
-          <dt>
-            <dfn>standalone</dfn>
-          </dt>
-          <dd>
-            Once launched, the Web application appears indistinguishable from a
-            native application by allowing the OS to treat it as equivalent to
-            a native application.
-          </dd>
-          <dt>
-            <dfn>bookmark</dfn>
-          </dt>
-          <dd>
-            When launched, the user agent open the URL is normal (e.g., opens a
-            new tab, or a new window, or whatever it commonly does when
-            instructed to open a bookmark).
-          </dd>
-        </dl>
         <p>
           Standalone mode can also be displayed in the following view modes:
         </p>
@@ -514,7 +538,8 @@ installButton.addEventListener("click", function(e){
           following [[!ABNF]]:
         </p>
         <pre>
-  mode = "bookmark" / "standalone" ["-fullscreen"]
+  mode = "bookmark" / "standalone" [&quot;-&quot; viewmode] 
+  viewmode = "fullscreen"
 </pre>
         <p>
           The <dfn>steps for processing the <code>mode</code> member of an
@@ -527,7 +552,7 @@ installButton.addEventListener("click", function(e){
           "<code>mode</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
-          <code>undefined</code>, return <code>undefined</code>.
+          <code>undefined</code>, return "<code>bookmark</code>".
           </li>
           <li>If <a>type</a>(<var>value</var>) is not "string", then return an
           error and terminate this algorithm.
@@ -537,6 +562,7 @@ installButton.addEventListener("click", function(e){
             "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
             Strip leading and trailing whitespace</a> from <var>value</var>.
           </li>
+          <li>If the value is an empty string, return "<code>bookmark</code>" and terminate this algorithm. </li>
           <li>If <var>value</var> is not a <a>valid application mode</a>, then
           return an error and terminate this algorithm.
           </li>
@@ -544,7 +570,220 @@ installButton.addEventListener("click", function(e){
           </li>
         </ol>
       </section>
+      <section>
+        <h3>
+          Processing the bookmark description document
+        </h3>
+        <p>
+          The <dfn>steps for fetching a bookmark description document</dfn> are
+          given by the following algorithm. It takes a <var>url</var> URL as an
+          argument. It returns either a <var>response</var> (which may be in
+          error).
+        </p>
+        <ol>
+          <li>Let <var>response</var> be the result of <a href=
+          "http://fetch.spec.whatwg.org/#concept-fetch">fetching</a> the
+          bookmark description document from <var>url</var>.
+          </li>
+          <li>Return <var>response</var>.
+          </li>
+        </ol>
+        <p>
+          The <dfn>steps to processing a bookmark description document</dfn>
+          are given by the following algorithm. The algorithm takes a
+          <var>text</var> string as an argument.
+        </p>
+        <ol>
+          <li>Let <var>bookmark description doccument</var> be the result of
+          invoking the <a href=
+          "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">
+            parse</a> function of the JSON object defined in [[!ECMASCRIPT]]
+            with <var>text</var> as its only argument. If parsing throws an
+            error, return the <a></a>error and terminate this algorithm.
+          </li>
+          <li>Let <var>name</var> be the result of running the <a>steps for
+          processing the <code>name</code> member</a>. If the returned value is
+          <code>undefined</code>:
+            <ol>
+              <li>Set <var>name</var> to be an implementation specific string
+              that can serve as a suitable name for the web application. For
+              example, if the manifest was obtained from a <code>link</code>
+              element, and the <code>document</code> has a <code>meta</code>
+              element whose <code>name</code> attribute matches
+                "<code><a href="http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
+                then the user agent could use the value of that
+                <code>meta</code> element's <code>content</code> attribute as a
+                fallback. Otherwise, then the document's <code>title</code> can
+                be used. Alternatively, the user could be prompted to provide a
+                custom name using as a place holder.
+              </li>
+            </ol>
+          </li>
+          <li>Let <var>alternative name</var> be the result of running the <a>
+            steps for processing the <code>altname</code> member</a>.
+          </li>
+          <li>Let <var>mode</var> be the result of running the <a>steps for
+          processing the <code>mode</code> member</a>. If processing returns an
+          error, report the error, and set <var>mode</var> to
+          "<code>bookmark</code>".
+          </li>
+          <li>Let <var>orientation</var> be the result of running the <a>steps
+          for processing the <code>orientation</code> member</a>.
+          </li>
+          <li>Let <var>url</var> be the result of running the <a>steps for
+          processing the <code>url</code> member</a>.
+          </li>
+          <li>Let <var>icons</var> be the result of running the <a>steps for
+          processing the <code>icons</code> member</a>.
+          </li>
+          <li>Optionally, <a>ignore</a> all other members.
+          </li>
+          <li>Return response.
+          </li>
+        </ol>
     </section>
+    <section id="linking">
+      <h3>
+        Linking to a bookmark description document
+      </h3>
+      <p>
+        The <code>manifest</code> keyword can be used with a [[!HTML]]
+        <a href=
+          "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
+        link</a> element. This keyword creates an <a href=
+          "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+          title="external resource link">external resource link</a>.
+      </p>
+      <table border="1">
+        <tr>
+          <th rowspan="2">
+            Link type
+          </th>
+          <th colspan="2">
+            Effect on...
+          </th>
+          <th rowspan="2">
+            Brief description
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <code><a href="#the-link-element">link</a></code>
+          </th>
+          <th>
+            <code><a href="#the-a-element">a</a></code> and <code><a href=
+              "#the-area-element">area</a></code>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <code title="rel-manifest">bookmark-description</code>
+          </td><!-- second most used <link rel> value -->
+          <td>
+            <a href=
+              "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+              title="external resource link">External Resource</a>
+          </td>
+          <td>
+            not allowed
+          </td>
+          <td>
+            Imports or links to a bookmark description document.
+          </td>
+        </tr>
+      </table>
+      <p>
+        The default media type for resources associated with the
+        <code>manifest</code> link type is
+        <code>application/webapp-manifest+json</code>.
+      </p>
+      <p>
+        In cases where more than one <a href=
+          "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
+        <code>link</code></a> element with a <code>manifest</code> link type
+          appears in a <code>document</code>, the user agent MUST use the first
+          inserted link element and ignore all subsequent <a href=
+          "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
+          <code>link</code></a> elements with a <code>manifest</code> link type
+          (even if the first element was in error).
+      </p>
+      <p>
+        The appropriate time to <a>fetch</a> the bookmark
+          description document is when the <a href=
+          "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+          title="external resource link">external resource link</a> is created
+          or when its element is <a href=
+          "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
+          title="insert an element into a document">inserted into a
+          document</a>, whichever happens last. However, a user agent MAY opt
+          to delay fetching a bookmark description document until after the
+          document and its other resources have loaded (i.e., to not delay the
+          availability of content and scripts required by the
+        <code>document</code>).
+      </p>
+      <p>Certain error conditions can result in a bookmark description
+          document being treated as an <a>invalid bookmark description
+          document</a>. An <dfn>invalid bookmark description document</dfn> is
+          one that is deemed to be non-conforming in such a way that it would
+          not be possible for the user agent to continue processing (e.g., it
+          can't be parsed by the JSON parser because of a syntax error, it
+          could be fetched from the network). In such a case, the user agent
+          MAY report the error to the user in a user-agent-specific manner, or
+          MAY ignore the error and do nothing. In either case, when a step
+          results in an <a>invalid bookmark description document</a> the user
+      agent MUST abort whatever step or sub-step caused the condition. </p>
+      <p>To fetch a bookmark description document, as user agent MUST: </p>
+      <ol>
+        <li>If the <code>link</code> element lacks a href attribute, abort this algorithm. </li>
+        <li>Run the <a>steps for fetching  a bookmark description
+        document</a>, with the value of <code>href</code> attribute as the url, and let <var>response</var> be the response.</li>
+        <li>If response's type is &quot;error&quot;, treat this as an <span>invalid bookmark description document</span>.</li>
+        <li>Otherwise, let <var>bookmark description</var> be the result of running  the <a>steps for processing  a bookmark description
+        document</a>.</li>
+        <li>If <var>bookmark description</var> results in an error,  treat this as an <span>invalid bookmark description document</span>.</li>
+        <li>Otherwise, in a user agent specific manner, and when the end-user so desires, provide a means for the end-user to view the relevant contents of the <var>bookmark description</var>; and provide a means for the end-user to create a bookmark based on that information.</li>
+      </ol>
+    </section>
+    <section id="proprietary-extensions" class="informative">
+      <h3>
+        Proprietary extensions to the bookmark description document
+      </h3>
+      <p>
+        Although proprietary extensions are undesirable, they can't
+        realistically be avoided. As such, the RECOMMENDED way to add
+        proprietary extension is to use a vendor prefix.
+      </p>
+      <section>
+        <h4>
+          Example of extending manifest format
+        </h4>
+        <p>
+          This example shows two hypothetical vendor extensions.
+        </p>
+        <pre class="example highlight JSON">
+      {
+        ...
+        "webkit-fancyfeature": "some/url/img",
+        "moz-awesome-thing": { ... }
+        ...
+      }
+</pre>
+      </section>
+    </section>
+    </section>
+    <section>
+      <h2>
+        Launching a standalone web application
+      </h2>
+      <p>
+        When an application is launched:
+      </p>
+      <ol>
+        <li>If the web application has a required orientation, run the
+        <span>steps for selecting the orientation</span>.
+        </li>
+      </ol>
+  </section>
     <section>
       <h2>
         Icon object and its members
@@ -555,8 +794,43 @@ installButton.addEventListener("click", function(e){
       </p>
       <section>
         <h3>
-          <code>width</code>, <code title="">height</code>, and
-          <code>density</code> members
+          <code>density</code> member
+        </h3>
+        <p>
+          The <dfn title="icon-densitiy">density</dfn> member of an icon is the
+          device pixel density for which this icon was designed. The device
+          pixel density is expressed as the number of dots per 'px' unit
+          (equivalent to a <a href=
+          "http://dev.w3.org/csswg//#resolution">dppx</a> as defined in
+          [[!css3-values]]). The value is a positive number greater than 0.
+          If the developer ommits the value, the user agent assumes the value
+          <a><code>1</code></a>.
+        </p>
+        <p>
+          The <dfn>steps for processing a density of an icon</dfn> are given by
+          the following algorithm. The algorithm returns a positive number,
+          <code>undefined</code>, or an error.
+        </p>
+        <ol>
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>icon</var> passing
+          "<code>density</code>" as the argument.
+          </li>
+          <li>If value is <code>undefined</code>, return 1.
+          </li>
+          <li>Let <var>number</var> be the result of
+          parseFloat(<var>value</var>);
+          </li>
+          <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
+          less than 0, return an error.
+          </li>
+          <li>Return <var>number</var>.
+          </li>
+        </ol>
+      </section>
+      <section>
+        <h3>
+          <code>width</code> and <code title="">height</code> members
         </h3>
         <p>
           The <dfn title="icon-width">width</dfn> and <dfn title=
@@ -565,24 +839,9 @@ installButton.addEventListener("click", function(e){
           greater than 0.
         </p>
         <p>
-          The <dfn title="icon-densitiy">density</dfn> member of an icon is the
-          device pixel density for which this icon was designed. The device
-          pixel density is expressed as the number of dots per 'px' unit
-          (equivalent to a <a href=
-          "http://dev.w3.org/csswg//#resolution">dppx</a> as defined in
-          [[!css3-values]]). The value is a positive number greater than 0.
-          When the value is missing, the user agent assumes the value
-          <a><code>1</code></a>.
-        </p>
-        <p>
-          The <code>width</code>, <code>height</code>, and <code>density</code>
-          members are processed using the <a>steps for processing a member
-          whose type is a positive number</a>.
-        </p>
-        <p>
-          The <dfn>steps for processing a member whose type is a positive
-          number</dfn> are given by the following algorithm. The algorithm
-          takes an <var>object</var> and a <var>key</var> as an argument. The
+          The <dfn>steps for processing a dimension of an icon</dfn> are given
+          by the following algorithm. The algorithm takes an <var>icon</var>
+          and a <var>key</var> ('width" or "height") as an argument. The
           algorithm returns a positive number, <code>undefined</code>, or an
           error.
         </p>
@@ -650,156 +909,10 @@ installButton.addEventListener("click", function(e){
           given by the following algorithm. The algorithm returns a string or
           <code>undefined</code>.
         </p>
+        <p>&nbsp;
+          
+        </p>
       </section>
-    </section>
-    <section>
-      <h2>
-        Processing the web manifest
-      </h2>
-      <p>
-        The <dfn>steps for processing a web manifest</dfn> are given by the
-        following algorithm:
-      </p>
-      <ol>
-        <li>Let <var>text</var> be the result of <a href=
-        "http://fetch.spec.whatwg.org/#concept-fetch">fetching</a> the web
-        manifest. If the fetching algorithm aborts, treat this web manifest as
-        an <a>invalid web manifest</a>.
-        </li>
-        <li>Let <var>manifest</var> be the result of invoking the <a href=
-        "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">parse</a>
-        function of the JSON object defined in [[!ECMASCRIPT]] with
-        <var>text</var> as its only argument. If parsing throws an exception,
-        then treat this web manifest as an <a>invalid application manifest</a>.
-        </li>
-        <li>Let <var>name</var> be the result of running the <a>steps for
-        processing the <code>name</code> member</a>.
-        </li>
-        <li>Let <var>alternative name</var> be the result of running the
-        <a>steps for processing the <code>altname</code> member</a>.
-        </li>
-        <li>Let <var>mode</var> be the result of running the <a>steps for
-        processing the <code>mode</code> member</a>.
-        </li>
-        <li>Let <var>orientation</var> be the result of running the <a>steps
-        for processing the <code>orientation</code> member</a>.
-        </li>
-        <li>Let <var>url</var> be the result of running the <a>steps for
-        processing the <code>url</code> member</a>.
-        </li>
-        <li>Let <var>icons</var> be the result of running the <a>steps for
-        processing the <code>icons</code> member</a>.
-        </li>
-        <li>Optionally, <a>ignore</a> all other members.
-        </li>
-      </ol>
-    </section>
-    <section id="linking">
-      <h2>
-        Linking to a web manifest
-      </h2>
-      <p>
-        The <code>manifest</code> keyword can be used with a [[!HTML]] <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">link</a>
-        element. This keyword creates an <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-        title="external resource link">external resource link</a>.
-      </p>
-      <table border="1">
-        <tr>
-          <th rowspan="2">
-            Link type
-          </th>
-          <th colspan="2">
-            Effect on...
-          </th>
-          <th rowspan="2">
-            Brief description
-          </th>
-        </tr>
-        <tr>
-          <th>
-            <code><a href="#the-link-element">link</a></code>
-          </th>
-          <th>
-            <code><a href="#the-a-element">a</a></code> and <code><a href=
-            "#the-area-element">area</a></code>
-          </th>
-        </tr>
-        <tr>
-          <td>
-            <code title="rel-manifest">manifest</code>
-          </td><!-- second most used <link rel> value -->
-          <td>
-            <a href=
-            "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-            title="external resource link">External Resource</a>
-          </td>
-          <td>
-            not allowed
-          </td>
-          <td>
-            Imports or links to a web manifest.
-          </td>
-        </tr>
-      </table>
-      <p>
-        The default media type for resources associated with the
-        <code>manifest</code> link type is
-        <code>application/webapp-manifest+json</code>.
-      </p>
-      <p>
-        In cases where more than one <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element"><code>
-        link</code></a> element with a <code>manifest</code> link type appears
-        in a <code>document</code>, the user agent MUST use the first inserted
-        link element and ignore all subsequent <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element"><code>
-        link</code></a> elements with a <code>manifest</code> link type (even
-        if the first element was in error).
-      </p>
-      <p>
-        The appropriate time to <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
-        title="concept-link-obtain">obtain</a> the web manifest is when the
-        <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
-        title="external resource link">external resource link</a> is created or
-        when its element is <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
-        title="insert an element into a document">inserted into a document</a>,
-        whichever happens last. However, a user agent MAY opt to delay <a href=
-        "http://www.whatwg.org/specs/web-apps/current-work/#concept-link-obtain"
-        title="concept-link-obtain">obtaining</a> a web manifest until after
-        the document and its other resources have loaded (i.e., to not delay
-        the availability of content and scripts required by the
-        <code>document</code>).
-      </p>
-    </section>
-    <section class="informative">
-      <h2>
-        Proprietary extensions to the web manifest
-      </h2>
-      <p>
-        Although proprietary extensions are undesirable, they can't
-        realistically be avoided. As such, the RECOMMENDED way to add
-        proprietary extension is to use a vendor prefix.
-      </p>
-      <h3>
-        Example of extending manifest format
-      </h3>
-      <p>
-        This example shows two hypothetical vendor extensions.
-      </p>
-      <pre class="example highlight JSON">
-      {
-        ...
-        "webkit-fancyfeature": "some/url/img",
-        "moz-awesome-thing": { ... }
-        ...
-      }
-      
-</pre>
     </section>
     <section>
       <h2>
@@ -814,14 +927,80 @@ installButton.addEventListener("click", function(e){
             readonly attribute Boolean standalone
           </dt>
           <dd>
-            When getting, the user agent MUST returns <code>true</code> if the
-            application is running as <a>standalone</a>. Return
-            <code>false</code> otherwise.
+            The standalone attribute provides a means for a developer to check
+            if the applicatoin is running in standalone mode. When getting, the
+            user agent MUST returns <code>true</code> if the application is
+            running as <a>standalone</a>. Return <code>false</code> otherwise.
           </dd>
           <dt>
-            void bookmark(DOMString manifestURL)
+            Promise requestBookmark(DOMString url)
           </dt>
+          <dd>
+            When invoked, the user agent MUST run the <a>steps to add a
+            bookmark</a>.
+          </dd>
         </dl>
+        <p>
+          The <dfn>steps to request a bookmark</dfn> are given by the following
+          algorithm. The algorithm runs asynchronously and returns a Promise.
+        </p>
+        <ol>
+          <li>Let <var>promise</var> be a new <a><code>Promise</code></a>
+          object and <var>resolver</var> its associated resolver.
+          </li>
+          <li>Return <var>promise</var> and run the remaining steps
+          asynchronously.
+          </li>
+          <li>If this method was not invoked as a result of explicit user
+          action, then:
+            <ol>
+              <li>Let <var>error</var> be a new
+              <a><code>DOMException</code></a> whose name is "<code><a href=
+              "http://dom.spec.whatwg.org/#securityerror">SecurityError</a></code>".
+              </li>
+              <li>Run resolver's internal reject algorithm with
+              <var>error</var> as value and terminate this algorithm.
+              </li>
+            </ol>
+          </li>
+          <li>Run the <a>steps for fetching  a bookmark
+          description document</a>. If the <var>response</var>'s  type is &quot;error&quot;:
+          <ol>
+            <li>Let exception name be "<code><a href=
+              "http://dom.spec.whatwg.org/#networkerror">NetworkError</a></code>". </li>
+            <li>If the <var>response</var>'s termination reason is end user
+              abort, set <var>exception name</var> to "<code><a href=
+              "http://dom.spec.whatwg.org/#aborterror">AbortError</a></code>". </li>
+            <li>If the <var>response</var>'s termination reason is timeout,
+              set <var>exception name</var> to "<code><a href=
+              "http://dom.spec.whatwg.org/#timeouterror">TimeoutError</a></code>". </li>
+            <li>Let <var>error</var> be a new <a><code>DOMException</code></a> whose name is <var>exception
+              name</var>. </li>
+            <li>Run <var>resolver</var>'s internal reject algorithm with <var>error</var> as value and terminate this algorithm. </li>
+          </ol>
+          </li>
+          <li>Let <var>boomark info</var> be result of the <a>steps for processing  a bookmark
+          description document</a>, with <var>response</var>'s <a href="http://fetch.spec.whatwg.org/#concept-response-body">body</a> as the argument. </li>
+          <li>If <var>boomark info</var> is an error:
+            <ol>
+    <li>Run <var>resolver</var>'s internal reject algorithm with <var>error</var> as value and terminate this algorithm. </li>
+  </ol>
+          </li>
+          <li>Present <var>bookmark info</var> to the end user.  If the end-user rejects the request to add the bookmark:
+<ol>
+          <li>Let <var>error</var> be a new
+              <a><code>DOMException</code></a> whose name is "<code><a href=
+              "http://dom.spec.whatwg.org/#aborterror">AbortError</a></code>".
+              </li>
+              <li>Run <var>resolver</var>'s internal reject algorithm with
+              <var>error</var> as value and terminate this algorithm.
+              </li>
+            </ol>
+          </li>
+          <li>Run <var>resolver</var>'s internal fulfill algorithm with
+          <var>undefined</var> as value.
+          </li>
+        </ol>
       </section>
     </section>
     <section>
@@ -833,14 +1012,14 @@ installButton.addEventListener("click", function(e){
         registration with IANA.
       </p>
       <p>
-        The <dfn>media type for a web manifests</dfn> is
+        The <dfn>media type for a bookmark description documents</dfn> is
         <code>application/webapp-manifest+json</code>.
       </p>
       <p>
-        If the protocol over which the web manifest is transferred supports the
-        [[!MIME-TYPES]] specification (e.g. [[!HTTP11]]), it is RECOMMENDED
-        that the web manifest be labeled with the <a>media type for a web
-        manifests</a>.
+        If the protocol over which the bookmark description document is
+        transferred supports the [[!MIME-TYPES]] specification (e.g. HTTP), it
+        is RECOMMENDED that the bookmark description document be labeled with
+        the <a>media type for a bookmark description documents</a>.
       </p>
       <dl>
         <dt>
@@ -878,23 +1057,14 @@ installButton.addEventListener("click", function(e){
         </dt>
         <dd>
           <p>
-            As the web manifest format is JSON and will commonly be encoded
-            using [[!UNICODE]], the security considerations described in
-            [[!JSON]] and [[!UNICODE-SECURITY]] apply. In addition,
-            implementors need to impose their own implementation-specific
-            limits on the values of otherwise unconstrained member types, e.g.
-            to prevent denial of service attacks, to guard against running out
-            of memory, or to work around platform-specific limitations.
-          </p>
-          <p>
-            The web manifest document allows developers, through the
-            permissions and <code>permissions</code> members, to request
-            permission to enable security sensitive APIs. As these APIs are
-            outside the scope of this specification, significant caution needs
-            to be taken when granting an application the capability to use a
-            feature. The relevant APIs define their own security considerations
-            (see the <a href="http://www.w3.org/2012/sysapps/#roadmap">System
-            Applications Working Group's APIs</a>).
+            As the bookmark description document format is JSON and will
+            commonly be encoded using [[!UNICODE]], the security considerations
+            described in [[!JSON]] and [[!UNICODE-SECURITY]] apply. In
+            addition, implementors need to impose their own
+            implementation-specific limits on the values of otherwise
+            unconstrained member types, e.g. to prevent denial of service
+            attacks, to guard against running out of memory, or to work around
+            platform-specific limitations.
           </p>
           <p>
             Web applications will generally contain ECMAScript, HTML, CSS
@@ -917,14 +1087,15 @@ installButton.addEventListener("click", function(e){
             that enable revocation of permissions.
           </p>
           <p>
-            As this specification allows for the declaration of IRIs within
-            certain members of the web manifest, implementors need to consider
-            the security considerations discussed in the [IRI] specification.
-            Implementations intending to display <abbr title=
-            "Internationalized Resource Identifiers">IRIs</abbr> and
-            <abbr title="Internationalized domain name">IDNA</abbr> addresses
-            found in the web manifest are strongly encouraged to follow the
-            security advice given in [[!UNICODE-SECURITY]].
+            As this specification allows for the declaration of URLs within
+            certain members of a bookmark description document, implementors
+            need to consider the security considerations discussed in the
+            [[!URL]] specification. Implementations intending to display
+            <abbr title="Internationalized Resource Identifiers">IRIs</abbr>
+            and <abbr title="Internationalized domain name">IDNA</abbr>
+            addresses found in the bookmark description document are strongly
+            encouraged to follow the security advice given in
+            [[!UNICODE-SECURITY]].
           </p>
         </dd>
         <dt>
@@ -948,7 +1119,7 @@ installButton.addEventListener("click", function(e){
               File extension(s):
             </dt>
             <dd>
-              .webapp
+              .bdd, .json
             </dd>
             <dt>
               Macintosh file type code(s):
@@ -992,7 +1163,7 @@ installButton.addEventListener("click", function(e){
           W3C.
         </dd>
       </dl>
-    </section>
+  </section>
     <section class="appendix">
       <h2>
         Acknowledgments
