@@ -34,7 +34,7 @@ a:not(href){ color: red }
       <p>
         This specification also defines two ways to allows a web page to be
         associated with a bookmark description document: through the
-        <code>manifest</code> link type or through an API.
+        <code>bookmard-description</code> link type or through an API.
       </p>
     </section>
     <section id="sotd">
@@ -138,8 +138,7 @@ a:not(href){ color: red }
           Example of using the API
         </h3>
         <p>
-          Check if the application is running in standalone.
-        </p>
+        Check if the application is running in <a>standalone</a> mode. </p>
         <pre class="example highlight html">
 &lt;script&gt;
 if("standalone" in window.navigator &amp;&amp; window.navigator.standalone){
@@ -403,11 +402,11 @@ installButton.addEventListener("click", function(e){
         <ol>
           <li>Let <var>icons</var> be an empty list.
           </li>
-          <li>Let <var>manifest URL</var> be the URL from which the
-          <var>manifest</var> was fetched from.
+          <li>Let <var>bookmark data URL</var> be the URL from which the
+          <var>bookmark data </var>was fetched from.
           </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          [[\GetOwnProperty]] internal method of <var>bookmark data</var> passing
           "<code>icons</code>" as the argument.
           </li>
           <li>If <var>value</var> is an array, then for each <var>potential
@@ -496,7 +495,7 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          [[\GetOwnProperty]] internal method of <var>bookmark data</var> passing
           "<code>orientation</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
@@ -561,7 +560,7 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          [[\GetOwnProperty]] internal method of <var>bookmark data</var> passing
           "<code>mode</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
@@ -622,7 +621,7 @@ installButton.addEventListener("click", function(e){
             <ol>
               <li>Set <var>name</var> to be an implementation specific string
               that can serve as a suitable name for the web application. For
-              example, if the manifest was obtained from a <code>link</code>
+              example, if the bookmark description document was obtained from a <code>link</code>
               element, and the <code>document</code> has a <code>meta</code>
               element whose <code>name</code> attribute matches
                 "<code><a href="http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
@@ -662,7 +661,7 @@ installButton.addEventListener("click", function(e){
           Linking to a bookmark description document
         </h3>
         <p>
-          The <code>manifest</code> keyword can be used with a [[!HTML]]
+          The <code>bookmark-description</code> keyword can be used with a [[!HTML]]
           <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
           link</a> element. This keyword creates an <a href=
@@ -709,17 +708,17 @@ installButton.addEventListener("click", function(e){
         </table>
         <p>
           The default media type for resources associated with the
-          <code>manifest</code> link type is
-          <code>application/webapp-manifest+json</code>.
+          <code>bookmark-description</code> link type is
+          <code>application/webapp-bookmark+json</code>.
         </p>
         <p>
           In cases where more than one <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-          <code>link</code></a> element with a <code>manifest</code> link type
+          <code>link</code></a> element with a <code>boomark-description</code> link type
           appears in a <code>document</code>, the user agent MUST use the first
           inserted link element and ignore all subsequent <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-          <code>link</code></a> elements with a <code>manifest</code> link type
+          <code>link</code></a> elements with a <code>bookmark-description</code> link type
           (even if the first element was in error).
         </p>
         <p>
@@ -785,23 +784,18 @@ installButton.addEventListener("click", function(e){
           Although proprietary extensions are undesirable, they can't
           realistically be avoided. As such, the RECOMMENDED way to add
           proprietary extension is to use a vendor prefix.
+        </p> 
+        <p>
+            This following is an example of two hypothetical vendor extensions.
         </p>
-        <section>
-          <h4>
-            Example of extending manifest format
-          </h4>
-          <p>
-            This example shows two hypothetical vendor extensions.
-          </p>
-          <pre class="example highlight json">
+        <pre class="example highlight json" title="vendor extensions">
 {
   ...
   "webkit-fancyfeature": "some/url/img",
   "moz-awesome-thing": { ... }
   ...
-}
-</pre>
-        </section>
+}</pre></div>
+
       </section>
     </section>
     <section>
@@ -911,18 +905,18 @@ installButton.addEventListener("click", function(e){
           returns a URL or an error.
         </p>
         <ol>
-          <li>Let <var>raw src</var> be the result of calling the
+          <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>potential icon</var>
           passing "<code>src</code>" as the argument.
           </li>
-          <li>If <var>raw src</var> is <code>null</code> or
+          <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code> or type(<var>potential src</var>) is not
           "string", return an error.
           </li>
+          <li>Let <var>bookmark description URL</var> be the URL from which the <var>bookmark description document</var> was fetched from. </li>
           <li>
-            <a href="http://url.spec.whatwg.org/#parsing">Parse</a> <var>raw
-            src</var>, using <var>manifest URL</var> as the base URL, and let
-            <var>src</var> be the result.
+            <a href="http://url.spec.whatwg.org/#parsing">Parse</a> <var>value</var>, using <var>bookmark description URL</var> as the base URL, and let
+            <var>result</var> be the result.
           </li>
           <li>return <var>result</var>.
           </li>
@@ -934,7 +928,7 @@ installButton.addEventListener("click", function(e){
         </h3>
         <p>
           The <dfn title="icon-type">type</dfn> member of an icon is a hint as
-          to the media type of the icon. A user agent can ignore icons of media
+          to the media type of the icon. The purpose of this member is to allow a user agent can ignore icons of media
           types it does not support.
         </p>
         <p>
@@ -942,6 +936,16 @@ installButton.addEventListener("click", function(e){
           given by the following algorithm. The algorithm returns a string or
           <code>undefined</code>.
         </p>
+        <ol>
+          <li>Let <var>value</var> be the result of calling the
+            [[\GetOwnProperty]] internal method of <var>potential icon</var> passing "<code>type</code>" as the argument. </li>
+          <li>If <var>value</var> is <code>null</code> or <code>undefined</code> or type(<var>potential src</var>) is not
+            "string", return an error. </li>
+          <li>Let <var>bookmark description URL</var> be the URL from which the <var>bookmark description document</var> was fetched from. </li>
+          <li> <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace"> Strip leading and trailing whitespace</a> from <var>result</var>. </li>
+          <li>return <var>result</var>. </li>
+        </ol>
       </section>
     </section>
     <section>
@@ -954,7 +958,7 @@ installButton.addEventListener("click", function(e){
         </dt>
         <dd>
           The standalone attribute provides a means for a developer to check if
-          the applicatoin is running in standalone mode. When getting, the user
+          the applicatoin is running in <a>standalone</a> mode. When getting, the user
           agent MUST returns <code>true</code> if the application is running as
           <a>standalone</a>. Return <code>false</code> otherwise.
         </dd>
@@ -1041,7 +1045,7 @@ installButton.addEventListener("click", function(e){
         <var>undefined</var> as value.
         </li>
       </ol>
-    </section>
+  </section>
     <section>
       <h2>
         Media type reregistration
@@ -1052,7 +1056,7 @@ installButton.addEventListener("click", function(e){
       </p>
       <p>
         The <dfn>media type for a bookmark description documents</dfn> is
-        <code>application/webapp-manifest+json</code>.
+        <code>application/bookmark+json</code>.
       </p>
       <p>
         If the protocol over which the bookmark description document is
@@ -1071,7 +1075,7 @@ installButton.addEventListener("click", function(e){
           Subtype name:
         </dt>
         <dd>
-          webapp-manifest+json
+          bookmark+json
         </dd>
         <dt>
           Required parameters:
