@@ -110,7 +110,13 @@ a:not(href){ color: red }
         <h3>
           Example of linking to bookmark description document
         </h3>
-        <p>Example of using a <code>link</code> element to associate a website with a bookmark description document. The example also shows how  HTML fallbacks, such as &quot;<span class="example highlight html">application-name</span>&quot;, can be used to support legacy user agents that don't implement this specification. </p>
+        <p>
+          Example of using a <code>link</code> element to associate a website
+          with a bookmark description document. The example also shows how HTML
+          fallbacks, such as "<span class=
+          "example highlight html">application-name</span>", can be used to
+          support legacy user agents that don't implement this specification.
+        </p>
         <pre class="example highlight html">
 &lt;!doctype html&gt;
 &lt;html&gt;
@@ -122,9 +128,10 @@ a:not(href){ color: red }
 
 &lt;!-- fallback metadata for legacy browsers --&gt;
 &lt;meta name="application-name" content="Best News!"&gt;
-&lt;link rel=&quot;shortcut icon&quot; src=&quot;favicon.ico&quot;&gt;
+&lt;link rel="shortcut icon" src="favicon.ico"&gt;
 &lt;/head&gt;
-...</pre>
+...
+</pre>
       </section>
       <section>
         <h3>
@@ -163,10 +170,13 @@ installButton.addEventListener("click", function(e){
 </pre>
       </section>
       <section>
-      <h3>Modes of operation</h3>
-              <p>
-          The <dfn>mode of operation</dfn> in which a web application can be launched
-        include: </p>
+        <h3>
+          Modes of operation
+        </h3>
+        <p>
+          The <dfn>mode of operation</dfn> in which a web application can be
+          launched include:
+        </p>
         <dl>
           <dt>
             <dfn>standalone</dfn>
@@ -187,7 +197,7 @@ installButton.addEventListener("click", function(e){
         </dl>
       </section>
     </section>
-  <section>
+    <section>
       <h2>
         Bookmark description document
       </h2>
@@ -527,8 +537,9 @@ installButton.addEventListener("click", function(e){
           <code title="">mode</code> member
         </h3>
         <p>
-          The <dfn title="member-mode">mode</dfn> member represents that mode of operation in which
-          the web application will be launched. When the developer ommits the value, the user agent assumes the value &quot;&quot;<a></a>.
+          The <dfn title="member-mode">mode</dfn> member represents that mode
+          of operation in which the web application will be launched. When the
+          developer ommits the value, the user agent assumes the value "".
         </p>
         <p>
           Standalone mode can also be displayed in the following view modes:
@@ -538,7 +549,7 @@ installButton.addEventListener("click", function(e){
           following [[!ABNF]]:
         </p>
         <pre>
-  mode = "bookmark" / "standalone" [&quot;-&quot; viewmode] 
+  mode = "bookmark" / "standalone" ["-" viewmode] 
   viewmode = "fullscreen"
 </pre>
         <p>
@@ -562,7 +573,9 @@ installButton.addEventListener("click", function(e){
             "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
             Strip leading and trailing whitespace</a> from <var>value</var>.
           </li>
-          <li>If the value is an empty string, return "<code>bookmark</code>" and terminate this algorithm. </li>
+          <li>If the value is an empty string, return "<code>bookmark</code>"
+          and terminate this algorithm.
+          </li>
           <li>If <var>value</var> is not a <a>valid application mode</a>, then
           return an error and terminate this algorithm.
           </li>
@@ -599,7 +612,7 @@ installButton.addEventListener("click", function(e){
           "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">
             parse</a> function of the JSON object defined in [[!ECMASCRIPT]]
             with <var>text</var> as its only argument. If parsing throws an
-            error, return the <a></a>error and terminate this algorithm.
+            error, return the error and terminate this algorithm.
           </li>
           <li>Let <var>name</var> be the result of running the <a>steps for
           processing the <code>name</code> member</a>. If the returned value is
@@ -641,75 +654,75 @@ installButton.addEventListener("click", function(e){
           <li>Return response.
           </li>
         </ol>
-    </section>
-    <section id="linking">
-      <h3>
-        Linking to a bookmark description document
-      </h3>
-      <p>
-        The <code>manifest</code> keyword can be used with a [[!HTML]]
-        <a href=
+      </section>
+      <section id="linking">
+        <h3>
+          Linking to a bookmark description document
+        </h3>
+        <p>
+          The <code>manifest</code> keyword can be used with a [[!HTML]]
+          <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-        link</a> element. This keyword creates an <a href=
+          link</a> element. This keyword creates an <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
           title="external resource link">external resource link</a>.
-      </p>
-      <table border="1">
-        <tr>
-          <th rowspan="2">
-            Link type
-          </th>
-          <th colspan="2">
-            Effect on...
-          </th>
-          <th rowspan="2">
-            Brief description
-          </th>
-        </tr>
-        <tr>
-          <th>
-            <code><a href="#the-link-element">link</a></code>
-          </th>
-          <th>
-            <code><a href="#the-a-element">a</a></code> and <code><a href=
+        </p>
+        <table border="1">
+          <tr>
+            <th rowspan="2">
+              Link type
+            </th>
+            <th colspan="2">
+              Effect on...
+            </th>
+            <th rowspan="2">
+              Brief description
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <code><a href="#the-link-element">link</a></code>
+            </th>
+            <th>
+              <code><a href="#the-a-element">a</a></code> and <code><a href=
               "#the-area-element">area</a></code>
-          </th>
-        </tr>
-        <tr>
-          <td>
-            <code title="rel-manifest">bookmark-description</code>
-          </td><!-- second most used <link rel> value -->
-          <td>
-            <a href=
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <code title="rel-manifest">bookmark-description</code>
+            </td><!-- second most used <link rel> value -->
+            <td>
+              <a href=
               "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
               title="external resource link">External Resource</a>
-          </td>
-          <td>
-            not allowed
-          </td>
-          <td>
-            Imports or links to a bookmark description document.
-          </td>
-        </tr>
-      </table>
-      <p>
-        The default media type for resources associated with the
-        <code>manifest</code> link type is
-        <code>application/webapp-manifest+json</code>.
-      </p>
-      <p>
-        In cases where more than one <a href=
+            </td>
+            <td>
+              not allowed
+            </td>
+            <td>
+              Imports or links to a bookmark description document.
+            </td>
+          </tr>
+        </table>
+        <p>
+          The default media type for resources associated with the
+          <code>manifest</code> link type is
+          <code>application/webapp-manifest+json</code>.
+        </p>
+        <p>
+          In cases where more than one <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-        <code>link</code></a> element with a <code>manifest</code> link type
+          <code>link</code></a> element with a <code>manifest</code> link type
           appears in a <code>document</code>, the user agent MUST use the first
           inserted link element and ignore all subsequent <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
           <code>link</code></a> elements with a <code>manifest</code> link type
           (even if the first element was in error).
-      </p>
-      <p>
-        The appropriate time to <a>fetch</a> the bookmark
-          description document is when the <a href=
+        </p>
+        <p>
+          The appropriate time to <a>fetch</a> the bookmark description
+          document is when the <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
           title="external resource link">external resource link</a> is created
           or when its element is <a href=
@@ -719,9 +732,10 @@ installButton.addEventListener("click", function(e){
           to delay fetching a bookmark description document until after the
           document and its other resources have loaded (i.e., to not delay the
           availability of content and scripts required by the
-        <code>document</code>).
-      </p>
-      <p>Certain error conditions can result in a bookmark description
+          <code>document</code>).
+        </p>
+        <p>
+          Certain error conditions can result in a bookmark description
           document being treated as an <a>invalid bookmark description
           document</a>. An <dfn>invalid bookmark description document</dfn> is
           one that is deemed to be non-conforming in such a way that it would
@@ -731,36 +745,53 @@ installButton.addEventListener("click", function(e){
           MAY report the error to the user in a user-agent-specific manner, or
           MAY ignore the error and do nothing. In either case, when a step
           results in an <a>invalid bookmark description document</a> the user
-      agent MUST abort whatever step or sub-step caused the condition. </p>
-      <p>To fetch a bookmark description document, as user agent MUST: </p>
-      <ol>
-        <li>If the <code>link</code> element lacks a href attribute, abort this algorithm. </li>
-        <li>Run the <a>steps for fetching  a bookmark description
-        document</a>, with the value of <code>href</code> attribute as the url, and let <var>response</var> be the response.</li>
-        <li>If response's type is &quot;error&quot;, treat this as an <span>invalid bookmark description document</span>.</li>
-        <li>Otherwise, let <var>bookmark description</var> be the result of running  the <a>steps for processing  a bookmark description
-        document</a>.</li>
-        <li>If <var>bookmark description</var> results in an error,  treat this as an <span>invalid bookmark description document</span>.</li>
-        <li>Otherwise, in a user agent specific manner, and when the end-user so desires, provide a means for the end-user to view the relevant contents of the <var>bookmark description</var>; and provide a means for the end-user to create a bookmark based on that information.</li>
-      </ol>
-    </section>
-    <section id="proprietary-extensions" class="informative">
-      <h3>
-        Proprietary extensions to the bookmark description document
-      </h3>
-      <p>
-        Although proprietary extensions are undesirable, they can't
-        realistically be avoided. As such, the RECOMMENDED way to add
-        proprietary extension is to use a vendor prefix.
-      </p>
-      <section>
-        <h4>
-          Example of extending manifest format
-        </h4>
-        <p>
-          This example shows two hypothetical vendor extensions.
+          agent MUST abort whatever step or sub-step caused the condition.
         </p>
-        <pre class="example highlight JSON">
+        <p>
+          To fetch a bookmark description document, as user agent MUST:
+        </p>
+        <ol>
+          <li>If the <code>link</code> element lacks a href attribute, abort
+          this algorithm.
+          </li>
+          <li>Run the <a>steps for fetching a bookmark description
+          document</a>, with the value of <code>href</code> attribute as the
+          url, and let <var>response</var> be the response.
+          </li>
+          <li>If response's type is "error", treat this as an <span>invalid
+          bookmark description document</span>.
+          </li>
+          <li>Otherwise, let <var>bookmark description</var> be the result of
+          running the <a>steps for processing a bookmark description
+          document</a>.
+          </li>
+          <li>If <var>bookmark description</var> results in an error, treat
+          this as an <span>invalid bookmark description document</span>.
+          </li>
+          <li>Otherwise, in a user agent specific manner, and when the end-user
+          so desires, provide a means for the end-user to view the relevant
+          contents of the <var>bookmark description</var>; and provide a means
+          for the end-user to create a bookmark based on that information.
+          </li>
+        </ol>
+      </section>
+      <section id="proprietary-extensions" class="informative">
+        <h3>
+          Proprietary extensions to the bookmark description document
+        </h3>
+        <p>
+          Although proprietary extensions are undesirable, they can't
+          realistically be avoided. As such, the RECOMMENDED way to add
+          proprietary extension is to use a vendor prefix.
+        </p>
+        <section>
+          <h4>
+            Example of extending manifest format
+          </h4>
+          <p>
+            This example shows two hypothetical vendor extensions.
+          </p>
+          <pre class="example highlight JSON">
       {
         ...
         "webkit-fancyfeature": "some/url/img",
@@ -768,8 +799,8 @@ installButton.addEventListener("click", function(e){
         ...
       }
 </pre>
+        </section>
       </section>
-    </section>
     </section>
     <section>
       <h2>
@@ -783,7 +814,7 @@ installButton.addEventListener("click", function(e){
         <span>steps for selecting the orientation</span>.
         </li>
       </ol>
-  </section>
+    </section>
     <section>
       <h2>
         Icon object and its members
@@ -802,8 +833,8 @@ installButton.addEventListener("click", function(e){
           pixel density is expressed as the number of dots per 'px' unit
           (equivalent to a <a href=
           "http://dev.w3.org/csswg//#resolution">dppx</a> as defined in
-          [[!css3-values]]). The value is a positive number greater than 0.
-          If the developer ommits the value, the user agent assumes the value
+          [[!css3-values]]). The value is a positive number greater than 0. If
+          the developer ommits the value, the user agent assumes the value
           <a><code>1</code></a>.
         </p>
         <p>
@@ -909,99 +940,105 @@ installButton.addEventListener("click", function(e){
           given by the following algorithm. The algorithm returns a string or
           <code>undefined</code>.
         </p>
-        <p>&nbsp;
-          
-        </p>
       </section>
     </section>
     <section>
       <h2>
         Extensions to the <code>Navigator</code> object
       </h2>
-      <section>
-        <h3>
-          <code>standalone</code> attribute
-        </h3>
-        <dl class="idl" title="partial interface Navigator">
-          <dt>
-            readonly attribute Boolean standalone
-          </dt>
-          <dd>
-            The standalone attribute provides a means for a developer to check
-            if the applicatoin is running in standalone mode. When getting, the
-            user agent MUST returns <code>true</code> if the application is
-            running as <a>standalone</a>. Return <code>false</code> otherwise.
-          </dd>
-          <dt>
-            Promise requestBookmark(DOMString url)
-          </dt>
-          <dd>
-            When invoked, the user agent MUST run the <a>steps to add a
-            bookmark</a>.
-          </dd>
-        </dl>
-        <p>
-          The <dfn>steps to request a bookmark</dfn> are given by the following
-          algorithm. The algorithm runs asynchronously and returns a Promise.
-        </p>
-        <ol>
-          <li>Let <var>promise</var> be a new <a><code>Promise</code></a>
-          object and <var>resolver</var> its associated resolver.
-          </li>
-          <li>Return <var>promise</var> and run the remaining steps
-          asynchronously.
-          </li>
-          <li>If this method was not invoked as a result of explicit user
-          action, then:
-            <ol>
-              <li>Let <var>error</var> be a new
-              <a><code>DOMException</code></a> whose name is "<code><a href=
-              "http://dom.spec.whatwg.org/#securityerror">SecurityError</a></code>".
-              </li>
-              <li>Run resolver's internal reject algorithm with
-              <var>error</var> as value and terminate this algorithm.
-              </li>
-            </ol>
-          </li>
-          <li>Run the <a>steps for fetching  a bookmark
-          description document</a>. If the <var>response</var>'s  type is &quot;error&quot;:
+      <dl class="idl" title="partial interface Navigator">
+        <dt>
+          readonly attribute Boolean standalone
+        </dt>
+        <dd>
+          The standalone attribute provides a means for a developer to check if
+          the applicatoin is running in standalone mode. When getting, the user
+          agent MUST returns <code>true</code> if the application is running as
+          <a>standalone</a>. Return <code>false</code> otherwise.
+        </dd>
+        <dt>
+          Promise requestBookmark(DOMString url)
+        </dt>
+        <dd>
+          When invoked, the user agent MUST run the <a>steps to request to add
+          bookmark</a>.
+        </dd>
+      </dl>
+      <p>
+        The <dfn>steps to request to add bookmark</dfn> are given by the
+        following algorithm. The algorithm runs asynchronously and returns a
+        Promise.
+      </p>
+      <ol>
+        <li>Let <var>promise</var> be a new <a><code>Promise</code></a> object
+        and <var>resolver</var> its associated resolver.
+        </li>
+        <li>Return <var>promise</var> and run the remaining steps
+        asynchronously.
+        </li>
+        <li>If this method was not invoked as a result of explicit user action,
+        then:
+          <ol>
+            <li>Let <var>error</var> be a new <a><code>DOMException</code></a>
+            whose name is "<code><a href=
+            "http://dom.spec.whatwg.org/#securityerror">SecurityError</a></code>".
+            </li>
+            <li>Run resolver's internal reject algorithm with <var>error</var>
+            as value and terminate this algorithm.
+            </li>
+          </ol>
+        </li>
+        <li>Run the <a>steps for fetching a bookmark description document</a>.
+        If the <var>response</var>'s type is "error":
           <ol>
             <li>Let exception name be "<code><a href=
-              "http://dom.spec.whatwg.org/#networkerror">NetworkError</a></code>". </li>
+            "http://dom.spec.whatwg.org/#networkerror">NetworkError</a></code>".
+            </li>
             <li>If the <var>response</var>'s termination reason is end user
-              abort, set <var>exception name</var> to "<code><a href=
-              "http://dom.spec.whatwg.org/#aborterror">AbortError</a></code>". </li>
-            <li>If the <var>response</var>'s termination reason is timeout,
-              set <var>exception name</var> to "<code><a href=
-              "http://dom.spec.whatwg.org/#timeouterror">TimeoutError</a></code>". </li>
-            <li>Let <var>error</var> be a new <a><code>DOMException</code></a> whose name is <var>exception
-              name</var>. </li>
-            <li>Run <var>resolver</var>'s internal reject algorithm with <var>error</var> as value and terminate this algorithm. </li>
+            abort, set <var>exception name</var> to "<code><a href=
+            "http://dom.spec.whatwg.org/#aborterror">AbortError</a></code>".
+            </li>
+            <li>If the <var>response</var>'s termination reason is timeout, set
+            <var>exception name</var> to "<code><a href=
+            "http://dom.spec.whatwg.org/#timeouterror">TimeoutError</a></code>".
+            </li>
+            <li>Let <var>error</var> be a new <a><code>DOMException</code></a>
+            whose name is <var>exception name</var>.
+            </li>
+            <li>Run <var>resolver</var>'s internal reject algorithm with <var>
+              error</var> as value and terminate this algorithm.
+            </li>
           </ol>
-          </li>
-          <li>Let <var>boomark info</var> be result of the <a>steps for processing  a bookmark
-          description document</a>, with <var>response</var>'s <a href="http://fetch.spec.whatwg.org/#concept-response-body">body</a> as the argument. </li>
-          <li>If <var>boomark info</var> is an error:
-            <ol>
-    <li>Run <var>resolver</var>'s internal reject algorithm with <var>error</var> as value and terminate this algorithm. </li>
-  </ol>
-          </li>
-          <li>Present <var>bookmark info</var> to the end user.  If the end-user rejects the request to add the bookmark:
-<ol>
-          <li>Let <var>error</var> be a new
-              <a><code>DOMException</code></a> whose name is "<code><a href=
-              "http://dom.spec.whatwg.org/#aborterror">AbortError</a></code>".
-              </li>
-              <li>Run <var>resolver</var>'s internal reject algorithm with
-              <var>error</var> as value and terminate this algorithm.
-              </li>
-            </ol>
-          </li>
-          <li>Run <var>resolver</var>'s internal fulfill algorithm with
-          <var>undefined</var> as value.
-          </li>
-        </ol>
-      </section>
+        </li>
+        <li>Let <var>boomark info</var> be result of the <a>steps for
+        processing a bookmark description document</a>, with
+        <var>response</var>'s <a href=
+        "http://fetch.spec.whatwg.org/#concept-response-body">body</a> as the
+        argument.
+        </li>
+        <li>If <var>boomark info</var> is an error:
+          <ol>
+            <li>Run <var>resolver</var>'s internal reject algorithm with <var>
+              error</var> as value and terminate this algorithm.
+            </li>
+          </ol>
+        </li>
+        <li>Present <var>bookmark info</var> to the end user. If the end-user
+        rejects the request to add the bookmark:
+          <ol>
+            <li>Let <var>error</var> be a new <a><code>DOMException</code></a>
+            whose name is "<code><a href=
+            "http://dom.spec.whatwg.org/#aborterror">AbortError</a></code>".
+            </li>
+            <li>Run <var>resolver</var>'s internal reject algorithm with <var>
+              error</var> as value and terminate this algorithm.
+            </li>
+          </ol>
+        </li>
+        <li>Run <var>resolver</var>'s internal fulfill algorithm with
+        <var>undefined</var> as value.
+        </li>
+      </ol>
     </section>
     <section>
       <h2>
@@ -1163,7 +1200,7 @@ installButton.addEventListener("click", function(e){
           W3C.
         </dd>
       </dl>
-  </section>
+    </section>
     <section class="appendix">
       <h2>
         Acknowledgments
