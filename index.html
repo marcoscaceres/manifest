@@ -2,7 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Configuration manifest for apps and bookmarks</title>
+    <title>
+      Configuration manifest for apps and bookmarks
+    </title>
     <script src="http://www.w3.org/Tools/respec/respec-w3c-common" class=
     "remove">
 </script>
@@ -17,11 +19,29 @@ a:not(href){ color: red }
   </head>
   <body>
     <section id='abstract'>
-      <p>This specification defines a <em>configuration manifest</em>, which provides developers with a centralized place to put metadata about a web application. This includes, amongst other things, the ability to specify the name of the web application, links to icons, as well as the preferred   URL at which the web application should open when it is launched by the user. </p>
-      <p>With this metadata,  user agents  can provide, for example, enhanced bookmarking capabilities such as being able to add a web application to the homescreen of a device - as well as the various icons naeeded to effectively integrate with an OS's task switcher and system preferences. The specification also defines an API to enable bookmarking from within a document, as well as a means to check if an application is running in a special mode called &quot;standalone&quot;. </p>
-      <p>This specification also defines    the <code>manifest</code> link type, which provides a declarative means for a web document to be
-      associated with a configuration manifest.</p>
-  </section>
+      <p>
+        This specification defines a <em>configuration manifest</em>, which
+        provides developers with a centralized place to put metadata about a
+        web application. This includes, amongst other things, the ability to
+        specify the name of the web application, links to icons, as well as the
+        preferred URL at which the web application should open when it is
+        launched by the user.
+      </p>
+      <p>
+        With this metadata, user agents can provide, for example, enhanced
+        bookmarking capabilities such as being able to add a web application to
+        the homescreen of a device - as well as the various icons naeeded to
+        effectively integrate with an OS's task switcher and system
+        preferences. The specification also defines an API to enable
+        bookmarking from within a document, as well as a means to check if an
+        application is running in a special mode called "standalone".
+      </p>
+      <p>
+        This specification also defines the <code>manifest</code> link type,
+        which provides a declarative means for a web document to be associated
+        with a configuration manifest.
+      </p>
+    </section>
     <section id="sotd">
       <p>
         Implementors should be aware that this specification is not stable.
@@ -32,7 +52,7 @@ a:not(href){ color: red }
         phase should join the aforementioned mailing lists and take part in the
         discussions.
       </p>
-  </section>
+    </section>
     <section id="conformance">
       <p>
         There is only one class of product that can claim conformance to this
@@ -41,9 +61,12 @@ a:not(href){ color: red }
     </section>
     <section>
       <h2>
-       Usage Examples
+        Usage Examples
       </h2>
-		  <p>This section shows how the expected usage of the various features provided by this specification. </p>
+      <p>
+        This section shows how the expected usage of the various features
+        provided by this specification.
+      </p>
       <section class="informative">
         <h3>
           Example configuration manifest
@@ -59,14 +82,14 @@ a:not(href){ color: red }
   "url": "/start.html",
   "mode": "standalone",
   "icons": [{
-    "src": "icon/lowres",
-    "density": "1",
-    "width": "64",
-    "type": "image/webp"
-  }, {
-    "src": "icon/hd",
-    "density": "2",
-    "width": "64"
+      "src": "icon/lowres",
+      "density": "1",
+      "width": "64",
+      "type": "image/webp"
+    }, {
+      "src": "icon/hd",
+      "density": "2",
+      "width": "64"
   }]
 }
 </pre>
@@ -137,25 +160,26 @@ installButton.addEventListener("click", function(e){
 &lt;/button&gt;
 </pre>
       </section>
-  </section>
-  <section>
-  <h2>Use cases and requirements</h2>
-        <p>
+    </section>
+    <section>
+      <h2>
+        Use cases and requirements
+      </h2>
+      <p>
         This document attempts to address the <cite><a href=
         "http://w3c-webmob.github.io/installable-webapps/">Use Cases and
         Requirements for Installable Web Apps</a></cite>.
       </p>
-  </section>
-
+    </section>
     <section>
       <h2>
         configuration manifest
       </h2>
       <p>
-        A <em>configuration manifest</em> is a [[!JSON]] document that
-        consists of a top-level object that can contain zero or more members,
-        some of which contain other objects. Each of the members, as well as
-        how their values are processes, are defined below.
+        A <em>configuration manifest</em> is a [[!JSON]] document that consists
+        of a top-level object that can contain zero or more members, some of
+        which contain other objects. Each of the members, as well as how their
+        values are processes, are defined below.
       </p>
       <p id="ecmascript-abstractop">
         Algorithms in this specification use the conventions described in
@@ -174,9 +198,9 @@ installButton.addEventListener("click", function(e){
         algorithms defined in [[!HTML]], [[!FETCH]], and [[!URL]].
       </p>
       <p>
-        As the configuration manifest format is a [[!JSON]] document,
-        this specification relies on the types defined in [[!JSON]]
-        specification: namely <dfn id="json-object">object</dfn>, <dfn id=
+        As the configuration manifest format is a [[!JSON]] document, this
+        specification relies on the types defined in [[!JSON]] specification:
+        namely <dfn id="json-object">object</dfn>, <dfn id=
         "json-array">array</dfn>, <dfn id="json-number">number</dfn>, and
         <dfn id="json-string">string</dfn>. Strict type checking is not
         enforced by this specification. Instead, each member's definition
@@ -205,11 +229,13 @@ installButton.addEventListener("click", function(e){
         </p>
         <p>
           The <dfn>steps for processing the name member</dfn> is given by the
-          following algorithm. The algorithm takes a configuration manifest as an argument and returns either an error or a string:
+          following algorithm. The algorithm takes a configuration manifest as
+          an argument and returns either an error or a string:
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing "<code>name</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>name</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code>, then return <code>undefined</code>.
@@ -243,11 +269,13 @@ installButton.addEventListener("click", function(e){
         </p>
         <p>
           The <dfn>steps for processing the short name member</dfn> is given by
-          the following algorithm. The algorithm takes a configuration manifest as an argument and returns a string:
+          the following algorithm. The algorithm takes a configuration manifest
+          as an argument and returns a string:
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing "<code>altname</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>altname</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code>, then return <code>undefined</code>.
@@ -294,8 +322,8 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing "<code>dont-share-cookies-and-stuff</code>"
-          as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>dont-share-cookies-and-stuff</code>" as the argument.
           </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToBoolean</a>(<var>value</var>).
@@ -323,7 +351,8 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of the <var>configuration manifest</var> passing "<code>url</code>" as the argument.
+          [[\GetOwnProperty]] internal method of the <var>configuration
+          manifest</var> passing "<code>url</code>" as the argument.
           </li>
           <li>Let <var>manifest URL</var> be the URL from which the
           <var>configuration manifest</var> was fetched from.
@@ -340,8 +369,8 @@ installButton.addEventListener("click", function(e){
             <ol>
               <li>
                 <a href="http://url.spec.whatwg.org/#parsing">Parse</a>
-                <var>value</var>, using <var>manifest URL</var> as
-                the base URL, and let <var>result</var> be the result.
+                <var>value</var>, using <var>manifest URL</var> as the base
+                URL, and let <var>result</var> be the result.
               </li>
             </ol>
           </li>
@@ -513,8 +542,11 @@ installButton.addEventListener("click", function(e){
         <p>
           The <dfn title="member-mode">mode</dfn> member represents that mode
           of operation in which the web application will be launched. When the
-        developer omits the value, the user agent assumes the value "bookmark".</p>
-             <p>The <dfn>mode of operation</dfn> in which a web application can be
+          developer omits the value, the user agent assumes the value
+          "bookmark".
+        </p>
+        <p>
+          The <dfn>mode of operation</dfn> in which a web application can be
           launched include:
         </p>
         <dl>
@@ -578,8 +610,8 @@ installButton.addEventListener("click", function(e){
           Processing the configuration manifest
         </h3>
         <p>
-          The <dfn>steps for fetching a configuration manifest</dfn> are
-          given by the following algorithm. It takes a <var>url</var> URL as an
+          The <dfn>steps for fetching a configuration manifest</dfn> are given
+          by the following algorithm. It takes a <var>url</var> URL as an
           argument. It returns either a <var>response</var> (which may be in
           error).
         </p>
@@ -592,13 +624,12 @@ installButton.addEventListener("click", function(e){
           </li>
         </ol>
         <p>
-          The <dfn>steps to processing a configuration manifest</dfn>
-          are given by the following algorithm. The algorithm takes a
-          <var>text</var> string as an argument.
+          The <dfn>steps to processing a configuration manifest</dfn> are given
+          by the following algorithm. The algorithm takes a <var>text</var>
+          string as an argument.
         </p>
         <ol>
-          <li>Let <var>manifest</var> be the result of
-          invoking the <a href=
+          <li>Let <var>manifest</var> be the result of invoking the <a href=
           "https://people.mozilla.com/~jorendorff/es6-draft.html#sec-15.12.2">
             parse</a> function of the JSON object defined in [[!ECMASCRIPT]]
             with <var>text</var> as its only argument. If parsing throws an
@@ -610,16 +641,16 @@ installButton.addEventListener("click", function(e){
             <ol>
               <li>Set <var>name</var> to be an implementation specific string
               that can serve as a suitable name for the web application. For
-              example, if the configuration manifest was obtained from a
-              <code>link</code> element, and the <code>document</code> has a
-              <code>meta</code> element whose <code>name</code> attribute
-              matches "<code><a href=
-              "http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
-              then the user agent could use the value of that <code>meta</code>
-              element's <code>content</code> attribute as a fallback.
-              Otherwise, then the document's <code>title</code> can be used.
-              Alternatively, the user could be prompted to provide a custom
-              name using as a place holder.
+              example, if the configuration manifest was obtained from a <code>
+                link</code> element, and the <code>document</code> has a
+                <code>meta</code> element whose <code>name</code> attribute
+                matches "<code><a href=
+                "http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
+                then the user agent could use the value of that
+                <code>meta</code> element's <code>content</code> attribute as a
+                fallback. Otherwise, then the document's <code>title</code> can
+                be used. Alternatively, the user could be prompted to provide a
+                custom name using as a place holder.
               </li>
             </ol>
           </li>
@@ -651,8 +682,8 @@ installButton.addEventListener("click", function(e){
           Linking to a configuration manifest
         </h3>
         <p>
-          The <code>manifest</code> keyword can be used with a
-          [[!HTML]] <a href=
+          The <code>manifest</code> keyword can be used with a [[!HTML]]
+          <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
           link</a> element. This keyword creates an <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
@@ -704,36 +735,37 @@ installButton.addEventListener("click", function(e){
         <p>
           In cases where more than one <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-          <code>link</code></a> element with a <code>manifest</code>
-          link type appears in a <code>document</code>, the user agent MUST use
-          the first inserted link element and ignore all subsequent <a href=
+          <code>link</code></a> element with a <code>manifest</code> link type
+          appears in a <code>document</code>, the user agent MUST use the first
+          inserted link element and ignore all subsequent <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-          <code>link</code></a> elements with a
-          <code>manifest</code> link type (even if the first
-          element was in error).
+          <code>link</code></a> elements with a <code>manifest</code> link type
+          (even if the first element was in error).
         </p>
         <p>
-          The appropriate time to <a>fetch</a> the configuration manifest is when the <a href=
+          The appropriate time to <a>fetch</a> the configuration manifest is
+          when the <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
           title="external resource link">external resource link</a> is created
           or when its element is <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
           title="insert an element into a document">inserted into a
           document</a>, whichever happens last. However, a user agent MAY opt
-          to delay fetching a configuration manifest until after the
-          document and its other resources have loaded (i.e., to not delay the
+          to delay fetching a configuration manifest until after the document
+          and its other resources have loaded (i.e., to not delay the
           availability of content and scripts required by the
           <code>document</code>).
         </p>
         <p>
-          Certain error conditions can result in a configuration manifest being treated as an <a>invalid configuration manifest</a>. An <dfn>invalid configuration manifest</dfn> is
-          one that is deemed to be non-conforming in such a way that it would
-          not be possible for the user agent to continue processing (e.g., it
-          can't be parsed by the JSON parser because of a syntax error, it
-          could be fetched from the network). In such a case, <a>report and
-          error</a>. In either case, when a step results in an <a>invalid
-          configuration manifest</a> the user agent MUST abort whatever
-          step or sub-step caused the condition.
+          Certain error conditions can result in a configuration manifest being
+          treated as an <a>invalid configuration manifest</a>. An <dfn>invalid
+          configuration manifest</dfn> is one that is deemed to be
+          non-conforming in such a way that it would not be possible for the
+          user agent to continue processing (e.g., it can't be parsed by the
+          JSON parser because of a syntax error, it could be fetched from the
+          network). In such a case, <a>report and error</a>. In either case,
+          when a step results in an <a>invalid configuration manifest</a> the
+          user agent MUST abort whatever step or sub-step caused the condition.
         </p>
         <p>
           To fetch a configuration manifest, as user agent MUST:
@@ -742,22 +774,23 @@ installButton.addEventListener("click", function(e){
           <li>If the <code>link</code> element lacks a href attribute, abort
           this algorithm.
           </li>
-          <li>Run the <a>steps for fetching a configuration manifest</a>, with the value of <code>href</code> attribute as the
-          url, and let <var>response</var> be the response.
+          <li>Run the <a>steps for fetching a configuration manifest</a>, with
+          the value of <code>href</code> attribute as the url, and let
+          <var>response</var> be the response.
           </li>
           <li>If response's type is "error", treat this as an <span>invalid
           configuration manifest</span>.
           </li>
-          <li>Otherwise, let <var>manifest</var> be the result of
-          running the <a>steps for processing a configuration manifest</a>.
+          <li>Otherwise, let <var>manifest</var> be the result of running the
+          <a>steps for processing a configuration manifest</a>.
           </li>
-          <li>If <var>manifest</var> results in an error, treat
-          this as an <span>invalid configuration manifest</span>.
+          <li>If <var>manifest</var> results in an error, treat this as an
+          <span>invalid configuration manifest</span>.
           </li>
           <li>Otherwise, in a user agent specific manner, and when the end-user
           so desires, provide a means for the end-user to view the relevant
-          contents of the <var>manifest</var>; and provide a means
-          for the end-user to create a bookmark based on that information.
+          contents of the <var>manifest</var>; and provide a means for the
+          end-user to create a bookmark based on that information.
           </li>
         </ol>
       </section>
@@ -903,8 +936,8 @@ installButton.addEventListener("click", function(e){
           </li>
           <li>
             <a href="http://url.spec.whatwg.org/#parsing">Parse</a>
-            <var>value</var>, using <var>manifest URL</var> as the
-            base URL, and let <var>result</var> be the result.
+            <var>value</var>, using <var>manifest URL</var> as the base URL,
+            and let <var>result</var> be the result.
           </li>
           <li>return <var>result</var>.
           </li>
@@ -991,15 +1024,19 @@ installButton.addEventListener("click", function(e){
             </li>
           </ol>
         </li>
-        <li>If the document's <a>mode of operation</a> is &quot;standalone&quot;:
-<ol>
-        <li>Let <var>error</var> be a new <a><code>DOMException</code></a> whose name is "<code><a href=
-            "http://dom.spec.whatwg.org/#notsupportederror">NotSupported</a></code>". </li>
-            <li>Run resolver's internal reject algorithm with <var>error</var> as value and terminate this algorithm.  </li>
+        <li>If the document's <a>mode of operation</a> is "standalone":
+          <ol>
+            <li>Let <var>error</var> be a new <a><code>DOMException</code></a>
+            whose name is "<code><a href=
+            "http://dom.spec.whatwg.org/#notsupportederror">NotSupported</a></code>".
+            </li>
+            <li>Run resolver's internal reject algorithm with <var>error</var>
+            as value and terminate this algorithm.
+            </li>
           </ol>
         </li>
-        <li>Run the <a>steps for fetching a configuration manifest</a>.
-        If the <var>response</var>'s type is "error":
+        <li>Run the <a>steps for fetching a configuration manifest</a>. If the
+        <var>response</var>'s type is "error":
           <ol>
             <li>Let exception name be "<code><a href=
             "http://dom.spec.whatwg.org/#networkerror">NetworkError</a></code>".
@@ -1021,10 +1058,9 @@ installButton.addEventListener("click", function(e){
           </ol>
         </li>
         <li>Let <var>boomark info</var> be result of the <a>steps for
-        processing a configuration manifest</a>, with
-        <var>response</var>'s <a href=
-        "http://fetch.spec.whatwg.org/#concept-response-body">body</a> as the
-        argument.
+        processing a configuration manifest</a>, with <var>response</var>'s
+        <a href="http://fetch.spec.whatwg.org/#concept-response-body">body</a>
+        as the argument.
         </li>
         <li>If <var>boomark info</var> is an error:
           <ol>
@@ -1063,10 +1099,10 @@ installButton.addEventListener("click", function(e){
         <code>application/manifest+json</code>.
       </p>
       <p>
-        If the protocol over which the configuration manifest is
-        transferred supports the [[!MIME-TYPES]] specification (e.g. HTTP), it
-        is RECOMMENDED that the configuration manifest be labeled with
-        the <a>media type for a configuration manifests</a>.
+        If the protocol over which the configuration manifest is transferred
+        supports the [[!MIME-TYPES]] specification (e.g. HTTP), it is
+        RECOMMENDED that the configuration manifest be labeled with the
+        <a>media type for a configuration manifests</a>.
       </p>
       <dl>
         <dt>
@@ -1104,14 +1140,13 @@ installButton.addEventListener("click", function(e){
         </dt>
         <dd>
           <p>
-            As the configuration manifest format is JSON and will
-            commonly be encoded using [[!UNICODE]], the security considerations
-            described in [[!JSON]] and [[!UNICODE-SECURITY]] apply. In
-            addition, implementors need to impose their own
-            implementation-specific limits on the values of otherwise
-            unconstrained member types, e.g. to prevent denial of service
-            attacks, to guard against running out of memory, or to work around
-            platform-specific limitations.
+            As the configuration manifest format is JSON and will commonly be
+            encoded using [[!UNICODE]], the security considerations described
+            in [[!JSON]] and [[!UNICODE-SECURITY]] apply. In addition,
+            implementors need to impose their own implementation-specific
+            limits on the values of otherwise unconstrained member types, e.g.
+            to prevent denial of service attacks, to guard against running out
+            of memory, or to work around platform-specific limitations.
           </p>
           <p>
             Web applications will generally contain ECMAScript, HTML, CSS
@@ -1135,14 +1170,13 @@ installButton.addEventListener("click", function(e){
           </p>
           <p>
             As this specification allows for the declaration of URLs within
-            certain members of a configuration manifest, implementors
-            need to consider the security considerations discussed in the
-            [[!URL]] specification. Implementations intending to display
-            <abbr title="Internationalized Resource Identifiers">IRIs</abbr>
-            and <abbr title="Internationalized domain name">IDNA</abbr>
-            addresses found in the configuration manifest are strongly
-            encouraged to follow the security advice given in
-            [[!UNICODE-SECURITY]].
+            certain members of a configuration manifest, implementors need to
+            consider the security considerations discussed in the [[!URL]]
+            specification. Implementations intending to display <abbr title=
+            "Internationalized Resource Identifiers">IRIs</abbr> and
+            <abbr title="Internationalized domain name">IDNA</abbr> addresses
+            found in the configuration manifest are strongly encouraged to
+            follow the security advice given in [[!UNICODE-SECURITY]].
           </p>
         </dd>
         <dt>
