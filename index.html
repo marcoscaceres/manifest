@@ -20,7 +20,7 @@ a:not(href){ color: red }
   <body>
     <section id='abstract'>
       <p>
-        This specification defines a <dfn>bookmark description document</dfn>
+        This specification defines a <em>bookmark description document</em>
         (BDD), which is a JSON document that a user agent can use to provide
         enhanced bookmarking capabilities. Unlike regular bookmarks, this
         specification allows developers to specify a range of icons, the name
@@ -138,7 +138,8 @@ a:not(href){ color: red }
           Example of using the API
         </h3>
         <p>
-        Check if the application is running in <a>standalone</a> mode. </p>
+          Check if the application is running in <a>standalone</a> mode.
+        </p>
         <pre class="example highlight html">
 &lt;script&gt;
 if("standalone" in window.navigator &amp;&amp; window.navigator.standalone){
@@ -161,7 +162,7 @@ var installButton = document.querySelector("#install");
 
 //Bookmarking only works if initiated by user interaction
 installButton.addEventListener("click", function(e){
-   window.navigator.bookmark("path/to/bookmark.json");
+   window.navigator.requestBookmark("path/to/bookmark.json");
 });
 &lt;/script&gt;
 
@@ -204,10 +205,9 @@ installButton.addEventListener("click", function(e){
       </h2>
       <p>
         A <em>bookmark description document</em> is a [[!JSON]] document that
-        consists of a top-level object (the bookmark description document
-        <dfn>root</dfn>) and one or more members, some of which contain other
-        objects. Each of the members, as well as how their values are
-        processes, are defined below.
+        consists of a top-level object that can contain zero or more members,
+        some of which contain other objects. Each of the members, as well as
+        how their values are processes, are defined below.
       </p>
       <p id="ecmascript-abstractop">
         Algorithms in this specification use the conventions described in
@@ -215,12 +215,15 @@ installButton.addEventListener("click", function(e){
         <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-parsefloat-string">
         <dfn>parseFloat</dfn></a> method, <a class="external" href=
-        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1.8"><dfn>ToString</dfn></a>
-        abstract operation, and the <a class="external" href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tostring"><dfn>
+        ToString</dfn></a> and <a href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-toboolean"><dfn>
+        ToBoolean</dfn></a> abstract operations, and the <a class="external"
+        href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-ecmascript-data-types-and-values">
-        Type(<var>x</var>)</a> notation referenced in this section are defined
-        in [[!ECMASCRIPT]]. Processing also relies on various algorithms
-        defined in [[!HTML]], [[!FETCH]], and [[!URL]].
+        <dfn>Type</dfn>(<var>x</var>)</a> notation referenced in this section
+        are defined in [[!ECMASCRIPT]]. Processing also relies on various
+        algorithms defined in [[!HTML]], [[!FETCH]], and [[!URL]].
       </p>
       <p>
         As the bookmark description document format is a [[!JSON]] document,
@@ -230,6 +233,12 @@ installButton.addEventListener("click", function(e){
         <dfn id="json-string">string</dfn>. Strict type checking is not
         enforced by this specification. Instead, each member's definition
         specifies the steps required to process a particular member.
+      </p>
+      <p>
+        When an algorithm asks the user agent to <dfn>report an error</dfn>,
+        the user agent MAY report the error to the developer in a
+        user-agent-specific manner (e.g., show the problem in the error
+        console), or MAY ignore the error and do nothing
       </p>
       <p>
         In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
@@ -259,13 +268,19 @@ installButton.addEventListener("click", function(e){
           <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code>, then return <code>undefined</code>.
           </li>
+          <li>If <a>Type</a>(<var>value</var>) is not "string", <a>report an
+          error</a>.
+          </li>
           <li>Let <var>result</var> be the result of calling
-          <a>ToString</a>(<var>value</var>)
+          <a>ToString</a>(<var>value</var>).
           </li>
           <li>
             <a href=
             "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
             Strip leading and trailing whitespace</a> from <var>result</var>.
+          </li>
+          <li>If <var>result</var> is the empty string, set result to
+          <var>undefined</var>.
           </li>
           <li>Return the <var>result</var>.
           </li>
@@ -293,6 +308,9 @@ installButton.addEventListener("click", function(e){
           <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code>, then return <code>undefined</code>.
           </li>
+          <li>If <a>Type</a>(<var>value</var>) is not "string", <a>report an
+          error</a>.
+          </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToString</a>(<var>value</var>).
           </li>
@@ -300,6 +318,9 @@ installButton.addEventListener("click", function(e){
             <a href=
             "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
             Strip leading and trailing whitespace</a> from <var>result</var>.
+          </li>
+          <li>If <var>result</var> is the empty string, set result to
+          <var>undefined</var>.
           </li>
           <li>Return the <var>result</var>.
           </li>
@@ -309,8 +330,9 @@ installButton.addEventListener("click", function(e){
         <h3>
           <code>dont-share-cookies-and-stuff</code> member
         </h3>
-        <p>
-          Yes, this needs to be renamed.
+        <p class="issue">
+          Yes, this needs to be renamed. Possible candidates: "isolated" or
+          "isolated-security-origin", "independent"
         </p>
         <p>
           The <code>dont-share-cookies-and-stuff</code> member is a boolean
@@ -333,7 +355,7 @@ installButton.addEventListener("click", function(e){
           as the argument.
           </li>
           <li>Let <var>result</var> be the result of calling
-          <a><a>ToBoolean</a></a>(<var>value</var>).
+          <a>ToBoolean</a>(<var>value</var>).
           </li>
           <li>Return the <var>result</var>.
           </li>
@@ -402,12 +424,12 @@ installButton.addEventListener("click", function(e){
         <ol>
           <li>Let <var>icons</var> be an empty list.
           </li>
-          <li>Let <var>bookmark data URL</var> be the URL from which the
-          <var>bookmark data </var>was fetched from.
+          <li>Let <var>bookmark data URL</var> be the URL from which the <var>
+            bookmark data</var> was fetched from.
           </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>bookmark data</var> passing
-          "<code>icons</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>bookmark data</var>
+          passing "<code>icons</code>" as the argument.
           </li>
           <li>If <var>value</var> is an array, then for each <var>potential
           icon</var> in the array:
@@ -416,14 +438,21 @@ installButton.addEventListener("click", function(e){
               processing the <code>src</code> member of an icon</a>. If the
               result is an error, stop processing this <var>potential
               icon</var> and move to the next <var>potential icon</var> in
-              value (if available).
+              value (if another is available).
               </li>
-              <li>Run the <a>steps for processing the <code>type</code> member
-              of an icon</a>. If the result is an error,
+              <li>Let <var>type</var> be the result of running the <a>steps for
+              processing the <code>type</code> member of an icon</a>.
+              </li>
+              <li>If <var>type</var> is not a <a href=
+              "http://www.whatwg.org/specs/web-apps/current-work/#valid-mime-type">
+                valid MIME type</a> or or the value of type is not a supported
+                icon format, then stop processing this <var>potential
+                icon</var> and move to the next <var>potential icon</var> (if
+                another is available).
               </li>
               <li>Let <var>width</var> be the result of running the <a>steps
               for processing the <code>width</code> member of an icon</a>. If
-              the result is an error,
+              the result is an error, set width to
               </li>
               <li>Otherwise, let <var>icon</var> be an object.
               </li>
@@ -486,7 +515,7 @@ installButton.addEventListener("click", function(e){
         <pre>
   orientation = type ["-" option]
   type = "portrait" / "landscape"
-  option = "any" / "primary" / "secondary" 
+  option = "auto" / "primary" / "secondary" 
 </pre>
         <p>
           The <dfn>steps for processing the <code>orientation</code>
@@ -495,14 +524,16 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>bookmark data</var> passing
-          "<code>orientation</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>bookmark data</var>
+          passing "<code>orientation</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code>, return <code>undefined</code>.
           </li>
-          <li>If <a>type</a>(<var>value</var>) is not "string", then return an
-          error and terminate this algorithm.
+          <li>If <a>type</a>(<var>value</var>) is not "string", then, report an
+          error, and return <var>undefined</var>.
+          </li>
+          <li>Set <var>value</var> to <a>ToString</a>(<var>value</var>).
           </li>
           <li>
             <a href=
@@ -510,7 +541,7 @@ installButton.addEventListener("click", function(e){
             Strip leading and trailing whitespace</a> from <var>value</var>.
           </li>
           <li>If <var>value</var> is not a <a>valid screen orientation</a>,
-          then return an error and terminate this algorithm.
+          then, <a>report an error</a>, and return <code>undefined</code>.
           </li>
           <li>Return <var>value</var>.
           </li>
@@ -556,31 +587,27 @@ installButton.addEventListener("click", function(e){
         <p>
           The <dfn>steps for processing the <code>mode</code> member of an
           icon</dfn> are given by the following algorithm. The algorithm
-          returns a string, an error, or <code>undefined</code>.
+          returns a string.
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>bookmark data</var> passing
-          "<code>mode</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>bookmark data</var>
+          passing "<code>mode</code>" as the argument.
           </li>
-          <li>If <var>value</var> is <code>null</code> or
-          <code>undefined</code>, return "<code>bookmark</code>".
+          <li>Let <var>result</var> be "<code>bookmark</code>".
           </li>
-          <li>If <a>type</a>(<var>value</var>) is not "string", then return an
-          error and terminate this algorithm.
+          <li>If <a>Type</a>(<var>value</var>) is not "string", then <a>report
+          an error</a>, and return <var>result</var>.
           </li>
           <li>
             <a href=
             "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
             Strip leading and trailing whitespace</a> from <var>value</var>.
           </li>
-          <li>If the value is an empty string, return "<code>bookmark</code>"
-          and terminate this algorithm.
+          <li>If <var>value</var> is a <a>valid application mode</a>, set <var>
+            result</var> to <var>value</var>.
           </li>
-          <li>If <var>value</var> is not a <a>valid application mode</a>, then
-          return an error and terminate this algorithm.
-          </li>
-          <li>Return <var>value</var>.
+          <li>Return <var>result</var>.
           </li>
         </ol>
       </section>
@@ -621,15 +648,16 @@ installButton.addEventListener("click", function(e){
             <ol>
               <li>Set <var>name</var> to be an implementation specific string
               that can serve as a suitable name for the web application. For
-              example, if the bookmark description document was obtained from a <code>link</code>
-              element, and the <code>document</code> has a <code>meta</code>
-              element whose <code>name</code> attribute matches
-                "<code><a href="http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
-                then the user agent could use the value of that
-                <code>meta</code> element's <code>content</code> attribute as a
-                fallback. Otherwise, then the document's <code>title</code> can
-                be used. Alternatively, the user could be prompted to provide a
-                custom name using as a place holder.
+              example, if the bookmark description document was obtained from a
+              <code>link</code> element, and the <code>document</code> has a
+              <code>meta</code> element whose <code>name</code> attribute
+              matches "<code><a href=
+              "http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
+              then the user agent could use the value of that <code>meta</code>
+              element's <code>content</code> attribute as a fallback.
+              Otherwise, then the document's <code>title</code> can be used.
+              Alternatively, the user could be prompted to provide a custom
+              name using as a place holder.
               </li>
             </ol>
           </li>
@@ -661,8 +689,8 @@ installButton.addEventListener("click", function(e){
           Linking to a bookmark description document
         </h3>
         <p>
-          The <code>bookmark-description</code> keyword can be used with a [[!HTML]]
-          <a href=
+          The <code>bookmark-description</code> keyword can be used with a
+          [[!HTML]] <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
           link</a> element. This keyword creates an <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
@@ -714,12 +742,13 @@ installButton.addEventListener("click", function(e){
         <p>
           In cases where more than one <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-          <code>link</code></a> element with a <code>boomark-description</code> link type
-          appears in a <code>document</code>, the user agent MUST use the first
-          inserted link element and ignore all subsequent <a href=
+          <code>link</code></a> element with a <code>boomark-description</code>
+          link type appears in a <code>document</code>, the user agent MUST use
+          the first inserted link element and ignore all subsequent <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#the-link-element">
-          <code>link</code></a> elements with a <code>bookmark-description</code> link type
-          (even if the first element was in error).
+          <code>link</code></a> elements with a
+          <code>bookmark-description</code> link type (even if the first
+          element was in error).
         </p>
         <p>
           The appropriate time to <a>fetch</a> the bookmark description
@@ -742,11 +771,10 @@ installButton.addEventListener("click", function(e){
           one that is deemed to be non-conforming in such a way that it would
           not be possible for the user agent to continue processing (e.g., it
           can't be parsed by the JSON parser because of a syntax error, it
-          could be fetched from the network). In such a case, the user agent
-          MAY report the error to the user in a user-agent-specific manner, or
-          MAY ignore the error and do nothing. In either case, when a step
-          results in an <a>invalid bookmark description document</a> the user
-          agent MUST abort whatever step or sub-step caused the condition.
+          could be fetched from the network). In such a case, <a>report and
+          error</a>. In either case, when a step results in an <a>invalid
+          bookmark description document</a> the user agent MUST abort whatever
+          step or sub-step caused the condition.
         </p>
         <p>
           To fetch a bookmark description document, as user agent MUST:
@@ -784,9 +812,9 @@ installButton.addEventListener("click", function(e){
           Although proprietary extensions are undesirable, they can't
           realistically be avoided. As such, the RECOMMENDED way to add
           proprietary extension is to use a vendor prefix.
-        </p> 
+        </p>
         <p>
-            This following is an example of two hypothetical vendor extensions.
+          This following is an example of two hypothetical vendor extensions.
         </p>
         <pre class="example highlight json" title="vendor extensions">
 {
@@ -794,8 +822,8 @@ installButton.addEventListener("click", function(e){
   "webkit-fancyfeature": "some/url/img",
   "moz-awesome-thing": { ... }
   ...
-}</pre></div>
-
+}
+</pre>
       </section>
     </section>
     <section>
@@ -913,10 +941,13 @@ installButton.addEventListener("click", function(e){
           <code>undefined</code> or type(<var>potential src</var>) is not
           "string", return an error.
           </li>
-          <li>Let <var>bookmark description URL</var> be the URL from which the <var>bookmark description document</var> was fetched from. </li>
+          <li>Let <var>bookmark description URL</var> be the URL from which the
+          <var>bookmark description document</var> was fetched from.
+          </li>
           <li>
-            <a href="http://url.spec.whatwg.org/#parsing">Parse</a> <var>value</var>, using <var>bookmark description URL</var> as the base URL, and let
-            <var>result</var> be the result.
+            <a href="http://url.spec.whatwg.org/#parsing">Parse</a>
+            <var>value</var>, using <var>bookmark description URL</var> as the
+            base URL, and let <var>result</var> be the result.
           </li>
           <li>return <var>result</var>.
           </li>
@@ -928,23 +959,32 @@ installButton.addEventListener("click", function(e){
         </h3>
         <p>
           The <dfn title="icon-type">type</dfn> member of an icon is a hint as
-          to the media type of the icon. The purpose of this member is to allow a user agent can ignore icons of media
-          types it does not support.
+          to the media type of the icon. The purpose of this member is to allow
+          a user agent can ignore icons of media types it does not support.
         </p>
         <p>
-          The <dfn>steps for processing the <code>type</code> member</dfn> are
-          given by the following algorithm. The algorithm returns a string or
-          <code>undefined</code>.
+          The <dfn>steps for processing the <code>type</code> member of an
+          icon</dfn> are given by the following algorithm. The algorithm
+          returns a string or <code>undefined</code>.
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-            [[\GetOwnProperty]] internal method of <var>potential icon</var> passing "<code>type</code>" as the argument. </li>
-          <li>If <var>value</var> is <code>null</code> or <code>undefined</code> or type(<var>potential src</var>) is not
-            "string", return an error. </li>
-          <li>Let <var>bookmark description URL</var> be the URL from which the <var>bookmark description document</var> was fetched from. </li>
-          <li> <a href=
-            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace"> Strip leading and trailing whitespace</a> from <var>result</var>. </li>
-          <li>return <var>result</var>. </li>
+          [[\GetOwnProperty]] internal method of <var>potential icon</var>
+          passing "<code>type</code>" as the argument.
+          </li>
+          <li>If <var>value</var> is <code>null</code> or
+          <code>undefined</code> , return <var>undefined</var>.
+          </li>
+          <li>If type(<var>potential src</var>) is not "string", return an
+          error.
+          </li>
+          <li>
+            <a href=
+            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
+            Strip leading and trailing whitespace</a> from <var>result</var>.
+          </li>
+          <li>return <var>result</var>.
+          </li>
         </ol>
       </section>
     </section>
@@ -958,9 +998,9 @@ installButton.addEventListener("click", function(e){
         </dt>
         <dd>
           The standalone attribute provides a means for a developer to check if
-          the applicatoin is running in <a>standalone</a> mode. When getting, the user
-          agent MUST returns <code>true</code> if the application is running as
-          <a>standalone</a>. Return <code>false</code> otherwise.
+          the applicatoin is running in <a>standalone</a> mode. When getting,
+          the user agent MUST returns <code>true</code> if the application is
+          running as <a>standalone</a>. Return <code>false</code> otherwise.
         </dd>
         <dt>
           Promise requestBookmark(DOMString url)
@@ -1045,7 +1085,7 @@ installButton.addEventListener("click", function(e){
         <var>undefined</var> as value.
         </li>
       </ol>
-  </section>
+    </section>
     <section>
       <h2>
         Media type reregistration
