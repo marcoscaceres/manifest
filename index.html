@@ -10,12 +10,6 @@
 </script>
     <script src="respecConfig.js" class='remove'>
 </script>
-    <style class='remove'>
-a:not(href){ color: red }
-    li{
-        padding: .5em 0;
-    }
-    </style>
   </head>
   <body>
     <section id='abstract'>
@@ -51,12 +45,6 @@ a:not(href){ color: red }
         specification before it eventually reaches the Candidate Recommendation
         phase should join the aforementioned mailing lists and take part in the
         discussions.
-      </p>
-    </section>
-    <section id="conformance">
-      <p>
-        There is only one class of product that can claim conformance to this
-        specification: a <dfn>user agent</dfn>.
       </p>
     </section>
     <section>
@@ -219,7 +207,7 @@ installButton.addEventListener("click", function(e){
       </p>
       <section>
         <h3>
-          <code title="">name</code> member
+          <code title="">name</code> and <code>altname</code> member
         </h3>
         <p>
           The <dfn id="member-name"><code>name</code></dfn> is a string that
@@ -228,54 +216,20 @@ installButton.addEventListener("click", function(e){
           underneath an icon).
         </p>
         <p>
-          The <dfn>steps for processing the name member</dfn> is given by the
-          following algorithm. The algorithm takes a manifest as an argument
-          and returns either an error or a string:
-        </p>
-        <ol>
-          <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          "<code>name</code>" as the argument.
-          </li>
-          <li>If <var>value</var> is <code>null</code> or
-          <code>undefined</code>, then return <code>undefined</code>.
-          </li>
-          <li>If <a>Type</a>(<var>value</var>) is not "string", <a>report an
-          error</a>.
-          </li>
-          <li>Let <var>result</var> be the result of calling
-          <a>ToString</a>(<var>value</var>).
-          </li>
-          <li>
-            <a href=
-            "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
-            Strip leading and trailing whitespace</a> from <var>result</var>.
-          </li>
-          <li>If <var>result</var> is the empty string, set result to
-          <var>undefined</var>.
-          </li>
-          <li>Return the <var>result</var>.
-          </li>
-        </ol>
-      </section>
-      <section>
-        <h3>
-          <code title="">altname</code> member
-        </h3>
-        <p>
-          The <dfn id="member-short-name"><code>altname</code></dfn> is a
+          The <dfn id="member-alt-name"><code>altname</code></dfn> is a
           string that represents an alternative name of the application, such
           as the name under which the application is sold or marketed.
         </p>
+
         <p>
-          The <dfn>steps for processing the short name member</dfn> is given by
-          the following algorithm. The algorithm takes a manifest as an
-          argument and returns a string:
+          The <dfn>steps for processing the names of an application</dfn> is given by the
+          following algorithm. The algorithm takes a <var>manifest</var>, and a key (either, "altname" or "name"), as an argument
+          and returns either <code>underfined</code> or a string. 
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          "<code>altname</code>" as the argument.
+          <var>key</key> as the argument.
           </li>
           <li>If <var>value</var> is <code>null</code> or
           <code>undefined</code>, then return <code>undefined</code>.
@@ -422,8 +376,10 @@ installButton.addEventListener("click", function(e){
                 another is available).
               </li>
               <li>Let <var>width</var> be the result of running the <a>steps
-              for processing the <code>width</code> member of an icon</a>. If
-              the result is an error, set width to
+              for processing the dimensions of an icon</a> with "width" as the argument. 
+              </li>
+              <li>Let <var>height</var> be the result of running the <a>steps
+              for processing the dimensions of an icon</a> with "height" as the argument. 
               </li>
               <li>Otherwise, let <var>icon</var> be an object.
               </li>
@@ -758,7 +714,7 @@ installButton.addEventListener("click", function(e){
           is deemed to be non-conforming in such a way that it would not be
           possible for the user agent to continue processing (e.g., it can't be
           parsed by the JSON parser because of a syntax error, it could be
-          fetched from the network). In such a case, <a>report and error</a>.
+          fetched from the network). In such a case, <a>report an error</a>.
           In either case, when a step results in an <a>invalid manifest</a> the
           user agent MUST abort whatever step or sub-step caused the condition.
         </p>
@@ -829,7 +785,7 @@ installButton.addEventListener("click", function(e){
         Icon object and its members
       </h2>
       <p>
-        Each <dfn>icons object</dfn> represents an icon for an application
+        Each <dfn>icon object</dfn> represents an icon for an application
         suitable to use at some dimensions and screen density.
       </p>
       <section>
@@ -1194,7 +1150,7 @@ installButton.addEventListener("click", function(e){
               File extension(s):
             </dt>
             <dd>
-              .bdd, .json
+              .json, .manifest
             </dd>
             <dt>
               Macintosh file type code(s):
@@ -1238,6 +1194,12 @@ installButton.addEventListener("click", function(e){
           W3C.
         </dd>
       </dl>
+    </section>
+    <section id="conformance" data-status="done">
+      <p>
+        There is only one class of product that can claim conformance to this
+        specification: a <dfn>user agent</dfn>.
+      </p>
     </section>
     <section class="appendix">
       <h2>
