@@ -1,7 +1,7 @@
 var respecConfig = {
     specStatus: 'FPWD',
     shortName: 'manifest',
-    subtitle: "Living Standard",
+    subtitle: 'Living Standard',
     edDraftURI: 'http://www.w3.org/2008/webapps/manifest/',
     editors: [{
         name: 'Marcos Caceres',
