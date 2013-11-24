@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>
-      Configuration manifest for apps and bookmarks
+      Manifest for web apps and bookmarks
     </title>
     <script src="http://www.w3.org/Tools/respec/respec-w3c-common" class=
     "remove">
@@ -130,7 +130,7 @@ a:not(href){ color: red }
         </p>
         <pre class="example highlight html">
 &lt;script&gt;
-if("standalone" in window.navigator &amp;&amp; window.navigator.standalone){
+if("standalone" in navigator &amp;&amp; navigator.standalone){
    //Do standalone specific stuff...
    document.documentElement.classList.add("standalone");
 }
