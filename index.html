@@ -20,9 +20,9 @@ a:not(href){ color: red }
   <body>
     <section id='abstract'>
       <p>
-        This specification defines a <em>manifest</em>, which
-        provides developers with a centralized place to put metadata about a
-        web application. This includes, amongst other things, the ability to
+        This specification defines a <em>manifest</em>, which provides
+        developers with a centralized place to put metadata about a web
+        application. This includes, amongst other things, the ability to
         specify the name of the web application, links to icons, as well as the
         preferred URL at which the web application should open when it is
         launched by the user.
@@ -100,10 +100,10 @@ a:not(href){ color: red }
         </h3>
         <p>
           Example of using a <code>link</code> element to associate a website
-          with a manifest. The example also shows how HTML
-          fallbacks, such as "<span class=
-          "example highlight html">application-name</span>", can be used to
-          support legacy user agents that don't implement this specification.
+          with a manifest. The example also shows how HTML fallbacks, such as
+          "<span class="example highlight html">application-name</span>", can
+          be used to support legacy user agents that don't implement this
+          specification.
         </p>
         <pre class="example highlight html">
 &lt;!doctype html&gt;
@@ -176,10 +176,10 @@ installButton.addEventListener("click", function(e){
         manifest
       </h2>
       <p>
-        A <em>manifest</em> is a [[!JSON]] document that consists
-        of a top-level object that can contain zero or more members, some of
-        which contain other objects. Each of the members, as well as how their
-        values are processes, are defined below.
+        A <em>manifest</em> is a [[!JSON]] document that consists of a
+        top-level object that can contain zero or more members, some of which
+        contain other objects. Each of the members, as well as how their values
+        are processes, are defined below.
       </p>
       <p id="ecmascript-abstractop">
         Algorithms in this specification use the conventions described in
@@ -198,13 +198,13 @@ installButton.addEventListener("click", function(e){
         algorithms defined in [[!HTML]], [[!FETCH]], and [[!URL]].
       </p>
       <p>
-        As the manifest format is a [[!JSON]] document, this
-        specification relies on the types defined in [[!JSON]] specification:
-        namely <dfn id="json-object">object</dfn>, <dfn id=
-        "json-array">array</dfn>, <dfn id="json-number">number</dfn>, and
-        <dfn id="json-string">string</dfn>. Strict type checking is not
-        enforced by this specification. Instead, each member's definition
-        specifies the steps required to process a particular member.
+        As the manifest format is a [[!JSON]] document, this specification
+        relies on the types defined in [[!JSON]] specification: namely <dfn id=
+        "json-object">object</dfn>, <dfn id="json-array">array</dfn>, <dfn id=
+        "json-number">number</dfn>, and <dfn id="json-string">string</dfn>.
+        Strict type checking is not enforced by this specification. Instead,
+        each member's definition specifies the steps required to process a
+        particular member.
       </p>
       <p>
         When an algorithm asks the user agent to <dfn>report an error</dfn>,
@@ -229,8 +229,8 @@ installButton.addEventListener("click", function(e){
         </p>
         <p>
           The <dfn>steps for processing the name member</dfn> is given by the
-          following algorithm. The algorithm takes a manifest as
-          an argument and returns either an error or a string:
+          following algorithm. The algorithm takes a manifest as an argument
+          and returns either an error or a string:
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
@@ -269,8 +269,8 @@ installButton.addEventListener("click", function(e){
         </p>
         <p>
           The <dfn>steps for processing the short name member</dfn> is given by
-          the following algorithm. The algorithm takes a manifest
-          as an argument and returns a string:
+          the following algorithm. The algorithm takes a manifest as an
+          argument and returns a string:
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
@@ -341,8 +341,8 @@ installButton.addEventListener("click", function(e){
           that is is <a href=
           "http://www.w3.org/html/wg/drafts/html/master/single-page.html#browsers">
           loaded</a> when the application is <a>launched</a>. When it's missing
-          from the manifest, the UA loads the URL from the
-          manifest was fetched.
+          from the manifest, the UA loads the URL from the manifest was
+          fetched.
         </p>
         <p>
           The <dfn>steps for processing the <code>url</code> member</dfn> are
@@ -351,8 +351,8 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of the <var>
-          manifest</var> passing "<code>url</code>" as the argument.
+          [[\GetOwnProperty]] internal method of the <var>manifest</var>
+          passing "<code>url</code>" as the argument.
           </li>
           <li>Let <var>manifest URL</var> be the URL from which the
           <var>manifest</var> was fetched from.
@@ -575,8 +575,8 @@ installButton.addEventListener("click", function(e){
           following [[!ABNF]]:
         </p>
         <pre>
-  mode = "bookmark" / "standalone" ["-" viewmode] 
-  viewmode = "fullscreen"
+  mode = "bookmark" / "standalone" ["-" presentation] 
+  presentation = "fullscreen"
 </pre>
         <p>
           The <dfn>steps for processing the <code>mode</code> member of an
@@ -610,10 +610,9 @@ installButton.addEventListener("click", function(e){
           Processing the manifest
         </h3>
         <p>
-          The <dfn>steps for fetching a manifest</dfn> are given
-          by the following algorithm. It takes a <var>url</var> URL as an
-          argument. It returns either a <var>response</var> (which may be in
-          error).
+          The <dfn>steps for fetching a manifest</dfn> are given by the
+          following algorithm. It takes a <var>url</var> URL as an argument. It
+          returns either a <var>response</var> (which may be in error).
         </p>
         <ol>
           <li>Let <var>response</var> be the result of <a href=
@@ -624,9 +623,9 @@ installButton.addEventListener("click", function(e){
           </li>
         </ol>
         <p>
-          The <dfn>steps to processing a manifest</dfn> are given
-          by the following algorithm. The algorithm takes a <var>text</var>
-          string as an argument.
+          The <dfn>steps to processing a manifest</dfn> are given by the
+          following algorithm. The algorithm takes a <var>text</var> string as
+          an argument.
         </p>
         <ol>
           <li>Let <var>manifest</var> be the result of invoking the <a href=
@@ -641,11 +640,10 @@ installButton.addEventListener("click", function(e){
             <ol>
               <li>Set <var>name</var> to be an implementation specific string
               that can serve as a suitable name for the web application. For
-              example, if the manifest was obtained from a <code>
-                link</code> element, and the <code>document</code> has a
-                <code>meta</code> element whose <code>name</code> attribute
-                matches "<code><a href=
-                "http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
+              example, if the manifest was obtained from a <code>link</code>
+              element, and the <code>document</code> has a <code>meta</code>
+              element whose <code>name</code> attribute matches
+                "<code><a href="http://www.whatwg.org/specs/web-apps/current-work/#meta-application-name">application-name</a></code>",
                 then the user agent could use the value of that
                 <code>meta</code> element's <code>content</code> attribute as a
                 fallback. Otherwise, then the document's <code>title</code> can
@@ -743,28 +741,25 @@ installButton.addEventListener("click", function(e){
           (even if the first element was in error).
         </p>
         <p>
-          The appropriate time to <a>fetch</a> the manifest is
-          when the <a href=
-          "http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
+          The appropriate time to <a>fetch</a> the manifest is when the
+          <a href="http://www.whatwg.org/specs/web-apps/current-work/#external-resource-link"
           title="external resource link">external resource link</a> is created
           or when its element is <a href=
           "http://www.whatwg.org/specs/web-apps/current-work/#insert-an-element-into-a-document"
           title="insert an element into a document">inserted into a
           document</a>, whichever happens last. However, a user agent MAY opt
-          to delay fetching a manifest until after the document
-          and its other resources have loaded (i.e., to not delay the
-          availability of content and scripts required by the
-          <code>document</code>).
+          to delay fetching a manifest until after the document and its other
+          resources have loaded (i.e., to not delay the availability of content
+          and scripts required by the <code>document</code>).
         </p>
         <p>
-          Certain error conditions can result in a manifest being
-          treated as an <a>invalid manifest</a>. An <dfn>invalid
-          manifest</dfn> is one that is deemed to be
-          non-conforming in such a way that it would not be possible for the
-          user agent to continue processing (e.g., it can't be parsed by the
-          JSON parser because of a syntax error, it could be fetched from the
-          network). In such a case, <a>report and error</a>. In either case,
-          when a step results in an <a>invalid manifest</a> the
+          Certain error conditions can result in a manifest being treated as an
+          <a>invalid manifest</a>. An <dfn>invalid manifest</dfn> is one that
+          is deemed to be non-conforming in such a way that it would not be
+          possible for the user agent to continue processing (e.g., it can't be
+          parsed by the JSON parser because of a syntax error, it could be
+          fetched from the network). In such a case, <a>report and error</a>.
+          In either case, when a step results in an <a>invalid manifest</a> the
           user agent MUST abort whatever step or sub-step caused the condition.
         </p>
         <p>
@@ -774,9 +769,9 @@ installButton.addEventListener("click", function(e){
           <li>If the <code>link</code> element lacks a href attribute, abort
           this algorithm.
           </li>
-          <li>Run the <a>steps for fetching a manifest</a>, with
-          the value of <code>href</code> attribute as the url, and let
-          <var>response</var> be the response.
+          <li>Run the <a>steps for fetching a manifest</a>, with the value of
+          <code>href</code> attribute as the url, and let <var>response</var>
+          be the response.
           </li>
           <li>If response's type is "error", treat this as an <span>invalid
           manifest</span>.
@@ -1058,9 +1053,9 @@ installButton.addEventListener("click", function(e){
           </ol>
         </li>
         <li>Let <var>boomark info</var> be result of the <a>steps for
-        processing a manifest</a>, with <var>response</var>'s
-        <a href="http://fetch.spec.whatwg.org/#concept-response-body">body</a>
-        as the argument.
+        processing a manifest</a>, with <var>response</var>'s <a href=
+        "http://fetch.spec.whatwg.org/#concept-response-body">body</a> as the
+        argument.
         </li>
         <li>If <var>boomark info</var> is an error:
           <ol>
@@ -1099,10 +1094,9 @@ installButton.addEventListener("click", function(e){
         <code>application/manifest+json</code>.
       </p>
       <p>
-        If the protocol over which the manifest is transferred
-        supports the [[!MIME-TYPES]] specification (e.g. HTTP), it is
-        RECOMMENDED that the manifest be labeled with the
-        <a>media type for a manifests</a>.
+        If the protocol over which the manifest is transferred supports the
+        [[!MIME-TYPES]] specification (e.g. HTTP), it is RECOMMENDED that the
+        manifest be labeled with the <a>media type for a manifests</a>.
       </p>
       <dl>
         <dt>
@@ -1140,13 +1134,13 @@ installButton.addEventListener("click", function(e){
         </dt>
         <dd>
           <p>
-            As the manifest format is JSON and will commonly be
-            encoded using [[!UNICODE]], the security considerations described
-            in [[!JSON]] and [[!UNICODE-SECURITY]] apply. In addition,
-            implementors need to impose their own implementation-specific
-            limits on the values of otherwise unconstrained member types, e.g.
-            to prevent denial of service attacks, to guard against running out
-            of memory, or to work around platform-specific limitations.
+            As the manifest format is JSON and will commonly be encoded using
+            [[!UNICODE]], the security considerations described in [[!JSON]]
+            and [[!UNICODE-SECURITY]] apply. In addition, implementors need to
+            impose their own implementation-specific limits on the values of
+            otherwise unconstrained member types, e.g. to prevent denial of
+            service attacks, to guard against running out of memory, or to work
+            around platform-specific limitations.
           </p>
           <p>
             Web applications will generally contain ECMAScript, HTML, CSS
@@ -1170,13 +1164,13 @@ installButton.addEventListener("click", function(e){
           </p>
           <p>
             As this specification allows for the declaration of URLs within
-            certain members of a manifest, implementors need to
-            consider the security considerations discussed in the [[!URL]]
-            specification. Implementations intending to display <abbr title=
+            certain members of a manifest, implementors need to consider the
+            security considerations discussed in the [[!URL]] specification.
+            Implementations intending to display <abbr title=
             "Internationalized Resource Identifiers">IRIs</abbr> and
             <abbr title="Internationalized domain name">IDNA</abbr> addresses
-            found in the manifest are strongly encouraged to
-            follow the security advice given in [[!UNICODE-SECURITY]].
+            found in the manifest are strongly encouraged to follow the
+            security advice given in [[!UNICODE-SECURITY]].
           </p>
         </dd>
         <dt>
