@@ -177,7 +177,10 @@ installButton.addEventListener("click", function(e){
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-parsefloat-string">
         <dfn>parseFloat</dfn></a> method, <a class="external" href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tostring"><dfn>
-        ToString</dfn></a> and <a href=
+        ToString</dfn></a>, <a href=
+        "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-hasownproperty">
+        <dfn>HasOwnProperty</dfn></a>, <dfn>[[\GetOwnProperty]]</dfn>, and
+        <a href=
         "http://people.mozilla.org/~jorendorff/es6-draft.html#sec-toboolean"><dfn>
         ToBoolean</dfn></a> abstract operations, and the <a class="external"
         href=
@@ -228,16 +231,12 @@ installButton.addEventListener("click", function(e){
           argument and returns either <code>underfined</code> or a string.
         </p>
         <ol>
-          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with <var>
-            key</var> as the argument returns <code>undefined</code>, then
-            return <code>undefined</code>.
+          <li>If <a>HasOwnProperty</a>(<var>manifest</var>, <var>key</var>)
+          returns <code>false</code>, then return <code>undefined</code>.
           </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          <var>key</var> as the argument.
-          </li>
-          <li>Optinally, if <a>Type</a>(<var>value</var>) is not "string", <a>
-            issue a developer warning</a>.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> with
+          argument <var>key</var>.
           </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToString</a>(<var>value</var>).
@@ -246,9 +245,6 @@ installButton.addEventListener("click", function(e){
             <a href=
             "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
             Strip leading and trailing whitespace</a> from <var>result</var>.
-          </li>
-          <li>If <var>result</var> is the empty string, set result to
-          <var>undefined</var>.
           </li>
           <li>Return the <var>result</var>.
           </li>
@@ -278,8 +274,8 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          "<code>dont-share-cookies-and-stuff</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> with
+          argument "<code>dont-share-cookies-and-stuff</code>".
           </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToBoolean</a>(<var>value</var>).
@@ -305,13 +301,12 @@ installButton.addEventListener("click", function(e){
           "http://url.spec.whatwg.org/#concept-url">URL</a>.
         </p>
         <ol>
-          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with "url"
-          as the argument equals <code>undefined</code>, then return
-          <code>undefined</code>.
+          <li>If <a>HasOwnProperty</a>(<var>manifest</var>, "url") returns
+          <code>false</code>, then return <code>undefined</code>.
           </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of the <var>manifest</var>
-          passing "<code>url</code>" as the argument.
+          [[\GetOwnProperty]] internal method of the <var>manifest</var> with
+          argument "<code>url</code>".
           </li>
           <li>Let <var>manifest URL</var> be the URL from which the
           <var>manifest</var> was fetched from.
@@ -351,9 +346,8 @@ installButton.addEventListener("click", function(e){
           icons, which can be empty, or <code>underfined</code>.
         </p>
         <ol>
-          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with
-          "icons" as the argument equals <code>undefined</code>, then return
-          <code>undefined</code>.
+          <li>If <a>HasOwnProperty</a>(<var>manifest</var>, <var>key</var>)
+          returns <code>false</code>, then return <code>undefined</code>.
           </li>
           <li>Let <var>icons</var> be an empty list.
           </li>
@@ -361,8 +355,8 @@ installButton.addEventListener("click", function(e){
           <var>manifest</var> was fetched from.
           </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          "<code>icons</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> with
+          argument "<code>icons</code>".
           </li>
           <li>If <var>value</var> is an array, then for each <var>potential
           icon</var> in the array:
@@ -460,32 +454,24 @@ installButton.addEventListener("click", function(e){
           returns either a string or undefined.
         </p>
         <ol>
-          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with
-          "orientation" as the argument equals <code>undefined</code>, then
-          return <code>undefined</code>.
+          <li>If <a>HasOwnProperty</a>(<var>manifest</var>,"orientation")
+          returns <code>false</code>, then return <code>undefined</code>.
           </li>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>manifest</var> passing
           "<code>orientation</code>" as the argument.
           </li>
-          <li>If <var>value</var> is <code>undefined</code>, return
-          <code>undefined</code>.
-          </li>
-          <li>If <a>type</a>(<var>value</var>) is not "string", then, issue a
-          developer warning, and return <var>undefined</var>.
-          </li>
-          <li>Set <var>value</var> to <a>ToString</a>(<var>value</var>).
+          <li>Let <var>result</var> to <a>ToString</a>(<var>value</var>).
           </li>
           <li>
             <a href=
             "http://www.whatwg.org/specs/web-apps/current-work/#strip-leading-and-trailing-whitespace">
-            Strip leading and trailing whitespace</a> from <var>value</var>.
+            Strip leading and trailing whitespace</a> from <var>result</var>.
           </li>
-          <li>If <var>value</var> is not a <a>valid screen orientation</a>,
-          then, <a>issue a developer warning</a>, and return
-          <code>undefined</code>.
+          <li>If <var>result</var> is not a <a>valid screen orientation</a>,
+          and return <code>undefined</code>.
           </li>
-          <li>Return <var>value</var>.
+          <li>Return <var>result</var>.
           </li>
         </ol>
         <p>
@@ -559,10 +545,7 @@ installButton.addEventListener("click", function(e){
           [[\GetOwnProperty]] internal method of <var>manifest</var> passing
           "<code>mode</code>" as the argument.
           </li>
-          <li>Let <var>result</var> be "<code>bookmark</code>".
-          </li>
-          <li>If <a>Type</a>(<var>value</var>) is not "string", then <a>issue a
-          developer warning</a>, and return <var>result</var>.
+          <li>Let <var>result</var> be "bookmark".
           </li>
           <li>
             <a href=
@@ -820,23 +803,21 @@ installButton.addEventListener("click", function(e){
         </p>
         <p>
           The <dfn>steps for processing a density of an icon</dfn> are given by
-          the following algorithm. The algorithm returns a positive number,
-          <code>undefined</code>, or an error.
+          the following algorithm. The algorithm thanks an <var>icon</var>
+          object as an argument and returns a positive number.
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>icon</var> passing
           "<code>density</code>" as the argument.
           </li>
-          <li>If value is <code>undefined</code>, return 1.
-          </li>
-          <li>Let <var>number</var> be the result of
+          <li>Let <var>result</var> be the result of
           parseFloat(<var>value</var>);
           </li>
-          <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
-          less than 0, return an error.
+          <li>If <var>result</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
+          less than 0, return 1.
           </li>
-          <li>Return <var>number</var>.
+          <li>Return <var>result</var>.
           </li>
         </ol>
       </section>
@@ -858,20 +839,20 @@ installButton.addEventListener("click", function(e){
           error.
         </p>
         <ol>
+          <li>If <a>HasOwnProperty</a>(<var>icon</var>, <var>key</var>) returns
+          <code>false</code>, then return <code>undefined</code>.
+          </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>object</var> passing
-          <var>key</var> as the argument.
+          [[\GetOwnProperty]] internal method of <var>icon</var> passing <var>
+            key</var> as the argument.
           </li>
-          <li>If value is <code>undefined</code>, return
-          <code>undefined</code>.
-          </li>
-          <li>Let <var>number</var> be the result of
+          <li>Let <var>result</var> be the result of
           parseFloat(<var>value</var>);
           </li>
-          <li>If <var>number</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
-          less than 0, return an error.
+          <li>If <var>result</var> is <code>NaN</code>, +0, −0, +∞, or −∞, or
+          less than 0, return <var>undefined</var>.
           </li>
-          <li>Return <var>number</var>.
+          <li>Return <var>result</var>.
           </li>
         </ol>
       </section>
@@ -886,16 +867,16 @@ installButton.addEventListener("click", function(e){
         <p>
           The <dfn>steps for processing the <code>src</code> member of an
           icon</dfn> are given by the following algorithm. The algorithm takes
-          a <var>potential icon</var> object as an argument. The algorithm
-          returns a URL or an error.
+          a <var>icon</var> object as an argument and returns a URL or
+          <code>undefined</code>.
         </p>
         <ol>
-          <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>potential icon</var>
-          passing "<code>src</code>" as the argument.
+          <li>If <a>HasOwnProperty</a>(<var>icon</var>, "src") returns
+          <code>false</code>, then return <code>undefined</code>.
           </li>
-          <li>If <var>value</var> is <code>undefined</code> or
-          type(<var>potential src</var>) is not "string", return an error.
+          <li>Let <var>value</var> be the result of calling the
+          [[\GetOwnProperty]] internal method of <var>icon</var> passing
+          "<code>src</code>" as the argument.
           </li>
           <li>Let <var>manifest URL</var> be the URL from which the
           <var>manifest</var> was fetched from.
@@ -920,16 +901,17 @@ installButton.addEventListener("click", function(e){
         </p>
         <p>
           The <dfn>steps for processing the <code>type</code> member of an
-          icon</dfn> are given by the following algorithm. The algorithm
-          returns a string or <code>undefined</code>.
+          icon</dfn> are given by the following algorithm. The algorithm takes
+          an <var>icon</var> object as an argument, and returns either string
+          or <code>undefined</code>.
         </p>
         <ol>
+          <li>If <a>HasOwnProperty</a>(<var>manifest</var>,"type") returns
+          <code>false</code>, then return <code>undefined</code>.
+          </li>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>potential icon</var>
           passing "<code>type</code>" as the argument.
-          </li>
-          <li>If <var>value</var> is <code>undefined</code> , return
-          <var>undefined</var>.
           </li>
           <li>If type(<var>potential src</var>) is not "string", return an
           error.
