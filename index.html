@@ -196,10 +196,10 @@ installButton.addEventListener("click", function(e){
         particular member.
       </p>
       <p>
-        When an algorithm asks the user agent to <dfn>report an error</dfn>,
-        the user agent MAY report the error to the developer in a
-        user-agent-specific manner (e.g., show the problem in the error
-        console), or MAY ignore the error and do nothing
+        When an algorithm asks the user agent to <dfn>issue a developer
+        warning</dfn>, the user agent MAY report the conformance violation to
+        the developer in a user-agent-specific manner (e.g., show the problem
+        in the error console), or MAY ignore the error and do nothing
       </p>
       <p>
         In the algorithms, to <dfn>ignore</dfn> means that the user agent MUST
@@ -229,15 +229,15 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with <var>
-            key</var> as the argument equals <code>undefined</code>, then
+            key</var> as the argument returns <code>undefined</code>, then
             return <code>undefined</code>.
           </li>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>manifest</var> passing
           <var>key</var> as the argument.
           </li>
-          <li>If <a>Type</a>(<var>value</var>) is not "string", <a>report an
-          error</a>.
+          <li>Optinally, if <a>Type</a>(<var>value</var>) is not "string", <a>
+            issue a developer warning</a>.
           </li>
           <li>Let <var>result</var> be the result of calling
           <a>ToString</a>(<var>value</var>).
@@ -305,6 +305,10 @@ installButton.addEventListener("click", function(e){
           "http://url.spec.whatwg.org/#concept-url">URL</a>.
         </p>
         <ol>
+          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with "url"
+          as the argument equals <code>undefined</code>, then return
+          <code>undefined</code>.
+          </li>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of the <var>manifest</var>
           passing "<code>url</code>" as the argument.
@@ -344,17 +348,21 @@ installButton.addEventListener("click", function(e){
         <p>
           The <dfn>steps for processing the <code>icons</code> member</dfn> are
           given by the following algorithm. The algorithm returns a list of
-          icons, which can be empty.
+          icons, which can be empty, or <code>underfined</code>.
         </p>
         <ol>
+          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with
+          "icons" as the argument equals <code>undefined</code>, then return
+          <code>undefined</code>.
+          </li>
           <li>Let <var>icons</var> be an empty list.
           </li>
-          <li>Let <var>bookmark data URL</var> be the URL from which the <var>
-            bookmark data</var> was fetched from.
+          <li>Let <var>manifest URL</var> be the URL from which the
+          <var>manifest</var> was fetched from.
           </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>bookmark data</var>
-          passing "<code>icons</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>icons</code>" as the argument.
           </li>
           <li>If <var>value</var> is an array, then for each <var>potential
           icon</var> in the array:
@@ -449,18 +457,22 @@ installButton.addEventListener("click", function(e){
         <p>
           The <dfn>steps for processing the <code>orientation</code>
           member</dfn> are given by the following algorithm. The algorithm
-          returns a string.
+          returns either a string or undefined.
         </p>
         <ol>
+          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with
+          "orientation" as the argument equals <code>undefined</code>, then
+          return <code>undefined</code>.
+          </li>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>bookmark data</var>
-          passing "<code>orientation</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>orientation</code>" as the argument.
           </li>
           <li>If <var>value</var> is <code>undefined</code>, return
           <code>undefined</code>.
           </li>
-          <li>If <a>type</a>(<var>value</var>) is not "string", then, report an
-          error, and return <var>undefined</var>.
+          <li>If <a>type</a>(<var>value</var>) is not "string", then, issue a
+          developer warning, and return <var>undefined</var>.
           </li>
           <li>Set <var>value</var> to <a>ToString</a>(<var>value</var>).
           </li>
@@ -470,7 +482,8 @@ installButton.addEventListener("click", function(e){
             Strip leading and trailing whitespace</a> from <var>value</var>.
           </li>
           <li>If <var>value</var> is not a <a>valid screen orientation</a>,
-          then, <a>report an error</a>, and return <code>undefined</code>.
+          then, <a>issue a developer warning</a>, and return
+          <code>undefined</code>.
           </li>
           <li>Return <var>value</var>.
           </li>
@@ -543,13 +556,13 @@ installButton.addEventListener("click", function(e){
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
-          [[\GetOwnProperty]] internal method of <var>bookmark data</var>
-          passing "<code>mode</code>" as the argument.
+          [[\GetOwnProperty]] internal method of <var>manifest</var> passing
+          "<code>mode</code>" as the argument.
           </li>
           <li>Let <var>result</var> be "<code>bookmark</code>".
           </li>
-          <li>If <a>Type</a>(<var>value</var>) is not "string", then <a>report
-          an error</a>, and return <var>result</var>.
+          <li>If <a>Type</a>(<var>value</var>) is not "string", then <a>issue a
+          developer warning</a>, and return <var>result</var>.
           </li>
           <li>
             <a href=
@@ -716,9 +729,10 @@ installButton.addEventListener("click", function(e){
           is deemed to be non-conforming in such a way that it would not be
           possible for the user agent to continue processing (e.g., it can't be
           parsed by the JSON parser because of a syntax error, it could be
-          fetched from the network). In such a case, <a>report an error</a>. In
-          either case, when a step results in an <a>invalid manifest</a> the
-          user agent MUST abort whatever step or sub-step caused the condition.
+          fetched from the network). In such a case, <a>issue a developer
+          warning</a>. In either case, when a step results in an <a>invalid
+          manifest</a> the user agent MUST abort whatever step or sub-step
+          caused the condition.
         </p>
         <p>
           To fetch a manifest, as user agent MUST:
