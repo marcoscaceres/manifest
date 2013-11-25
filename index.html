@@ -216,23 +216,23 @@ installButton.addEventListener("click", function(e){
           underneath an icon).
         </p>
         <p>
-          The <dfn id="member-alt-name"><code>altname</code></dfn> is a
-          string that represents an alternative name of the application, such
-          as the name under which the application is sold or marketed.
+          The <dfn id="member-alt-name"><code>altname</code></dfn> is a string
+          that represents an alternative name of the application, such as the
+          name under which the application is sold or marketed.
         </p>
-
         <p>
-          The <dfn>steps for processing the names of an application</dfn> is given by the
-          following algorithm. The algorithm takes a <var>manifest</var>, and a key (either, "altname" or "name"), as an argument
-          and returns either <code>underfined</code> or a string. 
+          The <dfn>steps for processing the names of an application</dfn> is
+          given by the following algorithm. The algorithm takes a
+          <var>manifest</var>, and a key (either, "altname" or "name"), as an
+          argument and returns either <code>underfined</code> or a string.
         </p>
         <ol>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>manifest</var> passing
-          <var>key</key> as the argument.
+          <var>key</var> as the argument.
           </li>
-          <li>If <var>value</var> is
-          <code>undefined</code>, then return <code>undefined</code>.
+          <li>If <var>value</var> is <code>undefined</code>, then return <code>
+            undefined</code>.
           </li>
           <li>If <a>Type</a>(<var>value</var>) is not "string", <a>report an
           error</a>.
@@ -291,12 +291,11 @@ installButton.addEventListener("click", function(e){
           <code>url</code> member
         </h3>
         <p>
-          The <dfn id="member-launch_path">url</dfn> member is the URL
-          that is is <a href=
+          The <dfn id="member-launch_path">url</dfn> member is the URL that is
+          is <a href=
           "http://www.w3.org/html/wg/drafts/html/master/single-page.html#browsers">
-          loaded</a> when the application is launched. When it's missing
-          from the manifest, the UA loads the URL from the manifest was
-          fetched.
+          loaded</a> when the application is launched. When it's missing from
+          the manifest, the UA loads the URL from the manifest was fetched.
         </p>
         <p>
           The <dfn>steps for processing the <code>url</code> member</dfn> are
@@ -311,9 +310,8 @@ installButton.addEventListener("click", function(e){
           <li>Let <var>manifest URL</var> be the URL from which the
           <var>manifest</var> was fetched from.
           </li>
-          <li>If <var>value</var> is is or
-          <code>undefined</code> or <a>Type</a>(<var>value</var>) is not
-          "string":
+          <li>If <var>value</var> is is or <code>undefined</code> or
+          <a>Type</a>(<var>value</var>) is not "string":
             <ol>
               <li>Let <var>result</var> be <var>manifest URL</var>.
               </li>
@@ -337,9 +335,9 @@ installButton.addEventListener("click", function(e){
           <code title="">icons</code> member
         </h3>
         <p>
-          The <dfn id="member-icons">icons</dfn> is a list of <a title="icon object">icon
-          objects</a> that represents a set of icons that the application can
-          make use.
+          The <dfn id="member-icons">icons</dfn> is a list of <a title=
+          "icon object">icon objects</a> that represents a set of icons that
+          the application can make use.
         </p>
         <p>
           The <dfn>steps for processing the <code>icons</code> member</dfn> are
@@ -376,10 +374,12 @@ installButton.addEventListener("click", function(e){
                 another is available).
               </li>
               <li>Let <var>width</var> be the result of running the <a>steps
-              for processing the dimensions of an icon</a> with "width" as the argument. 
+              for processing the dimensions of an icon</a> with "width" as the
+              argument.
               </li>
               <li>Let <var>height</var> be the result of running the <a>steps
-              for processing the dimensions of an icon</a> with "height" as the argument. 
+              for processing the dimensions of an icon</a> with "height" as the
+              argument.
               </li>
               <li>Otherwise, let <var>icon</var> be an object.
               </li>
@@ -454,8 +454,8 @@ installButton.addEventListener("click", function(e){
           [[\GetOwnProperty]] internal method of <var>bookmark data</var>
           passing "<code>orientation</code>" as the argument.
           </li>
-          <li>If <var>value</var> is
-          <code>undefined</code>, return <code>undefined</code>.
+          <li>If <var>value</var> is <code>undefined</code>, return
+          <code>undefined</code>.
           </li>
           <li>If <a>type</a>(<var>value</var>) is not "string", then, report an
           error, and return <var>undefined</var>.
@@ -714,8 +714,8 @@ installButton.addEventListener("click", function(e){
           is deemed to be non-conforming in such a way that it would not be
           possible for the user agent to continue processing (e.g., it can't be
           parsed by the JSON parser because of a syntax error, it could be
-          fetched from the network). In such a case, <a>report an error</a>.
-          In either case, when a step results in an <a>invalid manifest</a> the
+          fetched from the network). In such a case, <a>report an error</a>. In
+          either case, when a step results in an <a>invalid manifest</a> the
           user agent MUST abort whatever step or sub-step caused the condition.
         </p>
         <p>
@@ -878,9 +878,8 @@ installButton.addEventListener("click", function(e){
           [[\GetOwnProperty]] internal method of <var>potential icon</var>
           passing "<code>src</code>" as the argument.
           </li>
-          <li>If <var>value</var> is
-          <code>undefined</code> or type(<var>potential src</var>) is not
-          "string", return an error.
+          <li>If <var>value</var> is <code>undefined</code> or
+          type(<var>potential src</var>) is not "string", return an error.
           </li>
           <li>Let <var>manifest URL</var> be the URL from which the
           <var>manifest</var> was fetched from.
@@ -913,8 +912,8 @@ installButton.addEventListener("click", function(e){
           [[\GetOwnProperty]] internal method of <var>potential icon</var>
           passing "<code>type</code>" as the argument.
           </li>
-          <li>If <var>value</var> is
-          <code>undefined</code> , return <var>undefined</var>.
+          <li>If <var>value</var> is <code>undefined</code> , return
+          <var>undefined</var>.
           </li>
           <li>If type(<var>potential src</var>) is not "string", return an
           error.
