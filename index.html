@@ -24,7 +24,7 @@
       <p>
         With this metadata, user agents can provide, for example, enhanced
         bookmarking capabilities such as being able to add a web application to
-        the homescreen of a device - as well as the various icons naeeded to
+        the homescreen of a device - as well as the various icons needed to
         effectively integrate with an OS's task switcher and system
         preferences. The specification also defines an API to enable
         bookmarking from within a document, as well as a means to check if an
@@ -104,7 +104,7 @@
 
 &lt;!-- fallback metadata for legacy browsers --&gt;
 &lt;meta name="application-name" content="Best News!"&gt;
-&lt;link rel§="shortcut icon" src="favicon.ico"&gt;
+&lt;link rel="shortcut icon" src="favicon.ico"&gt;
 &lt;/head&gt;
 ...
 </pre>
@@ -228,7 +228,7 @@ installButton.addEventListener("click", function(e){
           The <dfn>steps for processing the names of an application</dfn> is
           given by the following algorithm. The algorithm takes a
           <var>manifest</var>, and a key (either, "altname" or "name"), as an
-          argument and returns either <code>underfined</code> or a string.
+          argument and returns either <code>undefined</code> or a string.
         </p>
         <ol>
           <li>If <a>HasOwnProperty</a>(<var>manifest</var>, <var>key</var>)
@@ -290,7 +290,7 @@ installButton.addEventListener("click", function(e){
         </h3>
         <p>
           The <dfn id="member-launch_path">url</dfn> member is the URL that is
-          is <a href=
+          <a href=
           "http://www.w3.org/html/wg/drafts/html/master/single-page.html#browsers">
           loaded</a> when the application is launched. When it's missing from
           the manifest, the UA loads the URL from the manifest was fetched.
@@ -311,7 +311,7 @@ installButton.addEventListener("click", function(e){
           <li>Let <var>manifest URL</var> be the URL from which the
           <var>manifest</var> was fetched from.
           </li>
-          <li>If <var>value</var> is is or <code>undefined</code> or
+          <li>If <var>value</var> is <code>undefined</code> or
           <a>Type</a>(<var>value</var>) is not "string":
             <ol>
               <li>Let <var>result</var> be <var>manifest URL</var>.
@@ -343,7 +343,7 @@ installButton.addEventListener("click", function(e){
         <p>
           The <dfn>steps for processing the <code>icons</code> member</dfn> are
           given by the following algorithm. The algorithm returns a list of
-          icons, which can be empty, or <code>underfined</code>.
+          icons, which can be empty, or <code>undefined</code>.
         </p>
         <ol>
           <li>If <a>HasOwnProperty</a>(<var>manifest</var>, <var>key</var>)
@@ -365,17 +365,17 @@ installButton.addEventListener("click", function(e){
               processing the <code>src</code> member of an icon</a>. If the
               result is an error, stop processing this <var>potential
               icon</var> and move to the next <var>potential icon</var> in
-              value (if another is available).
+              value, if any.
               </li>
               <li>Let <var>type</var> be the result of running the <a>steps for
               processing the <code>type</code> member of an icon</a>.
               </li>
               <li>If <var>type</var> is not a <a href=
               "http://www.whatwg.org/specs/web-apps/current-work/#valid-mime-type">
-                valid MIME type</a> or or the value of type is not a supported
+                valid MIME type</a> or the value of type is not a supported
                 icon format, then stop processing this <var>potential
-                icon</var> and move to the next <var>potential icon</var> (if
-                another is available).
+                icon</var> and move to the next <var>potential icon</var>,
+                if any.
               </li>
               <li>Let <var>width</var> be the result of running the <a>steps
               for processing the dimensions of an icon</a> with "width" as the
