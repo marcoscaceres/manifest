@@ -132,7 +132,8 @@ if("standalone" in navigator &amp;&amp; navigator.standalone){
         <p>
           Let the user bookmark the application through clicking a button.
         </p>
-        <pre class="example highlight html" title="requesting to bookmark a web app">
+        <pre class="example highlight html" title=
+        "requesting to bookmark a web app">
 &lt;script&gt;
 var installButton = document.querySelector("#install");
 
@@ -227,12 +228,13 @@ installButton.addEventListener("click", function(e){
           argument and returns either <code>underfined</code> or a string.
         </p>
         <ol>
+          <li>If calling [[\HasOwnProperty]] of <var>manifest</var> with <var>
+            key</var> as the argument equals <code>undefined</code>, then
+            return <code>undefined</code>.
+          </li>
           <li>Let <var>value</var> be the result of calling the
           [[\GetOwnProperty]] internal method of <var>manifest</var> passing
           <var>key</var> as the argument.
-          </li>
-          <li>If <var>value</var> is <code>undefined</code>, then return <code>
-            undefined</code>.
           </li>
           <li>If <a>Type</a>(<var>value</var>) is not "string", <a>report an
           error</a>.
