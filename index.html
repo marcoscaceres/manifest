@@ -3209,13 +3209,13 @@ if (installed) {
       </aside>
       <p class="note">
         Conformance testing for the <a href=
-        "#mf-installed-installed">`installed`</a> value requires launching the
-        document from an OS integration surface, which may not be automatable
-        in all testing environments. User agents SHOULD provide a WebDriver
-        extension or testing mode that allows setting the <a href=
-        "#mf-installed">`installed`</a> value for conformance testing purposes.
-        The <a href="#mf-installed-none">`none`</a> value can be verified
-        automatically in any regular browsing context.
+        "#mf-installed-installed">`installed`</a> value requires the document
+        to be running in an [=application context=] with a manifest [=applied=],
+        which may not be automatable in all testing environments. User agents
+        SHOULD provide a WebDriver extension or testing mode that allows setting
+        the <a href="#mf-installed">`installed`</a> value for conformance testing
+        purposes. The <a href="#mf-installed-none">`none`</a> value can be
+        verified automatically in any regular browsing context.
       </p>
       <section>
         <h3>
